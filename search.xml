@@ -8110,4 +8110,19 @@ pool-1-thread-1 running
         <tag>计算机网络</tag>
       </tags>
   </entry>
+  <entry>
+    <title>数据库设计三范式</title>
+    <url>/2021/03/15/%E3%80%90hexo%E3%80%91spawnfailed%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/</url>
+    <content><![CDATA[<h3 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h3><p>先是出现错误：<br>error：spawn failed…<br>然后经过一些博客的操作会出现以下问题：<br>fatal: cannot lock ref ‘HEAD’: unable to resolve reference HEAD: Invalid argument error: src refspec<br>或者：<br>error: src refspec HEAD does not match any.等等<br>总结一下：<br>问题大多是因为git进行push或者hexo d的时候改变了一些.deploy_git文件下的内容。</p>
+<h3 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h3><p>删除.deploy_git文件夹;<br>输入git config –global core.autocrlf false<br>然后，依次执行：<br>hexo clean<br>hexo g<br>hexo d<br>问题解决。</p>
+<p>参考：<a href="https://blog.csdn.net/HTL2018/article/details/106876940" target="_blank" rel="noopener">https://blog.csdn.net/HTL2018/article/details/106876940</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>数据库设计</tag>
+      </tags>
+  </entry>
 </search>
