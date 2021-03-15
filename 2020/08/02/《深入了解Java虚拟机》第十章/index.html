@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前端编译与优化," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="第十章 前端编译与优化10.1 概述本只讨论第一类编译期和编译器。· “编译期”  有可能指一个编译器的前端把.java文件转变成.class文件的过程； 也可能指Java虚拟机的即时编译器（JIT编译器，Just In Time Compiler）运行期把字节码转变为本地机器码的过程； 还可能指使用静态的提前编译器（AOT编译器，Ahead Of Time Compiler）直接把程序编译成与目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《深入了解Java虚拟机》第十章">
+<meta property="og:url" content="http://yoursite.com/2020/08/02/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E5%8D%81%E7%AB%A0/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="第十章 前端编译与优化10.1 概述本只讨论第一类编译期和编译器。· “编译期”  有可能指一个编译器的前端把.java文件转变成.class文件的过程； 也可能指Java虚拟机的即时编译器（JIT编译器，Just In Time Compiler）运行期把字节码转变为本地机器码的过程； 还可能指使用静态的提前编译器（AOT编译器，Ahead Of Time Compiler）直接把程序编译成与目">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200802144943847.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200802145014574.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200802145445188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200802145817481.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200802150329568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020080215034940.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020080215054820.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-08-02T00:27:57.000Z">
+<meta property="article:modified_time" content="2020-08-02T07:11:22.139Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="前端编译与优化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200802144943847.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/08/02/《深入了解Java虚拟机》第十章/"/>
+
+
+
+
+
+  <title>《深入了解Java虚拟机》第十章 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/02/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E5%8D%81%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《深入了解Java虚拟机》第十章</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-02T08:27:57+08:00">
+                2020-08-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index">
+                    <span itemprop="name">阅读记录</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="第十章-前端编译与优化"><a href="#第十章-前端编译与优化" class="headerlink" title="第十章 前端编译与优化"></a>第十章 前端编译与优化</h1><h2 id="10-1-概述"><a href="#10-1-概述" class="headerlink" title="10.1 概述"></a>10.1 概述</h2><pre><code>本只讨论第一类编译期和编译器。</code></pre><p>· <strong>“编译期”</strong></p>
+<ol>
+<li>有可能指一个编译器的前端把<font color = #F9000><em>.java</font>文件转变成<font color = #F9000></em>.class</font>文件的过程；</li>
+<li>也可能指Java虚拟机的<strong>即时编译器</strong>（<strong>JIT编译器</strong>，Just In Time Compiler）运行期把字节码转变为本地机器码的过程；</li>
+<li>还可能指使用静态的<strong>提前编译器</strong>（<strong>AOT编译器</strong>，Ahead Of Time Compiler）直接把<font color = #F9000>程序编译成与目标机器指令集相关的二进制代码</font>的过程。<br>· 上面<em>三类编译过程</em>中有一些比较有代表性的编译器产品：</li>
+</ol>
+<ul>
+<li>前端编译器：JDK的<strong>Javac</strong>、Eclipse JDT中的增量式编译器(ECJ)。</li>
+<li>即时编译器:HotSpot虚拟机的C1、C2编译器，Graal编译器。</li>
+<li>提前编译器：JDK的Jaotc、GNU Compiler for theJava（GCJ）、Excelsior JET。<br>· Javac这类前端编译器对代码的运行效率几乎没有任何优化措施可言，基本都集中到了即时编译器中。<br>· 如果把“优化”定义放宽，把对开发阶段的优化也算进来Javac确实做了许多针对Java语言编码过程的优化措施来降低编码复杂度，提高编码效率。<br>· 相当多新生的java语法特性，都是靠编译器的“<font color = #F9000>语法糖</font>”来实现，而不是依赖字节码或JVM的底层改进来支持。</li>
+</ul>
+<h2 id="10-2-Javac编译器"><a href="#10-2-Javac编译器" class="headerlink" title="10.2 Javac编译器"></a>10.2 Javac编译器</h2><h3 id="10-2-1-Javac的源码与调试"><a href="#10-2-1-Javac的源码与调试" class="headerlink" title="10.2.1 Javac的源码与调试"></a>10.2.1 Javac的源码与调试</h3><p><strong>javac发展过程</strong>：</p>
+<ol>
+<li>JDK6之前，Javac并不属于标准Java SE API的一部分，它实现代码单独存放在tools.jar中，要在程序中使用的话就必须把这个库放到<strong>类路径</strong>上。</li>
+<li>JDK6及之后，Javac编译器的实现代码晋升成为标准Java类库之一。</li>
+<li>JDK9时，整个JDK所有的Java类库都采用模块化进行<strong>重构划分</strong>，Javac编译器就被挪到了<code>jdk.compiler模块</code>。</li>
+</ol>
+<p>· Javac编译器除了JDK自身的标准类库外，就只引用了JDK_SRC_HOME/langtools/src/share/classes/com/sun/<em>里面的代码，所以我们的代码编译环境建立时基本无须处理依赖关系。<br>*</em>e.g** Eclipse IDE为开发工具，先建立一个Java工程，然后将上述目录下的文件全部复制到工程的源码目录中。之后，就可以运行main方法来执行编译了。使用参数与Javac命令相同。</p>
+<ul>
+<li>源码文件有的可能会提示“Access Restriction”（访问限制），被Eclipse拒绝编译。</li>
+<li>这是Eclipse为了防止引用非标准类库导致出现兼容性问题。在“JRE System Library”设置中默认包含了一系列的代码访问规则（Access Rules），如果代码引用了规则中禁止的类，就会报错。</li>
+<li>我们可以通过自行添加一条允许访问规则来解决。</li>
+</ul>
+<p>· 从Javac代码总体结构看，编译过程大致可以分为“<font color = #F9000>1准备3处理</font>”过程：<br>    1) 准备过程：初始化插入式注解处理器<br>    2) 解析与填充符号表过程：<br>    · 词法、语法分析。将源代码字符流转变成<font color = #F9000>标记集合</font>，构造出抽象语法树。<br>    · 填充符号表。产生<font color = #F9000>符号地址和符号信息</font>。<br>    3) 插入式注解处理器的注解处理过程<br>    4) 分析与字节码生成过程，包括：<br>    · 标注检查。对语法的静态信息进行检查。<br>    · 数据流及控制流分析。对程序动态运行过程进行检查。<br>    · 解语法糖。将简化代码编写的<font color = #F9000>语法糖还原</font>为原有的形式。<br>    · 字节码生成。将前面各步骤生成的信息转化为字节码。<br>注：上述三个处理过程里，执行插入式注解时可能会产生新的符号，一旦产生，就需要转会之前的处理中第二步，重新处理这些新符号。<br><img src="https://img-blog.csdnimg.cn/20200802144943847.png" alt="在这里插入图片描述"><br>· Javac编译动作的入口是com.sun.tools.javac.main.JavaCompiler类。代码逻辑集中在这个类的compile()和compile2()中。<br><img src="https://img-blog.csdnimg.cn/20200802145014574.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="10-2-2-解析与填充符号表"><a href="#10-2-2-解析与填充符号表" class="headerlink" title="10.2.2 解析与填充符号表"></a>10.2.2 解析与填充符号表</h3><ol>
+<li><p>词法、语法分析<br> <strong>词法分析</strong>是将源代码的<font color = #F9000>字符流</font>转变为<font color = #F9000>标记（Token）集合</font>的过程。<br> · 单个字符是程序编写的最小元素，但是标记才是编译时的最小元素。<br> · 标记包括：关键字、变量名、运算符、字面量。<br> e.g  <code>int a=b+2</code> 这句代码中就包含了6个标记，int关键字由三字符构成，但是只是一个独立标记。</p>
+<p> 语法分析是根据<font color = #F9000>标记序列</font>构造<font color = #F9000>抽象语法树(AST)</font>的过程。<br> · AST是一种用来<font color = #F9000>描述程序语法结构</font>的树形表示方式，每个节点代表程序代码中一个语法结构。<br> · 语法结构（Syntax Construct）包括：包、类型、修饰符、接口、返回值、代码注释等。</p>
+<p> 解析之后，编译器就不会对源码字符流操作了，后续操作都是建立在<strong>抽象语法树</strong>上。</p>
+<ol start="2">
+<li>填充符号表<br>· <strong>符号表</strong>是由一组<font color = #F9000>符号地址和符号信息</font>构成的<strong>数据结构</strong>。实现形式多样，如哈希表、有序符号表、树状符号表等。<br>· 符号表中所登记的信息，在编译不同阶段都会用到。譬如，<strong>语义分析</strong>阶段，将用于语义检查（如一个名字的使用与原先的声明是否一致）和产生中间代码。在<strong>目标代码生成</strong>阶段，当对符号名进行地址分配时，符号表是地址分配的直接依据。<br>· Javac源代码中，填充符号表的过程由com.sun.tools.javac.comp.Enter类实现。<br>· 该过程的产物是一个待处理表，其中包含了每一个编译单元的AST的顶级节点，以及<code>package-info.java</code>（如果存在的话）的顶级节点。</li>
+</ol>
+</li>
+</ol>
+<h3 id="10-2-3-注解处理器"><a href="#10-2-3-注解处理器" class="headerlink" title="10.2.3 注解处理器"></a>10.2.3 注解处理器</h3><p>· JDK5后，Java语言提供了对注解的支持。<br>· 注解设计原本与普通java代码一样，在运行期发挥作用。但JDK6中提出并通过提案，设计了一组“插入式注解处理器”的标准API，将处理提前至编译器。<br>· 我们可以将<strong>插入式注解处理器</strong>看作是一组<strong>编译器的插件</strong>，当这些插件工作时，允许读取、修改、添加<strong>抽象语法树中的任意元素</strong>。<br>· 如果这组插件在处理注解期间对树进行过修改，编译器将会回到解析及填充符号表的过程重新处理，直到所有插件没有再对树进行修改为止。每一次循环称为一个<strong>轮次（Round）</strong>。<br>· 有了注解处理器的标准API后，程序员代码才有可能干涉编译器的行为。由于语法树任意元素都能在插件中被访问到，所以通过注解处理器可以实现许多在编码中由人共完成的事情（譬如自动生成getter/setter方法）。</p>
+<h3 id="10-2-4-语义分析与字节码生成"><a href="#10-2-4-语义分析与字节码生成" class="headerlink" title="10.2.4 语义分析与字节码生成"></a>10.2.4 语义分析与字节码生成</h3><p>· 经过语法分析后，编译器获得了表示一个结构正确的源程序的抽象语法树。但是，并不能保证源程序的语义是符合逻辑的。<br>· 语义分析要做的事就是对结构正确的源程序进行<strong>上下文性质的相关性检查</strong>，譬如类型检查、控制流检查、数据流检查等。<br>· 我们编码时看到的红线标注，绝大多数是源于语义分析的检查结果——不合逻辑，拒绝编译。<br>· 语义分析过程分为<strong>标注检查</strong>和<strong>数据及控制流分析</strong>两步：</p>
+<ol>
+<li><p>标注检查<br> · 主要检查内容包括：变量使用前是否声明，变量与赋值间的数据类型是否匹配等。<br> · 还会进行一个<strong>常量折叠</strong>的代码优化，这是Javac编译器对源代码做的极少量优化措施之一。<br> e.g <code>int a = 1  + 2;</code> 优化前抽象语法树上能看到的“1”“2”“+”，优化后折叠为字面量“3”（这个值称为“插入式表达式的值”）<br> · 标注检查步骤在Javac源码中的实现类是<code>com.sun.tools.javac.comp.Attr类</code>和<code>.Check类</code>。</p>
+</li>
+<li><p>数据及控制流分析<br> · 是对程序上下文逻辑的进一步验证。<br> · 可检验出：局部变量使用前是否有赋值，受查异常是否都被正确处理，方法的每一条路径是否都有返回值等。<br> · <strong>编译期</strong>与<strong>类加载时</strong>的的数据及控制流分析目的基本一致，但是校验范围有所区别。<br> e.g final语义校验：一个只能在编译期而不能在运行期中检查的例子<br> <img src="https://img-blog.csdnimg.cn/20200802145445188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</li>
+</ol>
+<ul>
+<li>观察这两段代码编译出来的字节码，会发现它们是没有任何一点区别的，每条指令，甚至每个字节都一模一样。</li>
+<li>由于第六章中已知，局部变量在常量池中并没有CONSTANT_Fieldref_info的符号引用，自然不可能有<strong>访问标志</strong>，所以有没有final修饰在Class文件中都无法得知。</li>
+<li>因此，是否把局部变量声明为final，对运行期都完全没有影响。变量的不变性仅靠Javac在编译期保证。</li>
+<li>· 数据及控制流分析的入口是图10-5中过程3.2的flow()方法，具体操作由<code>com.sun.tools.javac.comp.Flow类</code>来完成。</li>
+</ul>
+<ol start="3">
+<li><p>解语法糖<br> ·<mark> 语法糖，也称糖衣语法</mark>，指的是在计算机语法中添加一些语法，这些语法在编译结果和功能上没有任何影响，但能方便程序员使用该语言。<br> · 使用语法糖，能够减少代码量，增加程序可读性，从而减少程序出错机会。<br> · Java相对于JVM上其他的语义来说，属于“低糖语言”，尤其在JDK5之前。<br> · Java中最常见的语法糖包括：泛型、变长参数、自动装箱拆箱等。<br> · JVM运行时并不直接支持这些语法，它们在编译阶段被还原回原始的基础语法结构，这个过程就称为<strong>解语法糖</strong>。<br> · 在Javac的源码中，过程由desugar()方法触发，在<code>com.sun.tools.javac.comp.TransTypes类</code>和<code>.Lower类</code>中完成。</p>
+</li>
+<li><p>字节码生成<br> · 在Javac的源码中，由<code>com.sun.tools.javac.jvm.Gen类</code>来完成。<br> · 字节码生成过程不仅是把之前阶段生成的信息（语法树、符号表）转化为字节码指令写到磁盘中，编译器还进行了少量代码添加与转换工作。<br> · 例如实例构造器&lt;init&gt;()方法和类构造器&lt;clinit&gt;()方法就是在这个阶段被添加到语法树之中的。</p>
+<blockquote>
+<p>注：</p>
+<ol>
+<li>这里的实例构造器并不等同于默认构造函数，如果代码没有提供构造函数，在<strong>填充符号表阶段</strong>，编译器就会添加一个没有参数、可访问性与当前类型一致的默认构造参数。</li>
+<li>&lt;init&gt;()和&lt;clinit&gt;()这两个构造器的产生实际上是一种<strong>代码收敛</strong>的过程。<br>· 编译器会把<strong>语句块</strong>（对实例构造器而言是“{}”块，对类构造器而言是“static{}”块）、<strong>变量初始化</strong>（实例变量和类变量）、<strong>调用父类的实例构造器</strong>（&lt;clinit&gt;()方法中无须调用父类的&lt;clinit&gt;()方法，JVM会自动保证父类构造器的正确执行，但在&lt;clinit&gt;()方法中常会生成调用Object的&lt;init&gt;()方法的代码）等操作收敛到&lt;init&gt;()和&lt;clinit&gt;()方法之中。<br>· 并且保证，无论源码顺序如何，都一定按照执行父类的实例构造器、初始化变量、执行语句块的顺序进行。上面所述的动作由<code>Gen::normalizeDefs()</code>方法来实现。</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>除此之外，还有其他的代码替换工作用于优化程序某些逻辑的实现方式。<br>如把字符串的加操作替换为StringBuffer或StringBuilder（取决于目标代码的版本是否大于或等于JDK5）的append()操作等。</p>
+</blockquote>
+<p> · 完成了对语法树的遍历和调整之后，就会把填充了所有所需信息的符号表交到<code>com.sun.tools.javac.jvm.ClassWriter类</code>手上，由这个类的writeClass()方法输出字节码，生成最终的Class文件。到此，整个编译过程宣告结束。    </p>
+</li>
+</ol>
+<h2 id="10-3-Java语法糖"><a href="#10-3-Java语法糖" class="headerlink" title="10.3 Java语法糖"></a>10.3 Java语法糖</h2><p>语法糖可以看作是前端编译器实现的一些“小把戏”，它可以使得效率提升，但我们也需要了解背后真面目，更好地利用它们。</p>
+<h3 id="10-3-1-泛型"><a href="#10-3-1-泛型" class="headerlink" title="10.3.1 泛型"></a>10.3.1 泛型</h3><p>· 泛型本质是<strong>参数类型</strong>或者<strong>参数多态</strong>的应用，即将操作的数据类型指定为方法签名中的一种特殊参数，这种参数能够在类、接口和方法的创建中，分别构成泛型类、泛型接口和泛型方法。<br>· 程序员能够针对泛化的数据类型，编写相同的算法。<br>    1. Java与C#泛型</p>
+<ul>
+<li><p>同年，Java 5.0和C#2.0各自添加了泛型的语法特性。</p>
+</li>
+<li><p>Java选择的泛型实现方式叫作“<font color = #F9000>类型擦除式泛型</font>”，而C#选择的泛型实现方式是“<font color = #F9000>具现化式泛型</font>”。</p>
+</li>
+<li><p>C#中的泛型，无论式源码里、编译后的中间语言表示(这时候泛型是一个占位符)里、运行期的CLR里都是切实存在的。例如List&lt;int&gt;与List&lt;string&gt;就是两个不同的类型，它们由系统在运行期生成，有着自己独立的虚方法表和类型数据。</p>
+</li>
+<li><p>Java中的泛型则不同。它只在源码中存在，在编译后的字节码文件里，全部泛型都被替换为<font color = green>裸类型</font>了，并且在相应地方插入了强制转换类型代码。因此早期Java，ArrayList&lt;Integer&gt;与ArrayList&lt;String&gt;其实是同一个类型。</p>
+</li>
+<li><p>这带来的不利影响是:<br>   1）<strong>使用效果落后</strong>。Java泛型在编码阶段产生不良影响：<br>   <img src="https://img-blog.csdnimg.cn/20200802145817481.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>   2）<strong>运行效率落后</strong>。C#引入泛型后，性能比java提高不少。因为在使用平台提供的容器类型时无需拆箱装箱。</p>
+</li>
+<li><p>唯一的优势是实现这种泛型的影响范围大：擦除式泛型实现几乎只需在Javac上做出改进即可。不需要改动字节码、虚拟机，甚至之前没有使用泛型的库也能直接运行在Java5.0上。</p>
+</li>
+</ul>
+<ol start="2">
+<li><p>泛型历史背景<br> · 把Pizza语言的泛型移植到Java语言上，形成了Java5.0的泛型实现。但事实上，Pizza语言中的泛型更接近C#的泛型。只是在移植过程中，受到许多约束。<br> 其中最紧的是由于Java需要完全向后兼容无泛型java，即保证“<font color = #F9000>二进制向后兼容性</font>”（在JDK之前版本编译出的Class文件，必须保证在之后的版本也能够正常运行）。<br> · 为了保证编译出来的Class文件可以在引入泛型之后继续运行，设计思路大体上有两条：<br> 1）需要泛化的类型，以前有的就保持不变，然后<font color = #F9000>平行加入</font>一套泛型化版本的新类型。<br> （e.g 假设：Vector（无泛型）和vector&lt;T&gt;（有泛型））<br> 2）直接把已有的、需要泛型化的类型都<font color = #F9000>原地泛型化</font>。<br> · C#走了第一条路，增加了一组新容器。但由于Java已经面世近10年了，遗留代码量巨大。所以Java选择了第二条路。但其实如果有足够时间好好设计与实现，完全能够做出更好的泛型系统，不至于今天的Valhalla项目还要偿还泛型偷懒的技术债了。</p>
+</li>
+<li><p>类型擦除<br> · 既要<strong>直接泛型化</strong>已有的类型（ArrayList&lt;T&gt;），又要保证之前用了这种类型（ArrayList）的代码在新版本中依旧可以运行，这就必须让所有泛型化的实例类型（ArrayList&lt;Integer&gt;）全部自动成为这种类型（ArrayList）的<strong>子类型</strong>，否则类型转换不安全。<br> · 所以引入“<font color = green>裸类型</font>”，它应当被视为所有该类型泛型化实例的共同父类型。<br> · 如何实现裸类型？主要有两种设计选择：<br> 1）在<strong>运行期</strong>由JVM自动、真实地生成实例类型（ArrayList&lt;Integer&gt;），并且自动实现从实例类型<strong>派生</strong>自原来类型（ArrayList）的<strong>继承关系</strong>。<br> 2）直接在编译期把实例类型（ArrayList&lt;Integer&gt;）还原为原来类型（ArrayList），只在元素访问、修改时插入一些<strong>强制类型转换和检查命令</strong>。</p>
+<p> · Java采用了第二种方式。<br> · e.g 将一段使用泛化类型的代码编译成Class文件，再用字节码反编译工具进行反编译，会发现泛型都不见了，程序又变回了Java泛型出现之前的写法，<strong>泛型类型都变回了裸类型</strong>，只在元素访问时插入了从<code>Object</code>到<code>String</code>的强制转型代码。<br> 泛型擦除前：<br> <img src="https://img-blog.csdnimg.cn/20200802150329568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br> 泛型擦除后：<br> <img src="https://img-blog.csdnimg.cn/2020080215034940.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p> · 缺点：<br> 1）目前Java<strong>不支持原生类型的泛型</strong>（ArrayList&lt;int&gt;）。Java解决方案就是都使用封装类型（ArrayList&lt;Integer&gt;）遇到原生类型，自动装箱拆箱。这就导致了许多开销，这也是Valhalla项目重点解决问题之一。</p>
+<p> e.g 下图这种情况，一旦把泛型信息擦除后，到要插入强制转型代码的地方就没办法往下做了，因为不支持int、long（原生类型）与Object之间的强制转型。<br> <img src="https://img-blog.csdnimg.cn/2020080215054820.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p> 2）<strong>运行时</strong>无法取得泛型类型信息，使得代码变得啰嗦。例如<br> 前面图片所示的Java不支持的几种泛型用法，都是由于运行期JVM无法取得泛型类型而导致的。<br> 当我们参数需要取得参数化类型T，但由于不能直接取得，所以不得不加入一个类型参数。</p>
+<p> 3）丧失了一些面向对象思维的优雅，带来些模棱两可的情况。<br> 如：函数重载，参数分别为List<String>和List<Integer>，代码拒绝编译。<strong>部分原因是</strong>因为编译后参数擦除，裸类型相同，导致这两个方法的特征签名一模一样。</p>
+<p> · 如果添加两个并不需要实际使用到的、不一样的返回值类型，却发现重载成功了，即<font color = green>代码能够编译、执行</font>了。（在Javac中成功，其他版本或者ECJ中可能失败。因为前端编译器在《Java虚拟机规范》中没具体定义，各虚拟机实现不同）<br> · 这<strong>并不是</strong>与<font color = #F9000>Java语言中返回值不参与重载选择的认知违背</font>。<br> 【<font color = #F9000>Java代码层面的方法特征签名：方法名称、参数顺序、参数类型；字节码层面的方法特征签名：还包括返回值及受查异常表</font>】方法重载要求方法具备不同的特征签名，返回值并不包含在方法的特征签名中，所以返回值不参与重载选择。但是在<strong>Class文件格式</strong>之中，只要<strong>描述符</strong>不是完全一致的两个方法就可以共存。<br> · 因此这两个方法加入了不同返回值后，能共存于一个Class文件中。</p>
+<p> 由于Java泛型的引入，各种场景下的方法调用有新的需求，如在泛型类中如何获取传入的参数化类型等。<br> · 所以《Java虚拟机规范》做出了相应的修改，引入了诸如Signature、LocalVariableTypeTable等新的属性用来解决参数类型识别问题。<br> · <strong>Signature</strong>：存储一个方法在<strong>字节码层面</strong>的特征签名。这个属性中保存的参数类型是<strong>包括了参数化</strong>类型的信息。<br> · 从Signature属性出现也可知，擦除只是对方法的Code属性中字节码进行擦除，实际上元数据中还是保留了泛型信息。<br> （编码时能通过反射手段获取参数化类型的根本依据）</p>
+<ol start="4">
+<li><p>值类型与未来的泛型<br>· 实现泛型的方式待定。可能被具现化，也可能继续维持兼容，不过可以选择不被完全擦除，相对完整地记录在Class文件中。<br>· 明确的是，未来Java应该会<strong>提供“值类型”</strong>的语言层面的支持。</p>
+<p>· 在C#中，没有int等原生数据类型，开发人员甚至可以自定义自己的值类型，只要继承于ValueType即可。因为ValueType也是统一基类Object的子类，所以不会遇到int不装箱就无法转型为Object的尴尬。<br>· 值类型可以与引用类型一样，有构造函数、方法、属性字段，区别是值类型在赋值的时候是<font color = #F9000>整体赋值</font>，而不是像引用类型那样传递引用。<br>· 值类型的实例很容易实现<font color = #F9000>分配在方法的调用栈上</font>。这样值类型会随着当前方法的退出而自动释放，不会给垃圾收集带来压力。</p>
+<p>· 在Valhalla项目中，Java的值类型方案被称为“<font color = #F9000>内联类型</font>”。计划通过关键字inline来定义，在字节码层也有专门的对应操作码（Q开头）来支撑。</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="10-3-2-自动装箱、拆箱与遍历循环"><a href="#10-3-2-自动装箱、拆箱与遍历循环" class="headerlink" title="10.3.2 自动装箱、拆箱与遍历循环"></a>10.3.2 自动装箱、拆箱与遍历循环</h3><p>· 自动装箱、拆箱与遍历循环（foreach循环）这些语法糖，复杂度和蕴含思想都不及泛型。但这些是Java中使用最多的语法糖。</p>
+<p>e.g 自动装箱陷阱：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">        Integer a &#x3D; 1;</span><br><span class="line">        Integer b &#x3D; 2;</span><br><span class="line">        Integer c &#x3D; 3;</span><br><span class="line">        Integer d &#x3D; 3;</span><br><span class="line">        Integer e &#x3D; 321;</span><br><span class="line">        Integer f &#x3D; 321;</span><br><span class="line">        Long g &#x3D;3L;</span><br><span class="line">        System.out.println(c&#x3D;&#x3D;d);</span><br><span class="line">        System.out.println(e&#x3D;&#x3D;f);</span><br><span class="line">        System.out.println(c&#x3D;&#x3D;(a+b));</span><br><span class="line">        System.out.println(c.equals(a+b));</span><br><span class="line">        System.out.println(g&#x3D;&#x3D;(a+b));</span><br><span class="line">        System.out.println(g.equals(a+b));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：<br>true<br>false<br>true<br>true<br>true<br>false</p>
+<p>注：<br>1.包装类的“==”在不遇到算术运算的情况下，不会自动拆箱，默认比较<strong>地址值</strong>；它们的equals()方法不处理数据转型的关系。<br>2.在Java中会有一个Integer缓存池，缓存的大小是：-128~127</p>
+<h3 id="10-3-3-条件编译"><a href="#10-3-3-条件编译" class="headerlink" title="10.3.3 条件编译"></a>10.3.3 条件编译</h3><p>· java语言没有使用预处理器来解决<font color = #F9000>编译时的代码依赖问题</font>。而C/C++中使用预处理器指示符（#ifdef）来完成条件编译。<br>因为Java语言天然的编译方式：编译器并非一个个编译Java文件，而是将<font color = #F9000>所有编译单元的语法树顶级节点</font>输入到<font color = #F9000>待处理列表</font>后再进行编译。因此各个文件间可以互相提供符号信息。<br>· 不过Java依旧有方法进行条件编译：使用条件为常量的<strong>if语句</strong>。（不能使用其他条件语句完成条件编译）<br>· Java语言中条件编译的实现，也是一颗<font color = #F9000>语法糖</font>，根据布尔常量值的真假，编译器把分支中不成立的代码块消除掉。这一工作在编译器解除语法糖阶段完成。<br>· 因为使用的if语句，所以只能写在方法体内部，因此只能实现语句<font color = #F9000>基本块（Block）级别</font>的条件编译，没法根据条件，调整整个Java类的结构。</p>
+<p><strong>Java程序命名规范</strong>：<br>    - 类（或接口）：符合驼式命名法，首字母大写。<br>    - 方法：符合驼式命名法，首字母小写。<br>    - 字段：<br>    · 类或实例变量。符合驼式命名法，首字母小写。<br>    · 常量。要求全部由大写字母或下划线构成，并且第一个字符不能是下划线。<br>注：驼式命名法，指混合使用大小写字母来分割名字。</p>
+<p>总结：<br>· 在前端编译器中，“优化”手段主要用于提升程序的编码效率。之所以把Javac这类将<strong>Java代码</strong>转变为<strong>字节码</strong>的编译器称作“<strong>前端编译器</strong>”，是因为它只完成了从<strong>程序</strong>到<strong>抽象语法树或中间字节码</strong>的生成。<br>· 在此之后，还有一组内嵌于虚拟机内部的“<strong>后端编译器</strong>”来完成代码优化以及从<strong>字节码</strong>生成<strong>本地机器码</strong>的过程。即即时编译器或提前编译器。<br>这个后端编译器的编译速度及编译结果质量高低，是衡量Java虚拟机性能最重要的一个指标。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BC%96%E8%AF%91%E4%B8%8E%E4%BC%98%E5%8C%96/" rel="tag"># 前端编译与优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/31/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B9%9D%E7%AB%A0/" rel="next" title="《深入了解Java虚拟机》第九章">
+                <i class="fa fa-chevron-left"></i> 《深入了解Java虚拟机》第九章
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/03/10-List%EF%BC%8CSet%EF%BC%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%8CCollections/" rel="prev" title="10-List，Set，数据结构，Collections">
+                10-List，Set，数据结构，Collections <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第十章-前端编译与优化"><span class="nav-text">第十章 前端编译与优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#10-1-概述"><span class="nav-text">10.1 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-2-Javac编译器"><span class="nav-text">10.2 Javac编译器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-1-Javac的源码与调试"><span class="nav-text">10.2.1 Javac的源码与调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-2-解析与填充符号表"><span class="nav-text">10.2.2 解析与填充符号表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-3-注解处理器"><span class="nav-text">10.2.3 注解处理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-4-语义分析与字节码生成"><span class="nav-text">10.2.4 语义分析与字节码生成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-3-Java语法糖"><span class="nav-text">10.3 Java语法糖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-1-泛型"><span class="nav-text">10.3.1 泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-2-自动装箱、拆箱与遍历循环"><span class="nav-text">10.3.2 自动装箱、拆箱与遍历循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-3-条件编译"><span class="nav-text">10.3.3 条件编译</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

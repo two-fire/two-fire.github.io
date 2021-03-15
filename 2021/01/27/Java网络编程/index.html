@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="网络编程," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="例子见Github-JavaSE-Day08 基本概念网络  多台计算机组成，使用物理线路连接 交换数据，共享资源  网络编程三要素  IP地址：唯一标识网络上每一台计算机，两台计算机间通信必备要素     ipconfig查看 端口号：计算机中应用程序的编号有效端口0~65536系统使用或保留端口0~1024 通信协议：通信的规则   TCP UDP国际通用协议TCP&#x2F;IP协议  网络分层模型网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java网络编程">
+<meta property="og:url" content="http://yoursite.com/2021/01/27/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="例子见Github-JavaSE-Day08 基本概念网络  多台计算机组成，使用物理线路连接 交换数据，共享资源  网络编程三要素  IP地址：唯一标识网络上每一台计算机，两台计算机间通信必备要素     ipconfig查看 端口号：计算机中应用程序的编号有效端口0~65536系统使用或保留端口0~1024 通信协议：通信的规则   TCP UDP国际通用协议TCP&#x2F;IP协议  网络分层模型网">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210127154629160.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210127171611100.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210127172249713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-01-27T07:25:30.000Z">
+<meta property="article:modified_time" content="2021-02-02T13:49:17.759Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="网络编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210127154629160.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/01/27/Java网络编程/"/>
+
+
+
+
+
+  <title>Java网络编程 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/27/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java网络编程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-27T15:25:30+08:00">
+                2021-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaSE/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaSE</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/JavaSE/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">Java网络编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>例子见<a href="https://github.com/two-fire/JavaSE" target="_blank" rel="noopener">Github-JavaSE-Day08</a></p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p><strong>网络</strong></p>
+<ol>
+<li>多台计算机组成，使用物理线路连接</li>
+<li>交换数据，共享资源</li>
+</ol>
+<p><strong>网络编程三要素</strong></p>
+<ol>
+<li>IP地址：唯一标识网络上每一台计算机，<br>两台计算机间通信必备要素     <code>ipconfig</code>查看</li>
+<li>端口号：计算机中应用程序的编号<br>有效端口0~65536<br>系统使用或保留端口0~1024</li>
+<li>通信协议：通信的规则   TCP UDP<br>国际通用协议TCP/IP协议</li>
+</ol>
+<p><strong>网络分层模型</strong><br>网络模型一：<br><strong>OSI</strong>开发系统互联参考模型</p>
+<p>网络模型二：<br>TCP/IP参考模型：Transfer Control Protocol/Internet Protocol传输控制/网际协议<br><img src="https://img-blog.csdnimg.cn/20210127154629160.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>IP地址表示方法</strong>：<br>IP地址一共32位。<br>IP地址 = 网络IP + 主机IP</p>
+<ul>
+<li>网络ID：标识计算机或网络设备所在网段</li>
+<li>主机ID：标识特定主机或网络设备</li>
+</ul>
+<blockquote>
+<p>特殊的IP地址<br>0.0.0.0：本机 更多是阻断和外网的通信<br>127.0.0.1：本机回环地址，用于本机测试 localhost 可以通信<br>255.255.255.255：当前子网，一般用于向当前子网广播信息</p>
+</blockquote>
+<p><strong>IP地址所对应的对象–&gt;InetAddress</strong><br>Java提供了一个对ip地址的访问类<code>java.net.InetAddress</code>。无构造方法。</p>
+<details><summary>InetAddressDemo.java</summary>
+<pre><code>public class InetAddressDemo {
+    public static void main(String[] args) throws UnknownHostException {
+        InetAddress localHost = InetAddress.getLocalHost();
+        System.out.println(localHost); // 主机名+IP地址
+
+<pre><code>    // 自己局域网内（同一网段内）的主机名才能拿到ip地址
+    InetAddress inetAdd = InetAddress.getByName(&quot;LAPTOP-8VFER8KN&quot;);
+    System.out.println(inetAdd);
+
+    //拿到百度的ip地址
+    InetAddress baidu = InetAddress.getByName(&quot;www.baidu.com&quot;);
+    System.out.println(baidu);
+    System.out.println(baidu.getHostAddress());
+    System.out.println(baidu.getHostName());
+}</code></pre><p>}</pre></code></details></p>
+<p><strong>端口：port</strong><br>端口是虚拟概念，并不是主机上真的有若干端口。通过端口可以在一个主机上运行多个网络应用程序。</p>
+<p><strong>传输协议</strong><br>UDP：</p>
+<ul>
+<li>相当于发短信（有字数限制），不需要建立连接，效率较高但容易丢包</li>
+<li>数据报大小限制在64k内<br>TCP：</li>
+<li>相当于打电话，需要建立连接，效率较低但数据传输安全。</li>
+<li>三次握手和四次分手。<blockquote>
+<p>为什么要三次握手？<br>如果只是两次握手， 至多只有连接发起方的起始序列号能被确认， 另一方选择的序列号则得不到确认。<br>为什么要四次分手？<br>A、B通信，如果三次分手可能会造成：A端已经释放了资源，但B端的资源没有释放。这就会造成我们对应资源的一种浪费。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>视频是用UDP还是TCP？<br>可以先用TCP建立连接，再用UDP传输数据。视频掉帧影响不大</p>
+</blockquote>
+<p><strong>Socket套接字</strong></p>
+<ul>
+<li>网络上两个程序通过一个<strong>双向的通信连接</strong>实现数据的交换，这个连接的一端(接收数据的地方，接收IO请求的，可以读写数据的地方)称为一个<strong>Socket</strong>。</li>
+<li>比如两台计算机互联，需要个接口，那么这个网线就是socket。两个程序互连，存在网络上，所以是一个<strong>逻辑上</strong>的概念，相当于虚拟接口。</li>
+<li>Socket是Java中定义好的一个类，Java中使用Socket完成<strong>TCP</strong>程序的开发，使用它可以方便地建立<font color = red><strong>可靠</strong>、<strong>双向</strong>、<strong>持续性</strong>（消息没发完不可能断）、<strong>点对点</strong></font>的通讯连接。</li>
+<li>在Socket的程序开发中，服务器端使用<font color = red><strong>ServerSocket</strong></font>等待客户端的连接（ServerSocket相当于是硬件设备）<br><img src="https://img-blog.csdnimg.cn/20210127171611100.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ul>
+<h3 id="基于TCP协议的Socket编程"><a href="#基于TCP协议的Socket编程" class="headerlink" title="基于TCP协议的Socket编程"></a>基于TCP协议的Socket编程</h3><p>进行网络通信时，Socket需要借助<strong>数据流</strong>来完成数据的传输工作。</p>
+<ol>
+<li>通信双方需要建立连接</li>
+<li>连接建立时双方存在主次之分。（先服务端再客户端）</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20210127172249713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>Socket类</strong><br><code>java.net.Socket</code><br>双端通信：<br>客户端向服务端发送数据</p>
+<ul>
+<li>先启动<strong>服务端</strong>，如果先启动客户端会报拒绝连接的错误</li>
+<li>如果启动两次服务端也会报错（地址被占用），因为端口只能绑定一次<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Client.java</span></span><br><span class="line"> <span class="comment">// 创建客户端的套接字</span></span><br><span class="line">Socket client = <span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>,<span class="number">10000</span>);</span><br><span class="line"><span class="comment">//-------------向外进行输出----------------</span></span><br><span class="line"><span class="comment">// 获取输出流对象</span></span><br><span class="line">OutputStream outputStream = client.getOutputStream();</span><br><span class="line"><span class="comment">// 数据输出</span></span><br><span class="line">outputStream.write(<span class="string">"hello java"</span>.getBytes());</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 或者：</span></span><br><span class="line"><span class="comment"> * // 将输出流对象进行包装</span></span><br><span class="line"><span class="comment"> * DataOutputStream dataOutputStream = new DataOutputStream(outputStream);</span></span><br><span class="line"><span class="comment"> * // 传输数据</span></span><br><span class="line"><span class="comment"> * dataOutputStream.writeUTF("hello,你好");</span></span><br><span class="line"><span class="comment"> */</span> </span><br><span class="line"> <span class="comment">//--------------接受服务器端返回的消息----------------------</span></span><br><span class="line">InputStream inputStream = client.getInputStream();</span><br><span class="line"><span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="keyword">int</span> length = inputStream.read(buf);</span><br><span class="line">System.out.println(<span class="string">"服务端的响应数据是："</span>+<span class="keyword">new</span> String(buf,<span class="number">0</span>,length));</span><br><span class="line"></span><br><span class="line"><span class="comment">//关闭流操作</span></span><br><span class="line">inputStream.close();</span><br><span class="line">outputStream.close();</span><br><span class="line">client.close();</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Server.java</span></span><br><span class="line"> <span class="comment">// 创建servertsocket对象</span></span><br><span class="line">ServerSocket serverSocket = <span class="keyword">new</span> ServerSocket(<span class="number">10000</span>);</span><br><span class="line"><span class="comment">// 获取服务器的套接字对象</span></span><br><span class="line">Socket server = serverSocket.accept();</span><br><span class="line"><span class="comment">//-------------接受客户端的输入----------------</span></span><br><span class="line"><span class="comment">// 获取输入流对象</span></span><br><span class="line">InputStream inputStream = server.getInputStream();</span><br><span class="line"><span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"><span class="keyword">int</span> length = inputStream.read(buf);</span><br><span class="line">System.out.println(<span class="string">"客户端传输的数据是："</span> +<span class="keyword">new</span> String(buf,<span class="number">0</span>,length));</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 或者：</span></span><br><span class="line"><span class="comment"> *  // 对输入流做包装，包装成DataInputStream</span></span><br><span class="line"><span class="comment"> *  DataInputStream dataInputStream = new DataInputStream*(inputStream);</span></span><br><span class="line"><span class="comment"> *  // 读取对应的数据</span></span><br><span class="line"><span class="comment"> *  String s = dataInputStream.readUTF();</span></span><br><span class="line"><span class="comment"> *  System.out.println(s);</span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="comment">//-------------向进客户端进行输出----------------</span></span><br><span class="line">OutputStream outputStream = server.getOutputStream();</span><br><span class="line"><span class="comment">// 数据输出</span></span><br><span class="line">outputStream.write(<span class="string">"hello from server"</span>.getBytes());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 关闭流对象</span></span><br><span class="line">outputStream.close();</span><br><span class="line">inputStream.close();</span><br><span class="line">server.close();</span><br><span class="line">serverSocket.close();</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><font color=red>注</font>：</p>
+<ol>
+<li>不能自动关闭流，必须手动进行关闭</li>
+<li>当数据比较大的时候，需要添加输入输出流完成的标志<br>shutdownOutput()或者shutdownInput()</li>
+<li>如果传输的是对象，需要用到<code>ObjectOutputStream</code>，序列化</li>
+</ol>
+<blockquote>
+<p>IDEA 实现<code>Serializable</code>接口时，自动生成UID值的方法。<br>File –&gt; Settings –&gt; Editor –&gt; Inspections –&gt; Java –&gt; Serialization issues –&gt; 勾选“Serializable class without ‘serialVersionUID’”<br>之后选择类名，按”alt + enter”，可以随机生成数字作为UID</p>
+</blockquote>
+<h3 id="基于UDP的网络编程（用的少）"><a href="#基于UDP的网络编程（用的少）" class="headerlink" title="基于UDP的网络编程（用的少）"></a>基于UDP的网络编程（用的少）</h3><ol>
+<li>通信双方不需要建立连接</li>
+<li>通信双方完全平等</li>
+</ol>
+<p>同样需要用到套接字，只不过变成了<code>DatagramSocket</code>（此类表示用于发送和接收数据报数据包的套接字）</p>
+<p><code>DatagramPacket</code>：该类表示数据报包。用于实现无连接传送服务。</p>
+<details><summary>UDPClient.java</summary>
+<pre><code>/**
+ * 客户端向服务端传送消息
+ * 先后启动无顺序
+ */
+public class UDPClient {
+    public static void main(String[] args) throws Exception {
+        // 创建UDP通信的socket 自己对应的端口
+        DatagramSocket datagramSocket = new DatagramSocket(10000);
+        // 从控制台读取数据
+        Scanner scanner = new Scanner(System.in);
+        String str = scanner.nextLine();
+        // 远程的地址和端口
+        DatagramPacket datagramPacket = new DatagramPacket(str.getBytes(),str.length(),
+                InetAddress.getByName("localhost"),10001);
+        // 发送数据
+        datagramSocket.send(datagramPacket);
+        datagramSocket.close();
+    }
+}</code></pre>
+</details>
+<details><summary>UDPServer.java</summary>
+<pre><code>public class UDPServer {
+    public static void main(String[] args) throws Exception {
+        DatagramSocket datagramSocket = new DatagramSocket(10001);
+        //--------接收数据----------
+        byte[] buf = new byte[1024];
+        // 用来接收传输过来的数据
+        DatagramPacket datagramPacket = new DatagramPacket(buf,buf.length);
+        // 利用创建好的数据报包来接收数据
+        datagramSocket.receive(datagramPacket);
+        // 打印输出信息
+        System.out.println(new String(datagramPacket.getData(),0,datagramPacket.getLength()));
+        datagramSocket.close();
+    }
+}</code></pre>
+</details>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="tag"># 网络编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/24/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E2%80%94%E2%80%94%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E9%97%AE%E9%A2%98%E3%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="next" title="多线程——生产者消费者问题、线程池">
+                <i class="fa fa-chevron-left"></i> 多线程——生产者消费者问题、线程池
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/28/IDEA%E5%BF%AB%E6%8D%B7%E9%94%AE%E5%92%8C%E7%B3%BB%E7%BB%9F%E8%AE%BE%E7%BD%AE/" rel="prev" title="IDEA快捷键和系统设置">
+                IDEA快捷键和系统设置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于TCP协议的Socket编程"><span class="nav-text">基于TCP协议的Socket编程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于UDP的网络编程（用的少）"><span class="nav-text">基于UDP的网络编程（用的少）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

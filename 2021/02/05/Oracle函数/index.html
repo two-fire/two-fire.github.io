@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Oracle函数," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SQL函数【在api里面做一个基本查询就可以了】函数一般是在数据上执行的，它给数据的转换和处理提供了方便。只是将取出的数据进行处理，不会改变数据库中的值。 分类SQL函数可以分为组函数和单行函数。&amp;emsp;– 组函数(又称聚合函数)，输入多个值，最终只会返回一个值&amp;emsp;– 组函数仅可用于选择列表或者查询的having子句where语句后面的只能是表中已有的字段，类似于sum(sal)这种的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle函数">
+<meta property="og:url" content="http://yoursite.com/2021/02/05/Oracle%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="SQL函数【在api里面做一个基本查询就可以了】函数一般是在数据上执行的，它给数据的转换和处理提供了方便。只是将取出的数据进行处理，不会改变数据库中的值。 分类SQL函数可以分为组函数和单行函数。&amp;emsp;– 组函数(又称聚合函数)，输入多个值，最终只会返回一个值&amp;emsp;– 组函数仅可用于选择列表或者查询的having子句where语句后面的只能是表中已有的字段，类似于sum(sal)这种的">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210205233109493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210206112846797.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210206105603174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021020611340090.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210206170757317.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210206194847279.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210206200919527.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210206202146650.png">
+<meta property="article:published_time" content="2021-02-05T14:27:57.425Z">
+<meta property="article:modified_time" content="2021-02-07T02:13:04.698Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="Oracle函数">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210205233109493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/02/05/Oracle函数/"/>
+
+
+
+
+
+  <title>Oracle函数 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/05/Oracle%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Oracle函数</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-05T22:27:57+08:00">
+                2021-02-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="SQL函数"><a href="#SQL函数" class="headerlink" title="SQL函数"></a>SQL函数</h2><p>【在api里面做一个基本查询就可以了】<br>函数一般是在数据上执行的，它给数据的转换和处理提供了方便。<br>只是将取出的数据进行处理，<strong>不会改变数据库中的值</strong>。</p>
+<p><strong>分类</strong><br>SQL函数可以分为<strong>组函数</strong>和<strong>单行函数</strong>。<br>&emsp;– <strong>组函数</strong>(又称聚合函数)，输入多个值，最终只会返回一个值<br>&emsp;– <font color='orange'>组函数仅可用于<strong>选择列表</strong>或者<strong>查询的having子句</strong></font><br>where语句后面的只能是表中已有的字段，类似于<code>sum(sal)</code>这种的是不能被执行的。<br>&emsp;– <strong>单行函数</strong>，输入一个值，输出一个值<br>例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> deptno,<span class="keyword">count</span>(*) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno <span class="keyword">having</span> <span class="keyword">count</span>(*) &gt;<span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<p>因为count(<em>)是在虚拟表里面，而并不存在于emp表中。所以如果把<code>having</code>换成<code>where</code>会报<code>COU标识符无效</code>。<br><font color='orange'>注意：上面的count(</em>)不能取别名<code>select deptno,c from emp group by deptno having c &gt;3;</code>也会报错</font></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--查询所有员工的薪水总和</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sum</span>(sal) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">--查看表中有多少条记录</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) cou <span class="keyword">from</span> emp；</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) cou <span class="keyword">from</span> emp；</span><br><span class="line"><span class="comment">--查看人数大于3的部门的部门编号</span></span><br><span class="line"><span class="keyword">select</span> deptno,<span class="keyword">count</span>(*) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno <span class="keyword">having</span> <span class="keyword">count</span>(*) &gt;<span class="number">3</span>;</span><br><span class="line"><span class="comment">--错误，where语句后面的只能是表中已有的字段，而函数得到的字段是虚拟表字段</span></span><br><span class="line"><span class="keyword">select</span> deptno,<span class="keyword">count</span>(*) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno <span class="keyword">where</span> <span class="keyword">count</span>(*) &gt;<span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="单行函数"><a href="#单行函数" class="headerlink" title="单行函数"></a>单行函数</h3><p>单行函数，输入一个值，输出一个值<br><strong>分类</strong><br><img src="https://img-blog.csdnimg.cn/20210205233109493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" width=50% height=50% align=center></p>
+<h4 id="字符函数"><a href="#字符函数" class="headerlink" title="字符函数"></a>字符函数</h4><p>字符函数全以<strong>字符作为参数</strong>，返回值分为两类：一类返回字符值，一类返回数字值。<br>– concat（string1，string2）连接两个字符串 ||<br>– initcap（string）string中<strong>每个</strong>单词首字母大写<br>– lower(string) 以小写形式返回string<br>– lpad,rpad 填充字符型数据<br>– ltrim/rtrim(string1,string2) 去左边/右部空格<br>– trim(A from B) 去空格<br>– Substr（string,x,y）提取字符串的一部分<br>&emsp;x代表第几个位置<br>&emsp;y代表长度<br>&emsp;0和1的效果一样<br>&emsp;用负数则从右边开始数第几个位置<br>– upper(string）以大写形式返回string<br>– Instr（）字符串出现的位置<br>– Length（）字符串长度</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--concat：表示字符串的连接，等同于 ||</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">concat</span>(<span class="string">'my name is '</span>,ename) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">--将字符串的每个首字母大写</span></span><br><span class="line"><span class="keyword">select</span> initcap(<span class="string">'eq a'</span>) <span class="keyword">from</span> dual; <span class="comment">-- Eq a</span></span><br><span class="line"><span class="comment">--将字符串全部转换为大写</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">upper</span>(ename) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">--将字符串全部转换为小写</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">lower</span>(ename) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">--填充字符串 </span></span><br><span class="line"><span class="comment">--规定字符串长度为10左端用*补全</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">lpad</span>(ename,<span class="number">10</span>,<span class="string">'*'</span>) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">--规定字符串长度为10右端用*补全</span></span><br><span class="line"><span class="keyword">select</span> rpad(ename,<span class="number">10</span>,<span class="string">'*'</span>) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">--去空格</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">trim</span>(ename) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">ltrim</span>(ename) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">rtrim</span>(ename) <span class="keyword">from</span> emp;</span><br><span class="line"></span><br><span class="line"><span class="comment">--查找指定字符串的位置</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">instr</span>(<span class="string">'ABCDABC'</span>,<span class="string">'BC'</span>) <span class="keyword">from</span> dual; <span class="comment">-- 结果为2</span></span><br><span class="line"><span class="comment">--查看字符串长度</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">length</span>(ename) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">--替换操作</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">replace</span>(<span class="string">'aabbd'</span>,<span class="string">'aa'</span>,<span class="string">'hehe'</span>) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">--提取字符串的一部分</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">substr</span>(<span class="string">'abcde'</span>,<span class="number">0</span>,<span class="number">2</span>) <span class="keyword">from</span> emp; <span class="comment">--ab</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">substr</span>(<span class="string">'abcde'</span>,<span class="number">1</span>,<span class="number">2</span>) <span class="keyword">from</span> emp; <span class="comment">--ab</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">substr</span>(<span class="string">'abcde'</span>,<span class="number">-5</span>,<span class="number">2</span>) <span class="keyword">from</span> dual; <span class="comment">--ab</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="数字函数"><a href="#数字函数" class="headerlink" title="数字函数"></a>数字函数</h4><p>数字函数以NUMBER类型为参数返回NUMBER值。<br>负数在函数操作中也是支持的。<br>▪ round（number，n）返回四舍五入后的值<br>▪ trunc（number，n）<br>▪ mod（x，y）求余数<br>▪ ceil()上取整<br>▪ floor()下取整<br>▪ abs()绝对值<br>▪ sign(x)获取正负值 x=0，返回0；x&lt;0，返回-1；否则返回1<br>▪ power(x,y)x的y次幂</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--进行四舍五入运算，可以指定小数部分位数</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">round</span>(<span class="number">123.123</span>,<span class="number">2</span>) <span class="keyword">from</span> dual;<span class="comment">--结果为123.12</span></span><br><span class="line"><span class="comment">--截断数据，按照位数直接截取，不会进行其他操作</span></span><br><span class="line"><span class="keyword">select</span> trunc(<span class="number">123.128</span>,<span class="number">2</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--取模操作</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">mod</span>(<span class="number">10</span>,<span class="number">4</span>) <span class="keyword">from</span> dual; <span class="comment">--结果为2 10 mod 4 = 2</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">mod</span>(<span class="number">-10</span>,<span class="number">4</span>) <span class="keyword">from</span> dual;  <span class="comment">--结果为-2 </span></span><br><span class="line"><span class="comment">--向上取整</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">ceil</span>(<span class="number">123.12</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--向下取整</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">123.56</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">floor</span>(<span class="number">-123.12</span>) <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--绝对值</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">abs</span>(<span class="number">-123.56</span>) <span class="keyword">from</span> dual; <span class="comment">--123.56</span></span><br><span class="line"><span class="comment">--获取正负值</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sign</span>(<span class="number">100</span>) <span class="keyword">from</span> dual; <span class="comment">--1</span></span><br><span class="line"><span class="comment">--x的y次幂</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">power</span>(<span class="number">2</span>,<span class="number">4</span>) <span class="keyword">from</span> dual; <span class="comment">--16</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="日期函数"><a href="#日期函数" class="headerlink" title="日期函数"></a>日期函数</h4><p>Oracle以内部数字格式存储日期:世纪,年,月,日,小时,分钟,秒。<br>– sysdate/current_date 以date类型返回当前的日期<br>– Add_months(d,x) 返回加上x月后的日期d的值<br>– LAST_DAY(d) 返回的所在月份的最后一天<br>– Months_between(date1,date2) 返回date1和date2之间月的数目</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--获取当前系统时间</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> <span class="keyword">from</span> dual; <span class="comment">--2021/2/6 10:13:18</span></span><br><span class="line"><span class="comment">--当前日期增加2个月</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> 当前日期,add_months(<span class="keyword">sysdate</span>,<span class="number">2</span>) add_months <span class="keyword">from</span> dual; </span><br><span class="line"><span class="comment">--返回输入日期所在月份的最后一天</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">last_day</span>(<span class="keyword">sysdate</span>) <span class="keyword">from</span> dual;<span class="comment">--2021/2/28 10:13:50</span></span><br><span class="line"><span class="comment">--两个日期相隔的月份 trunc截断</span></span><br><span class="line"><span class="keyword">select</span> trunc(months_between(<span class="keyword">sysdate</span>,hiredate),<span class="number">3</span>) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="comment">--提取日期中的时间</span></span><br><span class="line"><span class="keyword">select</span> </span><br><span class="line"><span class="keyword">extract</span>(<span class="keyword">hour</span> <span class="keyword">from</span> <span class="built_in">timestamp</span> <span class="string">'2001-2-16 2:38:40 '</span> ) 小时,</span><br><span class="line"><span class="keyword">extract</span>(<span class="keyword">minute</span> <span class="keyword">from</span> <span class="built_in">timestamp</span> <span class="string">'2001-2-16 2:38:40 '</span> ) 分钟,</span><br><span class="line"><span class="keyword">extract</span>(<span class="keyword">second</span> <span class="keyword">from</span> <span class="built_in">timestamp</span> <span class="string">'2001-2-16 2:38:40 '</span> ) 秒,</span><br><span class="line"><span class="keyword">extract</span>(<span class="keyword">DAY</span> <span class="keyword">from</span> <span class="built_in">timestamp</span> <span class="string">'2001-2-16 2:38:40 '</span> ) 日,</span><br><span class="line"><span class="keyword">extract</span>(<span class="keyword">MONTH</span> <span class="keyword">from</span> <span class="built_in">timestamp</span> <span class="string">'2001-2-16 2:38:40 '</span> ) 月,</span><br><span class="line"><span class="keyword">extract</span>(<span class="keyword">YEAR</span> <span class="keyword">from</span> <span class="built_in">timestamp</span> <span class="string">'2001-2-16 2:38:40 '</span> ) 年</span><br><span class="line"> <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>mysql中的日期函数</strong><br>▪ select current_time() from dual;—- mysql:时间。<br>▪ select current_date() form dual; —mysql；日期<br>▪ select current_timestamp() from dual;—mysql：日期时间</p>
+</blockquote>
+<h4 id="转换函数"><a href="#转换函数" class="headerlink" title="转换函数"></a>转换函数</h4><p>在oracle中，存在数值的<strong>隐式转换</strong>和<strong>显示转换</strong>。<br>隐式转换指的是<strong>字符串</strong>可以转换为<strong>数值</strong>或者<strong>日期</strong>。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">'999'</span>+<span class="number">10</span> <span class="keyword">from</span> dual; <span class="comment">-- 1009</span></span><br></pre></td></tr></table></figure>
+<p>尽管数据类型之间可以进行隐式转换，仍建议使用显示转换函数，以保持良好的设计风格。<br>显示转换指的是当由<strong>数值或者日期</strong>转换为<strong>字符串</strong>的时候，使用显示转换函数，必须规定格式。<br>▪ to_char<br>▪ to_number<br>▪ to_date<br><img src="https://img-blog.csdnimg.cn/20210206112846797.png" width=40% height=40% align=center></p>
+<p>1、<strong>TO_CHAR(date, ‘fmt’)</strong><br>用于将日期或时间戳转换成varchar2类型字符串，要指定格式字符串<br><img src="https://img-blog.csdnimg.cn/20210206105603174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" width=60% height=60% align=center></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--date：to_char</span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="keyword">sysdate</span>,<span class="string">'YYYY-MM-DD HH24:MI:SS'</span>) <span class="keyword">from</span> dual; <span class="comment">-- 2021-02-06 11:40:26</span></span><br></pre></td></tr></table></figure>
+
+<p>2、<strong>to_char（num,format）</strong><br>用于将Number类型参数转换为varchar2类型，要指定format<br><img src="https://img-blog.csdnimg.cn/2021020611340090.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" width=60% height=60% align=center></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--number：to_char</span></span><br><span class="line"><span class="comment">--9：占位符 </span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="number">123.456789</span>,<span class="string">'9999'</span>) <span class="keyword">from</span> dual; <span class="comment">-- 123.46</span></span><br><span class="line"><span class="comment">--0：填充0占位符 </span></span><br><span class="line"><span class="comment">--.：显示本小数点</span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="number">123.456789</span>,<span class="string">'0000.00'</span>) <span class="keyword">from</span> dual;<span class="comment">-- 0123.46</span></span><br><span class="line"><span class="comment">--$：显示美元符号</span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="number">123.456789</span>,<span class="string">'$0000.00'</span>) <span class="keyword">from</span> dual;<span class="comment">-- $0123.46</span></span><br><span class="line"><span class="comment">--L：显示本地货币符号</span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="number">123.456789</span>,<span class="string">'L0000.00'</span>) <span class="keyword">from</span> dual;<span class="comment">-- ￥0123.46</span></span><br><span class="line"><span class="comment">--,：显示千分位符号</span></span><br><span class="line"><span class="keyword">select</span> to_char(<span class="number">12345.456789</span>,<span class="string">'000,000,0.00'</span>) <span class="keyword">from</span> dual;<span class="comment">--  001,234,5.46</span></span><br></pre></td></tr></table></figure>
+<p>3、<strong>to_date (String,format)</strong><br>将char或varchar2类型的string转换为date类型</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">to_date</span>(<span class="string">'2019-10-10 10:10:10'</span>,<span class="string">'YYYY-MM-DD HH24:MI:SS'</span>) <span class="keyword">from</span> dual; <span class="comment">--2019/10/10 10:10:10</span></span><br></pre></td></tr></table></figure>
+<p>4、<strong>to_number(String,format)</strong><br>将char或varchar2类型的string转换为number类型</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> to_number(<span class="string">'123,456.789'</span>,<span class="string">'999,999.999'</span>) <span class="keyword">from</span> dual; <span class="comment">-- 123456.789</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="单行函数嵌套"><a href="#单行函数嵌套" class="headerlink" title="单行函数嵌套"></a>单行函数嵌套</h4><p>案例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--显示没有上级管理（mgr为null）的公司首脑  </span></span><br><span class="line"><span class="keyword">select</span> ename,nvl(to_char(mgr),<span class="string">'boss'</span>) <span class="keyword">from</span> emp <span class="keyword">where</span> mgr <span class="keyword">is</span> <span class="literal">null</span>;</span><br><span class="line"><span class="comment">--显示员工雇佣期满6个月后下一个星期五的日期</span></span><br><span class="line"><span class="keyword">select</span> hiredate,next_day(add_months(hiredate,<span class="number">6</span>),<span class="string">'星期五'</span>) <span class="keyword">from</span> emp;</span><br></pre></td></tr></table></figure>
+
+<h4 id="其他函数"><a href="#其他函数" class="headerlink" title="其他函数"></a>其他函数</h4><h5 id="decode"><a href="#decode" class="headerlink" title="decode"></a>decode</h5><p>decode(条件,值1,翻译值1,值2,翻译值2,…值n,翻译值n,缺省值)<br>功能】根据条件返回相应值<br>【参数】c1, c2, …,cn,字符型/数值型/日期型，必须类型相同或null<br>注：值1……n <font color='orange'>不能为条件表达式</font>,这种情况只能用case when then end解决</p>
+<p>该函数的含义如下：　　<br>　　IF 条件=值1 THEN<br>　　RETURN(翻译值1)<br>　　ELSIF 条件=值2 THEN<br>　　RETURN(翻译值2)<br>　　……<br>　　ELSIF 条件=值n THEN<br>　　RETURN(翻译值n)　　<br>　　ELSE<br>　　RETURN(缺省值)<br>　　END IF</p>
+<p><strong>例子</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--给不同部门的人员涨薪，10部门涨10%，20部门涨20%，30部门涨30%</span></span><br><span class="line"><span class="keyword">select</span> ename,</span><br><span class="line">       sal,</span><br><span class="line">       <span class="keyword">decode</span>(deptno, <span class="number">10</span>, sal * <span class="number">1.1</span>, <span class="number">20</span>, sal * <span class="number">1.2</span>, <span class="number">30</span>, sal * <span class="number">1.3</span>)</span><br><span class="line">  <span class="keyword">from</span> emp;</span><br></pre></td></tr></table></figure>
+
+<h5 id="case-when"><a href="#case-when" class="headerlink" title="case when"></a>case when</h5><p>case [&lt;表达式&gt;]<br>when &lt;表达式条件值1&gt; then &lt;满足条件时返回值1&gt;<br>[when &lt;表达式条件值2&gt; then &lt;满足条件时返回值2&gt;<br>……<br>[else  &lt;不满足上述条件时返回值&gt;]]<br>end<br>【功能】当：&lt;表达式&gt;＝&lt;表达式条件值1……n&gt; 时，返回对应 &lt;满足条件时返回值1……n&gt;<br>【参数】<br>&lt;表达式&gt; 默认为true (逻辑型)<br>&lt;表达式条件值1……n&gt; 类型要与&lt;表达式&gt;类型一致，<br>若&lt;表达式&gt;为字符型，则&lt;表达式条件值1……n&gt;也要为字符型<br>【注意点】<br>1、以CASE开头，以END结尾<br>2、分支中WHEN 后跟条件，THEN为显示结果<br>3、ELSE 为除此之外的默认情况，类似于高级语言程序中switch case的default，<font color='orange'>可以不加</font><br>4、END 后跟别名<br>5、只返回第一个符合条件的值,剩下的when部分将会被<font color='orange'>自动忽略</font>，得注意条件先后顺序</p>
+<p><strong>例子</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--给不同部门的人员涨薪，10部门涨10%，20部门涨20%，30部门涨30%</span></span><br><span class="line"><span class="keyword">select</span> ename,</span><br><span class="line">       sal,</span><br><span class="line">       <span class="keyword">case</span> deptno</span><br><span class="line">         <span class="keyword">when</span> <span class="number">10</span> <span class="keyword">then</span></span><br><span class="line">          sal * <span class="number">1.1</span></span><br><span class="line">         <span class="keyword">when</span> <span class="number">20</span> <span class="keyword">then</span></span><br><span class="line">          sal * <span class="number">1.2</span></span><br><span class="line">         <span class="keyword">else</span></span><br><span class="line">          sal * <span class="number">1.3</span></span><br><span class="line">       <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">from</span> emp;</span><br></pre></td></tr></table></figure>
+
+<h3 id="组函数"><a href="#组函数" class="headerlink" title="组函数"></a>组函数</h3><p>组函数，一般情况下，组函数都要和group by组合使用<br>常用的组函数有5个：<br>▪ avg()返回某列的平均值，只适合数值类型的数据<br>▪ min()返回某列的最小值，适用于任何类型<br>▪ max()返回某列的最大值，适用于任何类型<br>▪ sum()返回某列值的和，只适合数值类型的数据<br>▪ count()返回某列的行数，处理的时候会跳过空值而处理非空值<br><strong>注：</strong></p>
+<ol>
+<li>group by，按照某些相同的值去进行分组操作</li>
+<li>group进行分组操作的时候，可以指定一个列或者多个列，但是使用了group by之后，<font color='orange'>选择列表中只能包含<strong>组函数的值</strong>或者<strong>group by的普通字段</strong></font>。 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 求每个部门的平均薪水</span></span><br><span class="line"><span class="keyword">select</span> deptno,<span class="keyword">avg</span>(sal) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno;</span><br><span class="line"><span class="comment">--求平均薪水大于2000的部门</span></span><br><span class="line"><span class="keyword">select</span> deptno, <span class="keyword">avg</span>(sal) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno <span class="keyword">having</span> <span class="keyword">avg</span>(sal) &gt; <span class="number">2000</span>;</span><br><span class="line"><span class="comment">-- 报错,不是group by表达式</span></span><br><span class="line"><span class="keyword">select</span> sal, <span class="keyword">avg</span>(sal) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno <span class="keyword">having</span> <span class="keyword">avg</span>(sal) &gt; <span class="number">2000</span>;</span><br></pre></td></tr></table></figure>
+ <strong>理解</strong>：按照部门进行分组后，每个部门里面的工资能一样吗？不能！所以sal根本查不出来了。</li>
+<li>组函数仅在选择列表和Having子句中有效</li>
+<li>count一般用于获取表中的记录条数，获取条数的时候可以使用<code>*</code>或者某一个具体的列，甚至可以使用纯数字来代替，但从效率角度考虑，建议使用数字或者某一个具体的列，而不要使用<code>*</code>效率太低。<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--三种方式结果相同</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(ename) <span class="keyword">from</span> emp;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">from</span> emp;</span><br></pre></td></tr></table></figure></li>
+<li>组函数不能处理null<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">avg</span>(comm) <span class="keyword">from</span> emp; <span class="comment">--分母只算不为空的条目</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">avg</span>(nvl(comm,<span class="number">0</span>)) <span class="keyword">from</span> emp; <span class="comment">--分母为全部条目</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h4 id="数据分组"><a href="#数据分组" class="headerlink" title="数据分组"></a>数据分组</h4><p>▪ <strong>创建分组</strong><br>&emsp;– group by 子句<br>&emsp;– Group by 子句可以包含任意数目的列。<br>▪ 除组函数语句外，select语句中的每个列都必须在group by 子句中给出。<br>&emsp;– 如果分组列中具有null值，则null将作为一个分组返回。如果列中有多行null值，他们将分为一组。<br>&emsp;– Group by 子句必须出现在where子句之后，order by 子句之前。<br>▪ <strong>过滤分组</strong>（having子句)<br>&emsp;– Where过滤行，having过滤分组。<br>&emsp;– Having支持所有where操作符。<br>▪ 分组和排序<br>&emsp;– 一般在使用group by 子句时，应该也给出order by子句</p>
+<p>▪ 使用GROUP BY子句将表分成小组<br>▪ 出现在SELECT列表中的字段，如果出现的位置不是在组函数中，那么必须出现在GROUP BY子句中<br>▪ GROUP BY 列可以不在SELECT列表中<br>▪ 不能在 WHERE 子句中使用组函数.不能在 WHERE 子句中限制组. 使用Having对分组进行限制</p>
+<h4 id="Sql语句执行过程"><a href="#Sql语句执行过程" class="headerlink" title="Sql语句执行过程"></a>Sql语句执行过程</h4><img src="https://img-blog.csdnimg.cn/20210206170757317.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" width=60% height=60% align=center>
+1、读取from子句中的基本表、视图的数据。
+2、选取满足where子句中给出的条件表达式的元组
+3、按group子句中指定列的值分组，同时提取满足Having子句中组条件表达式的那些组
+4、按select子句中给出的列名戒列表达式求值输出
+5、Order by子句对输出的目标表进行排序
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--求部门下雇员的工资&gt;1200的人的平均薪资，且大于2000的部门，按顺序排列</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">avg</span>(sal)</span><br><span class="line">  <span class="keyword">from</span> emp</span><br><span class="line"> <span class="keyword">group</span> <span class="keyword">by</span> deptno</span><br><span class="line"><span class="keyword">having</span> <span class="keyword">avg</span>(sal) &gt; <span class="number">2000</span></span><br><span class="line"> <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">avg</span>(sal);</span><br></pre></td></tr></table></figure>
+
+<p>部门里面 工龄最小和最大的人找出来</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> deptno, <span class="keyword">min</span>(hiredate), <span class="keyword">max</span>(hiredate) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno;</span><br></pre></td></tr></table></figure>
+<img src="https://img-blog.csdnimg.cn/20210206194847279.png" width=40% height=40% align=center>
+如果想把对应的人名字列出来，怎么办？外面嵌套一层。
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> ename,deptno <span class="keyword">from</span> emp <span class="keyword">where</span> hiredate <span class="keyword">in</span>(</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">min</span>(hiredate), <span class="keyword">max</span>(hiredate) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno);</span><br></pre></td></tr></table></figure>
+in里面只能包含一个集合，这里面有两个集合，<font color="orange">**报错：值过多**</font>。那就再分开。
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> ename, deptno</span><br><span class="line">  <span class="keyword">from</span> emp</span><br><span class="line"> <span class="keyword">where</span> hiredate <span class="keyword">in</span> (<span class="keyword">select</span> <span class="keyword">min</span>(hiredate) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno)</span><br><span class="line">    <span class="keyword">or</span> hiredate <span class="keyword">in</span> (<span class="keyword">select</span> <span class="keyword">max</span>(hiredate) <span class="keyword">from</span> emp <span class="keyword">group</span> <span class="keyword">by</span> deptno);</span><br></pre></td></tr></table></figure>
+<img src="https://img-blog.csdnimg.cn/20210206200919527.png" width=30% height=30% align=center>
+部门为20的有2个。为什么？因为FORD的雇佣日期是`1981/12/3`，刚好和30部门工龄最小的JAMES同一天。这样导致FORD也符合条件被打印出来了。所以我们要把部门也进行关联。但是我们发现in里面都是对应的子查询，没法写了。
+
+<p>我们发现这种问题无法使用我们的<strong>子查询</strong>来解决了，需要用到两张表的关联查询。从而引入了<strong>关联查询</strong>。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> mm2.deptno, e1.ename, e1.hiredate</span><br><span class="line">  <span class="keyword">from</span> emp e1,</span><br><span class="line">       (<span class="keyword">select</span> <span class="keyword">min</span>(e.hiredate) mind, <span class="keyword">max</span>(e.hiredate) maxd, e.deptno</span><br><span class="line">          <span class="keyword">from</span> emp e</span><br><span class="line">         <span class="keyword">group</span> <span class="keyword">by</span> e.deptno) mm2</span><br><span class="line"> <span class="keyword">where</span> (e1.hiredate = mm2.mind <span class="keyword">or</span> e1.hiredate = mm2.maxd)</span><br><span class="line">   <span class="keyword">and</span> e1.deptno = mm2.deptno;</span><br></pre></td></tr></table></figure>
+<img src="https://img-blog.csdnimg.cn/20210206202146650.png" width=30% height=30% align=center>
+
+<h3 id="易错例子"><a href="#易错例子" class="headerlink" title="易错例子"></a>易错例子</h3><p>1、查询员工的奖金，如果奖金不为NULL显示‘有奖金’，为null则显示无奖金。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> ename,</span><br><span class="line">       <span class="keyword">decode</span>(nvl(to_char(comm), <span class="string">'无奖金'</span>),</span><br><span class="line">              to_char(comm),</span><br><span class="line">              <span class="string">'有奖金'</span>,</span><br><span class="line">              <span class="string">'无奖金'</span>)</span><br><span class="line">  <span class="keyword">from</span> emp;</span><br></pre></td></tr></table></figure>
+<p><font color='purple'>nvl(a, b) 当a！=null，才返回b。a，b类型要相同。</font></p>
+<p>2、查询EMP表按管理者编号升序排列，如果管理者编号为空则把为空的在最前显示。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> emp <span class="keyword">order</span> <span class="keyword">by</span> mgr <span class="keyword">nulls</span> <span class="keyword">first</span>;</span><br></pre></td></tr></table></figure>
+<p><font color='purple'>注意<code>nulls first</code>的使用。</font></p>
+<p>3、按部门求出工资大于1300人员的 部门编号、平均工资、最小佣金、最大佣金,且最大佣金大于100。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> deptno, <span class="keyword">avg</span>(nvl(sal, <span class="number">0</span>)), <span class="keyword">min</span>(comm), <span class="keyword">max</span>(comm)</span><br><span class="line">  <span class="keyword">from</span> emp</span><br><span class="line"> <span class="keyword">where</span> sal &gt; <span class="number">1300</span></span><br><span class="line"> <span class="keyword">group</span> <span class="keyword">by</span> deptno</span><br><span class="line"><span class="keyword">having</span> <span class="keyword">max</span>(nvl(comm, <span class="number">0</span>)) &gt; <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+<p><font color='purple'>Where过滤行，having过滤分组。</font></p>
+<p>4、查询10号部门中编号最新入职的员工，工龄最长的员工的个人信息。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> *</span><br><span class="line">  <span class="keyword">from</span> emp</span><br><span class="line"> <span class="keyword">where</span> deptno = <span class="number">10</span></span><br><span class="line">   <span class="keyword">and</span> (empno <span class="keyword">in</span> (<span class="keyword">select</span> <span class="keyword">max</span>(empno) <span class="keyword">from</span> emp <span class="keyword">where</span> deptno = <span class="number">10</span>) <span class="keyword">or</span></span><br><span class="line">       hiredate <span class="keyword">in</span> (<span class="keyword">select</span> <span class="keyword">min</span>(hiredate) <span class="keyword">from</span> emp <span class="keyword">where</span> deptno = <span class="number">10</span>));</span><br></pre></td></tr></table></figure>
+<font color='purple'>
+① and优先级大于or。</br>
+② 组函数仅在**选择列表**和**Having子句**中有效，不要忘记在where中的过滤条件中也可以有select选择列表，这个里面同样有效。</font>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Oracle%E5%87%BD%E6%95%B0/" rel="tag"># Oracle函数</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/05/SQL%E8%AF%AD%E5%8F%A5/" rel="next" title="SQL语言">
+                <i class="fa fa-chevron-left"></i> SQL语言
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/02/06/%E7%BB%8F%E5%85%B8%E7%AC%94%E8%AF%95%E9%A2%98/" rel="prev" title="Oracle行转列经典笔试题">
+                Oracle行转列经典笔试题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL函数"><span class="nav-text">SQL函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#单行函数"><span class="nav-text">单行函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符函数"><span class="nav-text">字符函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数字函数"><span class="nav-text">数字函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日期函数"><span class="nav-text">日期函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转换函数"><span class="nav-text">转换函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单行函数嵌套"><span class="nav-text">单行函数嵌套</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他函数"><span class="nav-text">其他函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#decode"><span class="nav-text">decode</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#case-when"><span class="nav-text">case when</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组函数"><span class="nav-text">组函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据分组"><span class="nav-text">数据分组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sql语句执行过程"><span class="nav-text">Sql语句执行过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#易错例子"><span class="nav-text">易错例子</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

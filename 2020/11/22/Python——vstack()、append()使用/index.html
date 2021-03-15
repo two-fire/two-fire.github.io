@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. numpy.vstack()   将两个矩阵分行合并。 12345import numpy as nps &#x3D; np.array([[1,0,1],[1,1,2]])s2 &#x3D; np.array([[1,0,1],[2,2,2],[3,1,3]])v &#x3D; np.vstack((s,np.expand_dims(s2[0],0)))print(v)  结果：  [[1 0 1] [1 1 2] [">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python——vstack()、append()、concatenate()使用">
+<meta property="og:url" content="http://yoursite.com/2020/11/22/Python%E2%80%94%E2%80%94vstack()%E3%80%81append()%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="1. numpy.vstack()   将两个矩阵分行合并。 12345import numpy as nps &#x3D; np.array([[1,0,1],[1,1,2]])s2 &#x3D; np.array([[1,0,1],[2,2,2],[3,1,3]])v &#x3D; np.vstack((s,np.expand_dims(s2[0],0)))print(v)  结果：  [[1 0 1] [1 1 2] [">
+<meta property="article:published_time" content="2020-11-22T08:20:39.000Z">
+<meta property="article:modified_time" content="2020-11-22T09:27:25.741Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/11/22/Python——vstack()、append()使用/"/>
+
+
+
+
+
+  <title>Python——vstack()、append()、concatenate()使用 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/22/Python%E2%80%94%E2%80%94vstack()%E3%80%81append()%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python——vstack()、append()、concatenate()使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-11-22T16:20:39+08:00">
+                2020-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E5%88%9B/" itemprop="url" rel="index">
+                    <span itemprop="name">大创</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E5%88%9B/%E9%97%AE%E9%A2%98%E9%9B%86/" itemprop="url" rel="index">
+                    <span itemprop="name">问题集</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-numpy-vstack"><a href="#1-numpy-vstack" class="headerlink" title="1. numpy.vstack()"></a>1. <strong>numpy.vstack()</strong></h2><p>   将<strong>两个</strong>矩阵分行合并。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">s = np.array([[<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>],[<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>]])</span><br><span class="line">s2 = np.array([[<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>],[<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">1</span>,<span class="number">3</span>]])</span><br><span class="line">v = np.vstack((s,np.expand_dims(s2[<span class="number">0</span>],<span class="number">0</span>)))</span><br><span class="line">print(v)</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<blockquote>
+<p>[[1 0 1]<br> [1 1 2]<br> [1 0 1]]</p>
+</blockquote>
+<p><code>np.expand_dims</code>将[1,0,1]升维到[[1,0,1]]，然后<code>np.vstack</code>进行合并，合并后shape为(3,3)</p>
+<h2 id="2-numpy-concatenate"><a href="#2-numpy-concatenate" class="headerlink" title="2. numpy.concatenate()"></a>2. <strong>numpy.concatenate()</strong></h2><p>concatenate(a_tuple, axis=0, out=None)<br>参数说明：<br>a_tuple:对需要合并的数组用元组的形式给出，(a1,a2,a3…)<br>axis: 沿指定的轴进行拼接，默认0，即第一个轴，分行合并</p>
+<p>维度必须相同，比如下面例子1不能“ar2 = np.array([[7,8], [11,12],[14,15]])”</p>
+<p><strong>例子：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ar1 = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line">ar2 = np.array([[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>], [<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>],[<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>]])</span><br><span class="line">v = np.concatenate((ar1, ar2))</span><br><span class="line">print(v)</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<blockquote>
+<p>[[ 1  2  3]<br> [ 4  5  6]<br> [ 7  8  9]<br> [11 12 13]<br> [14 15 16]]</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">R_pre = np.zeros((<span class="number">20</span>,<span class="number">120</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">20</span>):</span><br><span class="line">    R_pre[i] = np.concatenate((R_all[i][<span class="number">0</span>],R_all[i][<span class="number">1</span>],R_all[i][<span class="number">2</span>]))</span><br></pre></td></tr></table></figure>
+<p>R_all为shape是(20,3)的array数组。R_all[0]shape为(3,)，R_all[0][0]shape为(30,)，R_all[0][1]shape为(40,)，R_all[0][2]shape为(50,)<br><code>np.concatenate</code>将把<code>R_all[i][0]</code>,<code>R_all[i][1]</code>,<code>R_all[i][2]</code>拼到一起，最终shape为(20，120)</p>
+<blockquote>
+<p>R_all<br>[[array([1.6848972 , 0.        , 0.        , 3.398359  , 2.530793  ,<br>       1.0050455 , 2.9787443 , 0.6477883 , 2.556338  , 0.73463535,<br>       1.        , 0.        , 0.        , 0.        , 0.        ,<br>       2.        , 0.        , 2.7559242 , 0.47480136, 2.2723987 ,<br>       1.040998  , 0.63076216, 0.12816067, 1.9125026 , 3.1089356 ,<br>       0.04926831, 2.5731335 , 0.        , 0.        , 3.6136327 ,<br>       2.1885748 , 5.271537  , 2.4973857 , 2.3315785 , 0.4876842 ,<br>       2.5446043 , 2.8961205 , 2.2814133 , 2.7040894 , 0.        ,<br>       1.        , 0.40623373, 3.410592  , 0.04632151, 1.6073561 ,<br>       3.6362302 , 0.71310234, 0.807002  , 0.43683317, 0.69910496],<br>      dtype=float32)<br>  array([2.620739  , 0.        , 1.3929726 , 0.6371676 , 0.        ,<br>       1.        , 5.4475865 , 2.6643863 , 3.880937  , 4.7303853 ,<br>       0.05517461, 5.2109375 , 0.        , 0.        , 0.        ,<br>       0.98558354, 4.7299247 , 0.        , 3.8981698 , 3.6492205 ,<br>       1.        , 0.        , 6.190553  , 0.956293  , 3.5290947 ,<br>       2.        , 0.        , 1.8282684 , 0.32657242, 2.6781952 ,<br>       3.        , 0.69895065, 5.339527  , 0.        , 0.        ,<br>       5.5791173 , 0.        , 0.11749397, 7.2194476 , 0.714684  ],<br>      dtype=float32)<br>  array([6.9061866 , 6.52601   , 0.        , 0.        , 4.5311055 ,<br>       7.437533  , 0.        , 2.2622852 , 3.6607296 , 0.        ,<br>       1.        , 1.1706101 , 2.0249732 , 2.5909576 , 1.5096041 ,<br>       5.1143856 , 0.        , 7.4348016 , 8.265553  , 4.404272  ,<br>       1.        , 8.330065  , 6.1199856 , 1.8026098 , 0.        ,<br>       2.1523745 , 4.295476  , 0.        , 0.25838286, 4.181186  ],<br>      dtype=float32)]<br> [array([0.        , 1.0517871 , 0.        , 1.9522364 , 3.4467335 ,<br>       1.6532538 , 4.5833445 , 0.        , 2.8597844 , 0.        ,<br>       1.0986375 , 1.2344751 , 0.05524588, 0.        , 0.        ,<br>       1.        , 0.48994532, 2.0663538 , 0.0655461 , 1.4628885 ,<br>       2.        , 2.5271173 , 1.6658872 , 2.042052  , 1.8442372 ,<br>       3.        , 1.60442   , 0.        , 0.        , 2.941807  ,<br>       2.429257  , 5.0982413 , 1.9689019 , 0.        , 1.2967114 ,<br>       1.        , 0.915429  , 2.7474372 , 1.6846974 , 0.        ,<br>       2.        , 0.01763296, 2.0742316 , 0.24807084, 1.9481957 ,<br>       3.6349213 , 0.        , 0.01666034, 0.        , 0.606744  ],<br>      dtype=float32)<br>  array([0.8532868 , 0.        , 3.8194625 , 3.5880175 , 0.        ,<br>       1.        , 5.657879  , 2.5737116 , 2.7199547 , 3.7972608 ,<br>       2.        , 5.668191  , 0.        , 0.        , 0.        ,<br>       3.        , 4.598634  , 0.        , 3.8855243 , 1.230322  ,<br>       4.        , 0.        , 4.118646  , 0.68806565, 3.5005343 ,<br>       5.        , 1.1631998 , 3.6151364 , 0.6011877 , 4.762535  ,<br>       6.        , 1.906799  , 6.2813354 , 0.        , 0.844307  ,<br>       6.1294475 , 0.        , 0.        , 4.284295  , 1.6493309 ],<br>      dtype=float32)<br>  array([7.5145326 , 6.0982947 , 0.        , 0.        , 4.4792795 ,<br>       5.9737115 , 0.        , 1.8298718 , 3.148109  , 0.        ,<br>       1.        , 1.504651  , 2.8004415 , 3.89071   , 2.428724  ,<br>       4.807837  , 0.        , 4.968338  , 7.585526  , 2.6616354 ,<br>       1.        , 6.461577  , 7.4716034 , 1.954241  , 0.        ,<br>       0.87860256, 4.8513737 , 0.        , 0.33363724, 3.5909863 ],<br>      dtype=float32)]<br> …<br> [array([2.7897108 , 0.20866081, 0.13220854, 2.7202427 , 1.5674844 ,<br>       0.10765126, 0.6920907 , 1.729721  , 0.        , 0.24034634,<br>       0.5080626 , 0.        , 0.83318   , 0.        , 0.48236543,<br>       0.82242155, 0.        , 2.2105615 , 0.        , 0.1478676 ,<br>       4.16913   , 0.        , 1.0112963 , 2.1834922 , 1.1143222 ,<br>       1.4266597 , 0.01625035, 0.        , 0.        , 2.2396529 ,<br>       2.5664916 , 3.9461515 , 1.1411588 , 3.1272795 , 0.1037966 ,<br>       2.0988076 , 1.3239028 , 3.7377734 , 3.2496672 , 0.        ,<br>       1.        , 1.2223835 , 3.0089378 , 0.        , 0.86522657,<br>       4.675812  , 2.1618671 , 0.        , 0.35128778, 0.4188891 ],<br>      dtype=float32)<br>  array([1.1148797 , 0.        , 0.        , 0.        , 0.        ,<br>       1.        , 3.8114898 , 0.07180021, 2.3876183 , 4.440781  ,<br>       1.6769646 , 3.6686838 , 0.        , 0.        , 0.        ,<br>       4.4018536 , 3.0599968 , 0.        , 2.646227  , 4.513127  ,<br>       1.        , 0.16424567, 7.948415  , 2.2791777 , 4.057054  ,<br>       2.        , 0.        , 0.        , 0.67363834, 3.645394  ,<br>       0.25136846, 1.8742002 , 0.74671173, 4.585761  , 0.66469884,<br>       1.6343927 , 0.        , 0.9501083 , 9.39395   , 0.        ],<br>      dtype=float32)<br>  array([ 5.2303033,  3.398737 ,  0.       ,  3.7024248,  4.825684 ,<br>        6.3753657,  0.       ,  2.3967223,  3.570145 ,  2.7877963,<br>        2.67991  ,  0.       ,  0.       ,  3.125414 ,  1.5916126,<br>        3.8564463,  1.4738425, 10.70936  ,  3.1851664,  7.136737 ,<br>        1.9078373, 10.745646 ,  3.6944306,  1.1660497,  0.       ,<br>        5.3501906,  2.4445841,  1.090338 ,  0.       ,  2.5494943],<br>      dtype=float32)]]</p>
+</blockquote>
+<blockquote>
+<p>R_all[0]:<br>[array([1.6848972 , 0.        , 0.        , 3.398359  , 2.530793  ,<br>       1.0050455 , 2.9787443 , 0.6477883 , 2.556338  , 0.73463535,<br>       1.        , 0.        , 0.        , 0.        , 0.        ,<br>       2.        , 0.        , 2.7559242 , 0.47480136, 2.2723987 ,<br>       1.040998  , 0.63076216, 0.12816067, 1.9125026 , 3.1089356 ,<br>       0.04926831, 2.5731335 , 0.        , 0.        , 3.6136327 ,<br>       2.1885748 , 5.271537  , 2.4973857 , 2.3315785 , 0.4876842 ,<br>       2.5446043 , 2.8961205 , 2.2814133 , 2.7040894 , 0.        ,<br>       1.        , 0.40623373, 3.410592  , 0.04632151, 1.6073561 ,<br>       3.6362302 , 0.71310234, 0.807002  , 0.43683317, 0.69910496],<br>      dtype=float32)<br> array([2.620739  , 0.        , 1.3929726 , 0.6371676 , 0.        ,<br>       1.        , 5.4475865 , 2.6643863 , 3.880937  , 4.7303853 ,<br>       0.05517461, 5.2109375 , 0.        , 0.        , 0.        ,<br>       0.98558354, 4.7299247 , 0.        , 3.8981698 , 3.6492205 ,<br>       1.        , 0.        , 6.190553  , 0.956293  , 3.5290947 ,<br>       2.        , 0.        , 1.8282684 , 0.32657242, 2.6781952 ,<br>       3.        , 0.69895065, 5.339527  , 0.        , 0.        ,<br>       5.5791173 , 0.        , 0.11749397, 7.2194476 , 0.714684  ],<br>      dtype=float32)<br> array([6.9061866 , 6.52601   , 0.        , 0.        , 4.5311055 ,<br>       7.437533  , 0.        , 2.2622852 , 3.6607296 , 0.        ,<br>       1.        , 1.1706101 , 2.0249732 , 2.5909576 , 1.5096041 ,<br>       5.1143856 , 0.        , 7.4348016 , 8.265553  , 4.404272  ,<br>       1.        , 8.330065  , 6.1199856 , 1.8026098 , 0.        ,<br>       2.1523745 , 4.295476  , 0.        , 0.25838286, 4.181186  ],<br>      dtype=float32)]</p>
+</blockquote>
+<h2 id="3-numpy-append"><a href="#3-numpy-append" class="headerlink" title="3. numpy.append()"></a>3. <strong>numpy.append()</strong></h2><p>append(arr, values, axis=None)<br>参数说明：<br>arr：array_like的数据<br>values: array_like的数据，若axis为None，则先将arr和values进行ravel扁平化,再拼接；否则values应当与arr的shape一致，或至多<br>        在拼接axis的方向不一致<br>axis：进行append操作的axis的方向，默认无</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">v1 = np.append(ar1, ar2)    <span class="comment"># 先ravel扁平化再拼接，所以返回值为一个1维数组</span></span><br><span class="line"></span><br><span class="line">v2 = np.append(ar1, ar2, axis=<span class="number">0</span>)     <span class="comment"># 沿第一个轴拼接，这里为行的方向 </span></span><br><span class="line"></span><br><span class="line">v3 = np.append(ar1, ar2, axis=<span class="number">1</span>)     <span class="comment"># 沿第二个轴拼接，这里为列的方向 </span></span><br><span class="line"></span><br><span class="line">print(v1)</span><br><span class="line">print(v2)</span><br><span class="line">print(v3)</span><br></pre></td></tr></table></figure>
+<p><strong>结果：</strong></p>
+<blockquote>
+<p>array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 11, 12, 13])<br>array([[ 1,  2,  3],<br>       [ 4,  5,  6],<br>       [ 7,  8,  9],<br>       [11, 12, 13]])<br>array([[ 1,  2,  3,  7,  8,  9],<br>       [ 4,  5,  6, 11, 12, 13]])</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/22/Python%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E4%B8%8E%E4%BC%A0%E5%8F%82/" rel="next" title="Python全局变量与传参">
+                <i class="fa fa-chevron-left"></i> Python全局变量与传参
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/11/25/HexoError%20SpawnfailedatChildProcess/" rel="prev" title="【Hexo】 Error:Spawn failed at ChildProcess">
+                【Hexo】 Error:Spawn failed at ChildProcess <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-numpy-vstack"><span class="nav-text">1. numpy.vstack()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-numpy-concatenate"><span class="nav-text">2. numpy.concatenate()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-numpy-append"><span class="nav-text">3. numpy.append()</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

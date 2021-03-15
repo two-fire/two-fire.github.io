@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Class类文件结构," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="第六章 类文件结构Java虚拟机优势：  java虚拟机可以运行在各种不同硬件平台和操作系统上，这些虚拟机可以载入和执行同一种平台无关的字节码（所有平台统一支持的程序存储格式），从而实现“一次编写，到处运行”。 实现语言无关性。java虚拟机只与class这种二进制文件格式关联。Class文件中包含了Java虚拟机指令集、符号表、若干其他辅助信息。虚拟机不关心是什么语言被转换成Class文件。Cl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《深入了解Java虚拟机》第六章">
+<meta property="og:url" content="http://yoursite.com/2020/07/22/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E5%85%AD%E7%AB%A0/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="第六章 类文件结构Java虚拟机优势：  java虚拟机可以运行在各种不同硬件平台和操作系统上，这些虚拟机可以载入和执行同一种平台无关的字节码（所有平台统一支持的程序存储格式），从而实现“一次编写，到处运行”。 实现语言无关性。java虚拟机只与class这种二进制文件格式关联。Class文件中包含了Java虚拟机指令集、符号表、若干其他辅助信息。虚拟机不关心是什么语言被转换成Class文件。Cl">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724165340758.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724165640426.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724165704576.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724170214499.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724170300589.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724170417716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724170525236.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724170636273.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724170820107.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724170910311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724170933900.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020072417101570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724171133920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020072417120767.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724171242493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724171330629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200724171352539.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200725170712633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-07-22T08:49:15.000Z">
+<meta property="article:modified_time" content="2020-07-25T13:51:23.151Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="Class类文件结构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200724165340758.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/22/《深入了解Java虚拟机》第六章/"/>
+
+
+
+
+
+  <title>《深入了解Java虚拟机》第六章 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/22/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E5%85%AD%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《深入了解Java虚拟机》第六章</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-22T16:49:15+08:00">
+                2020-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index">
+                    <span itemprop="name">阅读记录</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="第六章-类文件结构"><a href="#第六章-类文件结构" class="headerlink" title="第六章 类文件结构"></a>第六章 类文件结构</h1><p><strong>Java虚拟机优势：</strong></p>
+<ol>
+<li>java虚拟机可以运行在各种不同硬件平台和操作系统上，这些虚拟机可以载入和执行同一种平台无关的字节码（所有平台统一支持的程序存储格式），从而实现“一次编写，到处运行”。</li>
+<li>实现语言无关性。java虚拟机只与class这种二进制文件格式关联。Class文件中包含了Java虚拟机指令集、符号表、若干其他辅助信息。虚拟机不关心是什么语言被转换成Class文件。Class文件是jvm执行引擎的数据入口。<br><img src="https://img-blog.csdnimg.cn/20200724165340758.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ol>
+<h2 id="class类文件的结构"><a href="#class类文件的结构" class="headerlink" title="class类文件的结构"></a>class类文件的结构</h2><p>· 任意一个Class文件都存储了一个类或者接口的定义信息。但是反过来，类和接口并不一定都定义在文件中。<br>· Class文件是以8字节为基础单位的二进制流，文件中没有分隔符。当遇到占用8字节以上的数据项时候，会按照高位在前分割成若干8字节进行存储。<br>· Class文件格式有两种数据类型“无符号数”和“表”。无符号数是基本数据类型，而表是由无符号数或者表作为数据项构成的复合数据类型，所有表的命名习惯以“_info”结尾。</p>
+<ol>
+<li>每个Class文件头4字节称“<strong>魔数</strong>”，值为“0xCAFEBABE”确定这个文件是否为一个能被虚拟机接受的class文件。</li>
+<li>接着四个字节存储Class文件的<strong>版本号</strong>：5，6为此版本，7，8为主版本号。</li>
+<li>接着是<strong>常量池</strong>入口，通常是占用Class文件空间最大的数据项目之一。是表类型数据项目。放置一个u2类型数据代表常量池容量计数值（class文件结构只有它是从第1项开始计数，其他都是第0项），如果不引用任何一个常量池项目值就设为0。<br>• 常量池主要存放：字面量和符号引用。符号引用包括：包，类和接口的全限定名，方法名称和描述，字段名称和描述，方法句柄和方法类型，动态调用点和动态常量。<br>• Class文件不会直接保存各个方法、字段最终在内存中的布局信息，而是当虚拟机做类加载时从常量池中获得对应符号引用，再在类创建或者运行的时候解析、翻译到具体的内存地址中。<br>• 常量池中每一项常量都是一个表。开始为11种表结构数据，为了更好支持动态语言调用，增加4种，之后为了支持java模块化系统，又增加2种。至JDK13有17种。<br>每种结构第一位都是u1类型的标志位，区分常量类型。</li>
+<li>接着的两个字节代表<strong>访问标志</strong>。用于识别一些类或者接口层次的访问信息，包括：是接口还是类，是否定义为public，是否定义为abstract等。</li>
+<li>紧接着，<strong>类索引</strong>、<strong>父类索引</strong>是一个u2的数据，<strong>接口索引集合</strong>是一组u2类型的集合，这三种数据确定该类型的继承关系。<br>类索引用于确定这个类的全限定名，而父类索引除了Object类外，所有的java类的父类索引都只有一个，且不为0。类索引、父类索引各自指向一个类型为CONSTANT_Class_info的类描述符常量，通过索引值找到定义到CONSTANT_Utf8_info类型的常量中的全限定名字符串。<br><img src="https://img-blog.csdnimg.cn/20200724165640426.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>接口索引集合则描述这个类实现了哪些接口。（按从左到右的顺序排列到集合中）入口的第一项u2的数据为接口计数器，表示索引表的容量。如果没有实现任何接口值为0。</li>
+<li><strong>字段表</strong>用于描述接口或者类中声明的变量。字段修饰符放在access_flags的u2的数据中。之后是name_index和descriptor_index，它们是对常量池的引用，分别代表字段的简单名称及字段和方法的描述符。这三个为固定数据项目。<br><img src="https://img-blog.csdnimg.cn/20200724165704576.png" alt="在这里插入图片描述"><br>字段表集合入口第一个u2类型的数据为容量计数器fields_count，说明字段表数据个数。之后就是access_flags，name_index，descriptor_index。之后跟随着一个属性表集合，用于存储一些额外的信息。</li>
+</ol>
+<p><em>Java语言中的“字段”（Field）包括类级变量以及实例级变量，但不包括在方法内部声明的局部变量。</em></p>
+<blockquote>
+<p>全限定名，简单名称，描述符概念<br>全限定名就是把类全名中的“.”换成”/“，最后以“；”表示结束。<br>简单名称指没有类型和参数修饰的方法或者字段名称。<br>（字段在Java中，包括类级变量以及实例级变量）<br>描述符用来描述字段的数据类型、方法的参数列表（包括数量、类型、顺序）和返回值。</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20200724170214499.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>对于数组类型，一维使用一个前置”[“描述，二维用两个”[“。例如，int[]将记录成“[I”。描述方法时，参数列表按照顺序放在括号内。如int indexOf(char[]source，intsourceOffset，int sourceCount，char[]target，int targetOffset，inttargetCount，int fromIndex)的描述符为“([CII[CIII)I”</p>
+</blockquote>
+<p>字段表不会列出继承而来的字段，但可能还出现代码中不存在的字段。另外在java语法中，字段无法重载，但在class文件中，只要两字段描述符不完全相同，字段重名就合法。</p>
+<p>7.class文件中对方法的描述与对字段的描述几乎一样，<strong>方法表</strong>中依次包括访问标志（access_flags）、名称索引（name_index）、描述符索引（descriptor_index）、属性表集合（attributes）几项。<br><img src="https://img-blog.csdnimg.cn/20200724170300589.png" alt="在这里插入图片描述"><br>方法中的代码经编译成字节码指令后，被存放在方法属性表集合中的一个叫“Code”的属性里面。属性表集合是class文件格式中最具扩展性的一种数据项目。</p>
+<p>&emsp;方法表集合入口第一个u2类型的数据为容量计数器fields_count，代表集合中有几个方法。之后为access_flags，name_index，descriptor_index。接下来属性表计数器attributes_count的值表示此方法的属性表集合有几项属性，属性名称的索引值有个对应常量，例如0x0009，对应常量为“Code”，说明此属性是方法的字节码描述。<br>&emsp;与字段表相对于的，如果父类方法在子类中没有被重写，那么方法表集合中不会出现来自父类方法的信息。但也会出现编译器自动添加的方法，最常见的是类构造器“<clinit>()”方法和实例构造器“<init>()”。<br>java中重载一个方法：</p>
+<ol>
+<li>方法名相同 </li>
+<li>拥有一个与原方法不同的特征签名（指一个方法中各个参数在常量池中的字段符号引用的集合，不包括返回值）<br>但是class文件格式中，特征签名的范围更大，只要描述符不完全一致就可以共存。</li>
+</ol>
+<h3 id="属性表集合"><a href="#属性表集合" class="headerlink" title="属性表集合"></a>属性表集合</h3><pre><code>class文件、字段表、方法表都可以携带自己的属性表集合，描述某些场景专有的信息。</code></pre><p>属性表集合限制较宽松，不需要属性表具有严格顺序，只要不与已规定属性名重复，任何人实现的编译器可以向属性表中写入自己定义的属性信息，jvm会自动忽略认不得的属性，所有jvm都能识别的属性已有29项。每个属性名称都是从常量池中引用一个CONSTANT_Utf8_info类型的常量表示，而属性值的结构都是自定义的，在之前只需要一个u4的数据项来说明长度即可。<br><img src="https://img-blog.csdnimg.cn/20200724170417716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ol>
+<li><p><strong>Code属性</strong><br>java经编译后的方法体变成字节码指令存储在这里面。不是每个方法表都需要该属性。如果存在该属性，则code属性表结构为：<br><img src="https://img-blog.csdnimg.cn/20200724170525236.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br> · attribute_name_index指向常量池的CONSTANT_Utf8_info型常量的索引，常量值固定为“Code”，代表属性的属性名称<br> · attribute_length指示了属性值的长度<br> · max_stack代表了操作数栈的最大深度值<br> · max_locals代表了局部变量表所需要的存储空间。单位是“变量槽slot”（除了double、long占2变量槽，其他长度不超过32位的数据类型每个局部变量都占一个），变量槽是虚拟机为局部变量分配内存最小单位。局部变量表中存放：方法参数（包括隐藏this），try-catch的catch块定义的异常处理参数，方法体中的局部变量。JVM会重用变量槽，所以运行过程中同时生存的最大局部变量数量和类型来计算max_locals大小<br> · code_length和code存储的是字节码指令信息， code_length表示字节码长度。虽然是u4类型，但是JVM规定一个方法长度不超过（65535，u2的长度），超过就拒绝编译。每条指令是一个u1类型的单字节，jvm访问到这个单字节就能知道对应的指令、是否需要参数、参数如何解析等信息。code可以一共表达256条指令，不过目前只有200多条<br> · 之后的异常表集合并不是必须存在的。规定使用异常表来实现java异常及finally处理机制<br> 如果把一个java程序分为代码（方法体中的代码）和元数据（包括类、字段、方法定义及其他），那么Code属性描述代码，其他属性都描述元数据。</p>
+</li>
+<li><p><strong>Exceptions属性</strong></p>
+<blockquote>
+<p>方法表中与Code属性平级的一个属性，与异常表不同。作用是列举出可能抛出的受查异常</p>
+</blockquote>
+<p> <img src="https://img-blog.csdnimg.cn/20200724170636273.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br> number_of_exceptions项表示受查异常的个数，每一种异常使用一个exception_index_table项表示。exception_index_table是指向常量池中CONSTANT_Class_info型常量的索引，表示该异常的类型。</p>
+</li>
+<li><p><strong>LineNumberTable属性（可选）</strong><br> 描述源代码行号和字节码行号之间的对应关系。<br> <img src="https://img-blog.csdnimg.cn/20200724170820107.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br> line_number_table是一个长度为line_number_table_length，类型为line_number_info的集合。line_number_info表包含start_pc和line_number两个u2类型的数据项，分别代表字节码行号，和源码行号。</p>
+</li>
+<li><p><strong>LocalVariableTable及LocalVariableTypeTable属性（可选）</strong><br> Code属性的子属性。用于描述栈帧中局部变量表的变量与java源码中定义的变量之间的关系。<br> <img src="https://img-blog.csdnimg.cn/20200724170910311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br> 其中local_variable_info项目代表了一个栈帧和源码中的局部变量的关联。<br> <img src="https://img-blog.csdnimg.cn/20200724170933900.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br> · Start_pc和length分别代表了这个局部变量的生命周期开始的字节码偏移量及其作用范围覆盖的长度。结合起来就是这个局部变量在字节码中的作用范围。<br> · name_index和descriptor_index都是指向常量池中CONSTANT_Utf8_info型常量的索引，分别代表了这个局部变量的名称和描述符。<br> · index是这个局部变量在栈帧的局部变量表中变量槽的位置。如果数据类型为64位，那么占用index，index+1两个变量槽。</p>
+<p> JDK5引入泛型之后，增加了一个LocalVariableTypeTable属性。仅仅是把记录的字段描述符的descriptor_index替换成了字段的特征签名（Signature）。对于非泛型，描述符和特征签名信息吻合，对于泛型，描述符不能准确描述泛型类型，需要用特征签名。</p>
+</li>
+<li><p><strong>SourceFile及SourceDebugExtension属性（可选）</strong><br> SourceFile属性记录Class文件对应的源码文件名。java中多数类名与文件名一致，也有例外（例如内部类）<br> <img src="https://img-blog.csdnimg.cn/2020072417101570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br> sourcefile_index数据项是指向常量池中CONSTANT_Utf8_info型常量的索引，常量值是源码文件的文件名。<br> JDK 5时，新增了SourceDebugExtension属性用来存储程序员新增的自定义额外代码调试信息。一个类最多只允许存在一个这个属性。</p>
+</li>
+<li><p><strong>ConstantValue属性</strong><br> 通知JVM自动为静态变量赋值。<br> 对于不用static修饰的实例变量的赋值是在实例构造器<init>()方法中进行的；对于类变量，可以使用类构造器<clinit>()方法，也可以使用ConstantValue属性。Oracle公司的javac编译器的选择是：如果用了final和static修饰，并且数据类型为基本类型或者String的话，就会生成ConstantValue属性进行初始化；否则就选择<clinit>()方法初始化。<br> ConstantValue属性只支持基本数据类型和字符串类型的原因：此属性的属性值是一个常量池的索引号，而class文件中常量类型只有与基本数据类型和字符串相对应的字面量。<br> <img src="https://img-blog.csdnimg.cn/20200724171133920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br> 此属性是个定长属性，所以attribute_length数据项值必须固定为2。constantvalue_index数据项代表了常量池中一个字面量常量的引用，可以是CONSTANT_Long_info、CONSTANT_Float_info、CONSTANT_Double_info、CONSTANT_Integer_info和CONSTANT_String_info常量中的一种。</p>
+</li>
+<li><p><strong>InnerClasses属性（可选）</strong><br> 记录内部类与宿主类间的关系。如果一个类中有内部类，编译器会自动生成该属性。<br> <img src="https://img-blog.csdnimg.cn/2020072417120767.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<pre><code>· inner_class_info_index和outer_class_info_index都是指向常量池中CONSTANT_Class_info型常量的索引，代表内部类和外部类的符号引用。</code></pre><p> · inner_name_index是指向常量池中CONSTANT_Utf8_info型常量的索引，代表这个内部类的名称，匿名类值为0.<br> · inner_class_access_flags是内部类的访问标志，值代表不同含义，如是否为public，是否为接口等等。</p>
+</li>
+<li><p><strong>Deprecated及Synthetic属性</strong><br> 两个属性都是属于标志类型的布尔属性。没有属性值需要设置，attribute_length数据项的值必须为0x00000000。<br> Deprecated用于表示某个类、字段、方法，不再推荐使用。<br> Synthetic属性代表此字段或者方法是由编译器自行添加的，实现越权访问等功能，是早期优化的技巧。jdk5之后可以通过设置ACC_SYNTHETIC标志位来完成Synthetic属性的功能。</p>
+</li>
+<li><p><strong>StackMapTable属性</strong><br> JDK6增加进入Code属性的属性表中，是一个变长属性。在虚拟机加载字节码验证阶段被新类型检查验证器使用，代替之前消耗性能的基于数据流分析的类型推导验证器。新的验证器省去了推导验证器在运行期的通过数据流分析字节码行为逻辑合理性的步骤，改成直接在编译阶段将一系列验证类型记录到class文件中，通过检查这些验证类型代替类型推导过程。<br> 每个StackMapTable中包含0到多个栈映射帧（Stack Map Frame），每个帧都显示或隐式代表了一个字节码的偏移量，用于表示执行到该字节码时局部变量表和操作数栈的验证类型。<br> 对于版本号&gt;=50的class文件，如果code属性没有附带该属性，就认为携带一个隐式的StackMap属性。这个属性相当于number_of_entries值为0的StackMapTable属性。一个方法最多只能有一个StackMapTable属性。</p>
+</li>
+<li><p><strong>Signature属性（可选）</strong><br>JDK5加入的一种变长属性，可以出现在类、字段表、方法表结构的属性表中。Java使用的是擦除式的“伪泛型”，就是当编译完成时直接清除掉泛型的信息（类型变量、参数化类型）。优点是简单，在运行时能够节约内存空间，但是缺点是运行的时候无法像c#等有真泛型支持的语言那样，把泛型类型与用户定义的普通类型同等对待，例如运行期间不能获得泛型信息。Signature属性就是为了弥补这个缺陷，记录泛型签名信息。现在java的反射API最终能够获得泛型信息，数据也就是来源这个属性。<br><img src="https://img-blog.csdnimg.cn/20200724171242493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>Signature_index项的值为指向常量池的CONSTANT_Utf8_info结构的索引。如果当前signat属性是类文件/方法表/字段表的属性，则CONSTANT_Utf8_info结构表示类签名/方法类型签名/字段类型签名。</p>
+<pre><code>11. BootstrapMethods属性</code></pre><p>Jdk7新增的一个变长属性，位于类文件的属性表中。这个属性用于保存InvokeDynamic指令引用的引导方法限定符。<br>规定如果常量池中曾经出现过CONSTANT_InvokeDynamic_info类型的常量，那么这个类文件属性表就需要有一个BootstrapMethods属性（有且只有一个）。</p>
+</li>
+<li><p><strong>MethodParameters属性</strong><br>jdk8时新加入class文件，用在方法表中的变长属性。用来记录方法的各个形参名称和信息。LocalVariableTable属性如果没有方法体就没有局部变量表，就不能保存方法参数名称。而MethodParameters属性<br>与code属性平级，可以运行时通过反射API获取。</p>
+</li>
+<li><p><strong>模块化相关属性</strong><br>jdk9的重量级功能为java模块化功能。因为模块描述文件（module-info.java）最终要以模块形式编译成独立文件，所以class文件格式也扩展了Module、ModulePackages和ModuleMainClass三个属性来支持模块化功能。<br>· module属性是一个变长属性，表示该模块的名称、版本、标志信息、模块导出包信息等内容。<br>· ModulePackages属性是一个变长属性，描述的是模块中所有的包（无论是export或者open的）。<br>· ModuleMainClass属性是一个定长属性，用于确定该模块的主类（Main Class）</p>
+</li>
+<li><p><strong>运行时注解相关属性</strong><br>JDK5，提供对注解的支持。为了存储注解信息，Class文件中增加了RuntimeVisibleAnnotations、RuntimeInvisibleAnnotations、RuntimeVisibleParameterAnnotations和RuntimeInvisibleParameter-Annotations四个属性。JDK8，进一步加强注解的使用范围，新增注解类型，class文件同步增加了RuntimeVisibleTypeAnnotations和RuntimeInvisibleTypeAnnotations两个属性。<br>这六个属性很相似，以RuntimeVisibleAnnotations为代表进行介绍。一个变长属性，它记录了类、字段或方法的声明上记录运行时可见注解。<br><img src="https://img-blog.csdnimg.cn/20200724171330629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>num_annotations是annotations数组的计数器，每个数组元素代表一个运行时可见注解。注解在class文件中以annotation的结构来存储。<br><img src="https://img-blog.csdnimg.cn/20200724171352539.png" alt="在这里插入图片描述"><br>· type_index是一个指向常量池CONSTANT_Utf8_info常量的索引值，常量以字段描述符来表示一个注解。num_element_value_pairs是element_value_pairs数组的计数器，element_value_pairs中每个元素为一个键值对，代表该注解的参数和值。</p>
+</li>
+</ol>
+<h2 id="字节码指令简介"><a href="#字节码指令简介" class="headerlink" title="字节码指令简介"></a>字节码指令简介</h2><p>jvm的指令由一个字节长度的数字（操作码opcode）以及之后0到多个的操作所需的参数（操作数operand）构成。由于jvm采用面向操作数栈的架构，所以大多数指令不包含操作数，操作数都存放在操作数栈中。<br>因为class文件格式放弃了编译后操作数长度对齐，意味着jvm处理超过1字节的数据时，不得不在运行时从字节中重建出具体的数据结构。这种操作会导致解释执行字节码时将损失一些性能，也有优势：可以省略大量填充和间隔符，获得精干的编译代码。</p>
+<h3 id="字节码与数据类型"><a href="#字节码与数据类型" class="headerlink" title="字节码与数据类型"></a>字节码与数据类型</h3><p><strong>大多数指令包含其操作对象所对应的数据类型信息</strong>。两条操作数据类型不同的指令，在虚拟机内部可能会是由同一段代码来实现，但在class文件中它们必须拥有各自独立的操作码。<br>指令中有特殊的字符来表明为哪种数据类型服务：符中都有特殊的字符来表明专门为哪种数据类型服务：i代表对int类型的数据操作，l代表long，s代表short，b代表byte，c代表char，f代表float，d代表double，a代表reference。还有的指令并没有用特殊字符来指明，因为它只为一种数据服务。<br>但是如果每种数据类型和每个操作都有对应的指令，操作码只有一个字节数量太少。所以指令集设计成<font color = #9000><strong>非完全独立的</strong></font>。利用替换指令模板中的T，得到一个具体的字节码指令。<br>大部分指令不支持byte、char、short类型，没有任何指令支持Boolean类型。编译器会在编译或者运行期间扩展为int型数据，将Boolean和char类型零位扩展为int数据类型。<strong>在处理这四类数组时，也会转换成int型数组</strong>。</p>
+<h3 id="字节码指令"><a href="#字节码指令" class="headerlink" title="字节码指令"></a>字节码指令</h3><p><img src="https://img-blog.csdnimg.cn/20200725170712633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="公有设计，私有实现"><a href="#公有设计，私有实现" class="headerlink" title="公有设计，私有实现"></a>公有设计，私有实现</h2><p>· JVM应有的共同程序存储格式：class文件格式以及字节码指令集。这些内容与硬件、操作系统、JVM实现之间都是完全独立的。<br>· JVM都必须实现：1.能够读取class文件；2.精确实现包含在其中的代码语义。一个优秀的JVM，在约束内，对具体实现进行修改优化是可行的，在后台如何处理class文件是实现者自己的事，<font color = #9000><strong>只需要外部接口与规范保持一致</strong></font>。不必完全逐字实现《java虚拟机规范》。<br>· 根据虚拟机实现者关注的是性能、内存消耗、可移植性，使用上面的伸缩性来获得。虚拟机实现的方法主要有以下两种：</p>
+<ol>
+<li>将输入的jvm代码在加载或者执行时翻译成另一种虚拟机的指令集；</li>
+<li>将输入的jvm代码在加载或者执行时翻译成宿主机处理程序的本地指令集（即时编译器代码生产技术）</li>
+</ol>
+<h2 id="Class-文件结构的发展"><a href="#Class-文件结构的发展" class="headerlink" title="Class 文件结构的发展"></a>Class 文件结构的发展</h2><p>· Class 文件结构一直处于相对稳定的状态，改进基本集中于可扩展数据结构中新增内容（访问标志、属性表等）。<br>· Class 文件格式所具备的平台中立、紧凑、稳定、可扩展的特点，是java技术体系实现平台无关、语言无关的重要支柱。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Class%E7%B1%BB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/" rel="tag"># Class类文件结构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/18/08-Object%E7%B1%BB%EF%BC%8C%E5%B8%B8%E7%94%A8API/" rel="next" title="08-Object类，常用API">
+                <i class="fa fa-chevron-left"></i> 08-Object类，常用API
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/23/09-Collection%EF%BC%8C%E6%B3%9B%E5%9E%8B/" rel="prev" title="09-Collection，泛型">
+                09-Collection，泛型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第六章-类文件结构"><span class="nav-text">第六章 类文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#class类文件的结构"><span class="nav-text">class类文件的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性表集合"><span class="nav-text">属性表集合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字节码指令简介"><span class="nav-text">字节码指令简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字节码与数据类型"><span class="nav-text">字节码与数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字节码指令"><span class="nav-text">字节码指令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#公有设计，私有实现"><span class="nav-text">公有设计，私有实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-文件结构的发展"><span class="nav-text">Class 文件结构的发展</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

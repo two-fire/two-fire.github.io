@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JDBC," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ODBC（Open Database Connectivity）是一组对数据库访问的标准API。ODBC的最大优点是能以统一的方式处理所有的数据库。  ▪ JDBC(Java Database Connectivity)是基于JAVA语言访问数据库的一种技术。▪ JDBC（Java Data Base Connectivity,java数据库连接）是一种用于执行SQL语句的Java API▪ J">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JDBC">
+<meta property="og:url" content="http://yoursite.com/2021/02/13/JDBC/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="ODBC（Open Database Connectivity）是一组对数据库访问的标准API。ODBC的最大优点是能以统一的方式处理所有的数据库。  ▪ JDBC(Java Database Connectivity)是基于JAVA语言访问数据库的一种技术。▪ JDBC（Java Data Base Connectivity,java数据库连接）是一种用于执行SQL语句的Java API▪ J">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210214092415561.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210214092553810.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210214102055476.png">
+<meta property="article:published_time" content="2021-02-13T09:01:30.031Z">
+<meta property="article:modified_time" content="2021-02-16T03:38:53.762Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="JDBC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210214092415561.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/02/13/JDBC/"/>
+
+
+
+
+
+  <title>JDBC | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/13/JDBC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JDBC</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-13T17:01:30+08:00">
+                2021-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>ODBC（Open Database Connectivity）是一组对数据库访问的标准API。ODBC的最大优点是能以统一的方式处理所有的数据库。</p>
+</blockquote>
+<p>▪ JDBC(Java Database Connectivity)是基于JAVA语言访问数据库的一种技术。<br>▪ JDBC（Java Data Base Connectivity,<strong>java数据库连接</strong>）是一种用于执行SQL语句的Java API<br>▪ JDBC的设计思想：由sun公司提供的访问数据库的接口，由数据库厂商提供对这些接口的实现，程序员编程时都是针对接口进行编程的。<br>▪ JDBC可以做些什么？<br>&emsp;– 连接到数据库<br>&emsp;– 在Java app中执行SQL命令<br>&emsp;– 处理结果</p>
+<p><strong>一、jdbc职责</strong><br>1、java: 客户端 :接收数据、拼接sql 、发送sql、分析结果、返回结果browser<br>2、db: 服务器 :接收sql, 分析处理，返回结果给java</p>
+<p><strong>二、jdbc操作</strong><br>把<code>D:\oracle\product\11.2.0\dbhome_1\jdbc\lib</code>中<code>ojdbc6.jar</code>，或者<code>D:\oracle\product\11.2.0\dbhome_1\oui\jlib</code>中的<code>classes12.jar</code>加入到idea中：<br><img src="https://img-blog.csdnimg.cn/20210214092415561.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>在Driver中可以发现有对应的实现方式：<br><img src="https://img-blog.csdnimg.cn/20210214092553810.png" alt="在这里插入图片描述"><br>这就意味着此时我们已经能够找到对应的实现方式了。当我们把jar包加入后，我们已经能够进行数据库的连接操作了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">   <span class="comment">//1. 加载驱动</span></span><br><span class="line">   Class.forName(<span class="string">"oracle.jdbc.driver.OracleDriver"</span>);</span><br><span class="line">   <span class="comment">//2. 建立连接</span></span><br><span class="line">   Connection connection = DriverManager.getConnection(<span class="string">"jdbc:oracle:thin:@192.168.12.1:1521:orcl"</span>,</span><br><span class="line">            <span class="string">"scott"</span>, <span class="string">"tiger"</span>);</span><br><span class="line">   <span class="comment">//3. 测试是否成功</span></span><br><span class="line">   System.out.println(connection);</span><br><span class="line">   <span class="comment">//4. 定义sql语句</span></span><br><span class="line">   String sql = <span class="string">"select * from emp"</span>;</span><br><span class="line">   <span class="comment">//5. 准备静态处理块对象，将sql语句放置到静态处理块中，理解为sql语句放置对象</span></span><br><span class="line">   Statement statement = connection.createStatement();</span><br><span class="line">   <span class="comment">//6. 执行sql语句，返回值对象是结果集合</span></span><br><span class="line">   ResultSet resultSet = statement.executeQuery(sql);</span><br><span class="line">   <span class="comment">//7. 循环处理</span></span><br><span class="line">   <span class="keyword">while</span> (resultSet.next()) &#123;</span><br><span class="line">      <span class="keyword">int</span> anInt = resultSet.getInt(<span class="number">1</span>);</span><br><span class="line">      System.out.println(anInt);</span><br><span class="line">      String ename = resultSet.getString(<span class="string">"ename"</span>);</span><br><span class="line">      System.out.println(ename);</span><br><span class="line">      System.out.println(<span class="string">"---------------"</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 8. 关闭连接</span></span><br><span class="line">   statement.close();</span><br><span class="line">   connection.close();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>解释</strong>：</p>
+<ol>
+<li><p><strong>加载驱动</strong></p>
+<blockquote>
+<p><font color='red'><strong>Java SPI机制</strong></font><br>SPI(Service Provider Interface)是一种<strong>动态替换发现</strong>的机制， 比如有个接口，想运行时动态的给它添加实现，你只需要添加一个实现。我们经常遇到的就是java.sql.Driver接口,其他不同厂商可以针对同一接口做出不同的实现，比如oracle和mysql都有不同的实现提供给用户，而Java的SPI机制可以<font color='red'><strong>为某个接口寻找服务实现</strong></font>。<br>spi接口定义在调用方。<br><img src="https://img-blog.csdnimg.cn/20210214102055476.png" alt="在这里插入图片描述"><br>接口对应的抽象SPI接口；实现方实现SPI接口；调用方依赖SPI接口<br>当服务的提供者提供了接口的实现后，需要在指定目录创建以服务接口命名的文件【配置文件】，当程序需要这个服务的时候，就可以通过查找这个jar包的配置文件，里面有接口的具体实现类名，通过这个类名进行加载实例化，就可以使用该服务了。<br>JDK中查找服务实现的工具类是：<code>java.util.ServiceLoader</code>。</p>
+</blockquote>
+<p>当执行了当前代码后，会返回一个Class对象，在此对象的创建过程中，会调用具体类(OracleDriver)的静态代码块，里面会将当前对象注册进DriverManager</p>
+</li>
+<li><p><strong>建立连接</strong><br>“jdbc:oracle:thin:@localhost:1521:orcl”<br>thin:不同的数据库连接方式<br>orcl：对应数据库实例（名字）</p>
+<blockquote>
+<p>数据库DriverManager就用到了SPI机制。<strong>DriverManager</strong>是jdbc里管理和注册不同数据库driver的工具类。针对一个数据库，可能会存在着不同的数据库驱动实现。我们在使用特定的驱动实现时，DriverManager是怎么<font color='red'>获得某确定驱动类</font>的？就是通过第一步把driver静态注册到driverManager中。</p>
+</blockquote>
+<p>第一步中已经将driver对象注册到了driverManager中，所以此时可以直接通过drivermanager来获取数据库的连接了<br>需要输入连接数据库的参数：</p>
+<ul>
+<li>url: 数据库的地址</li>
+<li>username：用户名</li>
+<li>password：密码</li>
+</ul>
+</li>
+<li><p><strong>定义sql语句</strong><br>只要填写正常sql语句即可</p>
+</li>
+<li><p><strong>准备静态处理块对象，将sql语句放置到静态处理块中，理解为sql语句放置对象</strong><br>在执行sql语句的过程中，需要一个对象来存放sql语句，将对象进行执行的时候，调用的是数据库的服务，数据库会从当前对象中拿到对应的sql语句进行执行。</p>
+</li>
+<li><p><strong>执行sql语句，返回值对象是结果集合</strong><br>将结果放到resultset中，是返回结果的一个集合,需要经过循环迭代才能获取得到其中的每一条记录.<br>statement在执行的时候可以选择三种方式：<br>1.execute：任何sql语句都可以执行<br>2.executeQuery：只能执行查询语句<br>3.executeUpdate：只能执行DML语句 增删改查</p>
+</li>
+<li><p><strong>循环处理</strong><br>使用while循环，有两种获取具体值的方式：<br>1.通过下标索引编号来获取 从1开始<br>2.通过列名来获取<br>推荐使用<strong>列名</strong>，列名一般不会发生修改。</p>
+</li>
+</ol>
+<p><strong>查找数据</strong><br>1、存在sql注入问题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Emp <span class="title">getEmpByEname</span><span class="params">(String ename)</span> </span>&#123;</span><br><span class="line">   Connection connection = <span class="keyword">null</span>;</span><br><span class="line">   Statement statement = <span class="keyword">null</span>;</span><br><span class="line">   ResultSet resultSet = <span class="keyword">null</span>;</span><br><span class="line">   Emp emp = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      connection = DButil.getConnection();</span><br><span class="line">      statement = connection.createStatement();</span><br><span class="line">      String sql = <span class="string">"select * from emp where ename = "</span>+ ename;</span><br><span class="line">      System.out.println(sql);</span><br><span class="line">      <span class="comment">// 返回结果</span></span><br><span class="line">      resultSet = statement.executeQuery(sql);</span><br><span class="line">      SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd"</span>);</span><br><span class="line">      <span class="keyword">while</span> (resultSet.next()) &#123;</span><br><span class="line">            emp = <span class="keyword">new</span> Emp(resultSet.getInt(<span class="string">"empno"</span>),resultSet.getString(<span class="string">"ename"</span>),</span><br><span class="line">                  resultSet.getString(<span class="string">"job"</span>),resultSet.getInt(<span class="string">"mgr"</span>),</span><br><span class="line">                  sdf.format(resultSet.getDate(<span class="string">"hiredate"</span>)), resultSet.getDouble(<span class="string">"sal"</span>),</span><br><span class="line">                  resultSet.getDouble(<span class="string">"comm"</span>),resultSet.getInt(<span class="string">"deptno"</span>));</span><br><span class="line">      &#125;</span><br><span class="line">   &#125; <span class="keyword">catch</span> (SQLException throwables) &#123;</span><br><span class="line">      throwables.printStackTrace();</span><br><span class="line">   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      DButil.closeConnection(connection,statement,resultSet);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> emp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span> </span>&#123;</span><br><span class="line">   EmpDao empDao = <span class="keyword">new</span> EmpDaoImpl();</span><br><span class="line">   Emp emp1 = empDao.getEmpByEname(<span class="string">"'SMITH' or 1 = 1"</span>); </span><br><span class="line">   System.out.println(emp1);<span class="comment">//会打印出emp表中最后一条记录</span></span><br><span class="line">   Emp emp2 = empDao.getEmpByEname(<span class="string">"'SMITH'"</span>);</span><br><span class="line">   System.out.println(emp2);<span class="comment">//会打印出emp表对应的记录</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2、防止sql注入问题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Emp <span class="title">getEmpByEname</span><span class="params">(String ename)</span> </span>&#123;</span><br><span class="line">   Connection connection = <span class="keyword">null</span>;</span><br><span class="line">   PreparedStatement pstmt = <span class="keyword">null</span>; <span class="comment">// 预处理块</span></span><br><span class="line">   ResultSet resultSet = <span class="keyword">null</span>;</span><br><span class="line">   Emp emp = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      connection = DButil.getConnection();</span><br><span class="line">      String sql = <span class="string">"select * from emp where ename = ?"</span>;</span><br><span class="line">      pstmt = connection.prepareStatement(sql);</span><br><span class="line">      pstmt.setString(<span class="number">1</span>,ename);</span><br><span class="line">      System.out.println(sql);</span><br><span class="line">      <span class="comment">// 返回结果</span></span><br><span class="line">      resultSet = pstmt.executeQuery();</span><br><span class="line">      SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd"</span>);</span><br><span class="line">      <span class="keyword">while</span> (resultSet.next()) &#123;</span><br><span class="line">            emp = <span class="keyword">new</span> Emp(resultSet.getInt(<span class="string">"empno"</span>),resultSet.getString(<span class="string">"ename"</span>),</span><br><span class="line">                  resultSet.getString(<span class="string">"job"</span>),resultSet.getInt(<span class="string">"mgr"</span>),</span><br><span class="line">                  sdf.format(resultSet.getDate(<span class="string">"hiredate"</span>)), resultSet.getDouble(<span class="string">"sal"</span>),</span><br><span class="line">                  resultSet.getDouble(<span class="string">"comm"</span>),resultSet.getInt(<span class="string">"deptno"</span>));</span><br><span class="line">      &#125;</span><br><span class="line">   &#125; <span class="keyword">catch</span> (SQLException throwables) &#123;</span><br><span class="line">      throwables.printStackTrace();</span><br><span class="line">   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      DButil.closeConnection(connection,pstmt,resultSet);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> emp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span> </span>&#123;</span><br><span class="line">   EmpDao empDao = <span class="keyword">new</span> EmpDaoImpl();</span><br><span class="line">   Emp emp1 = empDao.getEmpByEname(<span class="string">"'SMITH' or 1 = 1"</span>); </span><br><span class="line">   System.out.println(emp1);<span class="comment">//null</span></span><br><span class="line">   Emp emp2 = empDao.getEmpByEname(<span class="string">"SMITH"</span>);</span><br><span class="line">   System.out.println(emp2);<span class="comment">//会打印出emp表对应的记录</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>批量提交</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 批量提交 时间比单条插入快</span></span><br><span class="line"><span class="comment">* 中间省略了打开关闭连接过程</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insertBatch</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   Connection connection = DButil.getConnection();</span><br><span class="line">   String sql = <span class="string">"insert into emp(empno,ename) values(?,?)"</span>;</span><br><span class="line">   PreparedStatement pstmt = <span class="keyword">null</span>;</span><br><span class="line">   <span class="comment">// 准备预处理块对象</span></span><br><span class="line">   <span class="keyword">try</span> &#123;</span><br><span class="line">      pstmt = connection.prepareStatement(sql);</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">            pstmt.setInt(<span class="number">1</span>,i);</span><br><span class="line">            pstmt.setString(<span class="number">2</span>,<span class="string">"msb"</span>+i);</span><br><span class="line">            <span class="comment">// 向批处理中添加sql语句</span></span><br><span class="line">            pstmt.addBatch();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">int</span>[] ints = pstmt.executeBatch();</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> anInt : ints) &#123;</span><br><span class="line">            System.out.println(anInt);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125; <span class="keyword">catch</span> (SQLException throwables) &#123;</span><br><span class="line">      throwables.printStackTrace();</span><br><span class="line">   &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      DButil.closeConnection(connection,pstmt);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JDBC/" rel="tag"># JDBC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/13/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B8%89%E8%8C%83%E5%BC%8F/" rel="next" title="数据库设计三范式">
+                <i class="fa fa-chevron-left"></i> 数据库设计三范式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/02/14/Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%97%B6%E5%80%99%E6%8A%A5%E9%94%99/" rel="prev" title="Oracle数据库连接时候报错">
+                Oracle数据库连接时候报错 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

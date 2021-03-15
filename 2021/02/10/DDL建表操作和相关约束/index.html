@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Oracle表设计," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="表的创建一、标准的建表语法：CREATE TABLE [schema.]table(column datatype [DEFAULT expr] , …);schema：不同数据库对应意义不一样。表示的是相应模式的规范。datatype：对应的类型匹配 ▪ 在创建新表时，指定的表名必须不存在，否则将出错。▪ 使用默认值：当插入行时如果不给出值，dbms将自动采用默认值。▪ 在用Create语句创建">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DDL建表操作和相关约束">
+<meta property="og:url" content="http://yoursite.com/2021/02/10/DDL%E5%BB%BA%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%BA%A6%E6%9D%9F/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="表的创建一、标准的建表语法：CREATE TABLE [schema.]table(column datatype [DEFAULT expr] , …);schema：不同数据库对应意义不一样。表示的是相应模式的规范。datatype：对应的类型匹配 ▪ 在创建新表时，指定的表名必须不存在，否则将出错。▪ 使用默认值：当插入行时如果不给出值，dbms将自动采用默认值。▪ 在用Create语句创建">
+<meta property="article:published_time" content="2021-02-10T08:24:15.021Z">
+<meta property="article:modified_time" content="2021-03-13T05:59:09.322Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="Oracle表设计">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/02/10/DDL建表操作和相关约束/"/>
+
+
+
+
+
+  <title>DDL建表操作和相关约束 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/10/DDL%E5%BB%BA%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%92%8C%E7%9B%B8%E5%85%B3%E7%BA%A6%E6%9D%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DDL建表操作和相关约束</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-10T16:24:15+08:00">
+                2021-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="表的创建"><a href="#表的创建" class="headerlink" title="表的创建"></a>表的创建</h3><p><strong>一、标准的建表语法</strong>：<br>CREATE TABLE [schema.]table<br>(column datatype [DEFAULT expr] , …<br>);<br>schema：不同数据库对应意义不一样。表示的是相应模式的规范。<br>datatype：对应的类型匹配</p>
+<p>▪ 在创建新表时，指定的表名<strong>必须不存在</strong>，否则将出错。<br>▪ 使用默认值：当插入行时如果不给出值，dbms将自动采用<strong>默认值</strong>。<br>▪ 在用Create语句创建基本表时，最初只是一个空的框架，用户可<br>以使用insert命令把数据插入表中。</p>
+<p><strong>案例：</strong><br>设计要求：建立一张用来存储学生信息的表，表中的字段包含了学生的学号、姓名、年龄、入学日期、年级、班级、email等信息，<br>–并且为grade指定了默认值为1，如果在插入数据时不指定grade的值，就代表是一年级的学生</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> student</span><br><span class="line">(</span><br><span class="line">stu_id <span class="built_in">number</span>(<span class="number">10</span>),</span><br><span class="line"><span class="keyword">name</span> <span class="built_in">varchar2</span>(<span class="number">20</span>),</span><br><span class="line">age <span class="built_in">number</span>(<span class="number">3</span>),</span><br><span class="line">hiredate <span class="built_in">date</span>,</span><br><span class="line">grade <span class="built_in">varchar2</span>(<span class="number">10</span>) <span class="keyword">default</span> <span class="number">1</span>,</span><br><span class="line">classes <span class="built_in">varchar2</span>(<span class="number">10</span>),</span><br><span class="line">email <span class="built_in">varchar2</span>(<span class="number">50</span>)</span><br><span class="line">);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student <span class="keyword">values</span>(<span class="number">20191109</span>,<span class="string">'zhangsan'</span>,<span class="number">22</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-09'</span>,<span class="string">'yyyy-mm-dd'</span>),<span class="string">'2'</span>,<span class="string">'1'</span>,<span class="string">'123@qq.com'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student(stu_id,<span class="keyword">name</span>,age,hiredate,classes,email) <span class="keyword">values</span>(<span class="number">20191109</span>,<span class="string">'zhangsan'</span>,<span class="number">22</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-09'</span>,<span class="string">'yyyy-mm-dd'</span>),<span class="string">'2'</span>,<span class="string">'123@qq.com'</span>);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> student;</span><br></pre></td></tr></table></figure>
+
+<p><strong>二、使用子查询创建表的语法：</strong><br>CREATE TABLE table [column(, column…)]<br>AS subquery;</p>
+<ol>
+<li>新表的字段列表必须与子查询中的字段列表匹配</li>
+<li>字段列表可以省略<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> emp2 <span class="keyword">as</span> <span class="keyword">select</span> * <span class="keyword">from</span> emp;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="表结构的修改"><a href="#表结构的修改" class="headerlink" title="表结构的修改"></a>表结构的修改</h3><p>▪ 在基本表建立并使用一段时间后，可以根据实际需要对基本表的结构进行修改</p>
+<ul>
+<li>增加新的列用“alter table … add …”语句</li>
+<li>删除原有的列用“alter table … drop…”语句，语法格式：alter table 表名 drop column 列名</li>
+<li>修改字段“alter table…modify…”<br>▪ 在基本表不需要时，可以使用“drop table”语句撤消。在一个基<br>本表撤消后，所有的数据都丢弃。所有相关的索引被删除。<br>&emsp;<font color=red>drop table emp cascade constraints</font><blockquote>
+<p><strong>级联删除</strong>：A表中dept=10，B表中dept=10，它们两个是一一对应的关系（B表中包含了其他表的一些列）。如果现在想把B表进行删除的话，那对应A表中的字段就不在了，肯定会报错的。级联删除就是先删除A，才能删除B。<br>▪ 可以使用RENAME语句改变表名（视图）</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--正规的表结构设计需要使用第三方工具 powerdesigner</span></span><br><span class="line"><span class="comment">--在添加表的列的时候，不能允许设置成not null</span></span><br><span class="line"><span class="keyword">alter</span>  <span class="keyword">table</span> student <span class="keyword">add</span> address <span class="built_in">varchar</span>(<span class="number">20</span>);</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> student <span class="keyword">drop</span> <span class="keyword">column</span> address;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> student <span class="keyword">modify</span>(email <span class="built_in">varchar2</span>(<span class="number">100</span>));</span><br><span class="line"><span class="comment">--重新命名表</span></span><br><span class="line"><span class="keyword">rename</span> student <span class="keyword">to</span> stu;</span><br><span class="line"><span class="comment">--删除表</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">在删除表的时候，经常会遇到多个表关联的情况。多个表关联的时候，不能随意删除，需要使用级联删除。</span></span><br><span class="line"><span class="comment">cascade：如果A,B，A中的某个字段和B中的某一个字段做关联，那么删除A表的时候，需要将B表先删除</span></span><br><span class="line"><span class="comment">set null：在删除的时候，把表的关联字段设成空</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> stu;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="约束-constraint"><a href="#约束-constraint" class="headerlink" title="约束 constraint"></a>约束 constraint</h3><p>▪ 当我们创建表的时候，同时可以指定所插入数据的一些规则，比如说某个字段不能为空值，某个字段的值（比如年龄）不能小于零等等，<strong>这些规则称为约束</strong>。约束是在表上强制执行的<strong>数据校验规则</strong>。<br>▪ Oracle 支持下面<strong>五类</strong>完整性约束:</p>
+<ol>
+<li><p><strong>NOT NULL</strong>非空： 插入数据的时候，某些列不能为空</p>
+</li>
+<li><p><strong>UNIQUE</strong> 唯一： 可以限定某一个列的值是唯一的，唯一键的列一般被用作索引列</p>
+</li>
+<li><p><strong>PRIMARY KEY</strong> 主键：非空且唯一，任何一张表最好有主键，用来唯一标识一行记录</p>
+</li>
+<li><p><strong>FOREIGN KEY</strong> 外键：当多个表之间有关联关系（一个表的某个列的值依赖于另一张表的某个值）的时候），需要使用外键</p>
+<blockquote>
+<p>作为主键的表称为“<strong>主表</strong>”，作为外键的关系称为“<strong>依赖表</strong>”<br> 外键参照的是主表的<strong>主键</strong>或者<strong>唯一键</strong><br> 对于主表的删除和修改主键值的操作，会对依赖关系产生影响，以删除为例：当要删除主表的某个记录（即删除一个主键值），那么对依赖的影响可采取下列3种做法：</p>
+<ol>
+<li><strong>RESTRICT</strong>方式：只有当依赖表中没有一个外键值与要删除的主表中主键值相对应时，才可执行删除操作。</li>
+<li><strong>CASCADE</strong>方式：将依赖表中所有外键值与主表中要删除的主键值相对应的记录一起删除</li>
+<li><strong>SET NULL</strong>方式：将依赖表中所有与主表中被删除的主键值相对应的外键值设为空值<br>FOREIGN KEY (DEPTNO) REFERENCES DEPT(DEPTNO)<br>[ON DELETE [CASCADE|SET NULL]] 如省略on短语，缺省为第一种处理方式。</li>
+</ol>
+</blockquote>
+</li>
+<li><p>CHECK 自定义检查约束：可以根据用户自己的需求去限定某些列的值</p>
+</li>
+</ol>
+<p><strong>约束的添加和撤销</strong><br>▪ 可增加或删除约束，但不能直接修改<br>alter table tablename<br>增加<br>add constraint con_name unique(col)<br>删除<br>drop constraint com_name [cascade]</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--执行失败，外键约束</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> emp(empno,ename,deptno) <span class="keyword">values</span>(<span class="number">9999</span>,<span class="string">'hehe'</span>,<span class="number">50</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> student</span><br><span class="line">(</span><br><span class="line">stu_id <span class="built_in">number</span>(<span class="number">10</span>) primary <span class="keyword">key</span>,</span><br><span class="line"><span class="keyword">name</span> <span class="built_in">varchar2</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">age <span class="built_in">number</span>(<span class="number">3</span>) <span class="keyword">check</span>(age&gt;<span class="number">0</span> <span class="keyword">and</span> age&lt;<span class="number">126</span>),</span><br><span class="line">hiredate <span class="built_in">date</span>,</span><br><span class="line">grade <span class="built_in">varchar2</span>(<span class="number">10</span>) <span class="keyword">default</span> <span class="number">1</span>,</span><br><span class="line">classes <span class="built_in">varchar2</span>(<span class="number">10</span>),</span><br><span class="line">email <span class="built_in">varchar2</span>(<span class="number">50</span>) <span class="keyword">unique</span>,</span><br><span class="line">deptno <span class="built_in">number</span>(<span class="number">2</span>),</span><br><span class="line"><span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (DEPTNO) <span class="keyword">REFERENCES</span> DEPT(DEPTNO)</span><br><span class="line">);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> student;</span><br><span class="line"><span class="comment">--建议在创建表的时候直接将各个表的约束添加好，如果包含外键约束的话，最好把外键关联表的数据优先插入</span></span><br><span class="line"><span class="comment">--失败，非空约束</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student(stu_id,age,hiredate,classes,email) <span class="keyword">values</span>(<span class="number">20191109</span>,<span class="number">22</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-09'</span>,<span class="string">'yyyy-mm-dd'</span>),<span class="string">'2'</span>,<span class="string">'123@qq.com'</span>);</span><br><span class="line"><span class="comment">--失败，唯一约束</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student(stu_id,<span class="keyword">name</span>,age,hiredate,classes,email) <span class="keyword">values</span>(<span class="number">20191109</span>,<span class="string">'zhangsan'</span>,<span class="number">22</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-09'</span>,<span class="string">'yyyy-mm-dd'</span>),<span class="string">'2'</span>,<span class="string">'123@qq.com'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student(stu_id,<span class="keyword">name</span>,age,hiredate,classes,email) <span class="keyword">values</span>(<span class="number">20191109</span>,<span class="string">'zhangsan'</span>,<span class="number">22</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-09'</span>,<span class="string">'yyyy-mm-dd'</span>),<span class="string">'2'</span>,<span class="string">'123@qq.com'</span>);</span><br><span class="line"><span class="comment">--失败，主键约束</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student(stu_id,<span class="keyword">name</span>,age,hiredate,classes,email) <span class="keyword">values</span>(<span class="number">20191109</span>,<span class="string">'zhangsan'</span>,<span class="number">22</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-09'</span>,<span class="string">'yyyy-mm-dd'</span>),<span class="string">'2'</span>,<span class="string">'123@qq.com'</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student(<span class="keyword">name</span>,age,hiredate,classes,email) <span class="keyword">values</span>(<span class="string">'lisi'</span>,<span class="number">22</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-09''yyyy-mm-dd'</span>),<span class="string">'2'</span>,<span class="string">'124@qq.com'</span>);</span><br><span class="line"><span class="comment">--失败，检查约束</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student(stu_id,<span class="keyword">name</span>,age,hiredate,classes,email) <span class="keyword">values</span>(<span class="number">20191110</span>,<span class="string">'zhangsan'</span>,<span class="number">144</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-09'</span>,<span class="string">'yyyy-mm-dd'</span>),<span class="string">'2'</span>,<span class="string">'124@qq.com'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--添加后，如果想删除dept表中的dept=10的那条记录，会失败。因为外键关联了.但是可以直接删除student中这条记录 </span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> student(stu_id,<span class="keyword">name</span>,age,hiredate,classes,email,deptno) <span class="keyword">values</span>(<span class="number">20191109</span>,<span class="string">'zhangsan'</span>,<span class="number">22</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-09'</span>,<span class="string">'yyyy-mm-dd'</span>),<span class="string">'2'</span>,<span class="string">'123@qq.com'</span>,<span class="number">10</span>);</span><br><span class="line"><span class="comment">--可以选择后续额外添加</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> student <span class="keyword">add</span> <span class="keyword">constraint</span> fk_0001 <span class="keyword">foreign</span> <span class="keyword">key</span>(deptno) <span class="keyword">references</span> dept(deptno);</span><br></pre></td></tr></table></figure>
+
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>▪ 索引是为了加快对数据的搜索速度而设立的。<br>▪ 索引的作用：在数据库中用来加速对表的查询,通过使用<strong>快速路径访问方法</strong>快速定位数据,减少了<strong>磁盘的I/O</strong></p>
+<blockquote>
+<p>索引：指针，偏移量。索引不存放在内存（内存一开关机就不存在了。）所以<strong>索引数据是存放在磁盘中的</strong>。<br>1、<strong>局部性原理</strong>：（时间、空间）经常访问的数据和代码都经常聚在一起<br>2、<strong>磁盘预读</strong>：磁盘1T数据，从中读取1字节数据，怎么读？每次其实是读入的多个字节（一个块空间，一般是4k）。<br>3、减少I/O：一个是减少访问的次数，一个是减少IO的量。<br>4、索引是有数据结构的，每次读数据不是把所有数据都加到内存，而是需要哪快加哪快。（<strong>B+树</strong>）<br><font color=red>什么叫回表？<br>什么叫覆盖索引？<br>什么叫字符匹配？<br>什么叫组合索引？</font></p>
+</blockquote>
+<p>▪ <strong>索引的创建</strong>有两种情况<br>&emsp;1、自动：当在表上定义一个PRIMARY KEY 或者UNIQUE 约束条件时,Oracle数据库自动创建一个对应的唯一索引<br>&emsp;2、手动：用户可以创建索引以加速查询</p>
+<p>▪ 开发中使用索引的要点：<br>&emsp;1、索引改善检索操作的性能，但<font color=red>降低数据插入、修改和删除的性能</font>。在执行这些操作时，DBMS必须动态地更新索引<br>&emsp;2、索引数据可能要占用大量的存储空间<br>&emsp; 可以在索引中定义多个列（如省加城市）先限定死大的范围</p>
+<p>▪ 在一列或者多列上创建索引<br>CREATE INDEX index ON table (column[, column]…);<br>▪ 下面的索引将会提高对EMP表基于 ENAME 字段的查询速度.<br>CREATE INDEX emp_last_name_idx<br>ON emp (ename)<br>▪ 通过DROP INDEX 命令删掉一个索引.<br>– DROP INDEX index;<br>▪ 删掉 UPPER_LAST_NAME_IDX 索引.<br>– DROP INDEX upper_last_name_idx;</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--创建索引</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">index</span> i_ename <span class="keyword">on</span> emp(ename);</span><br><span class="line"><span class="comment">--删除索引</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">index</span> i_ename;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> emp <span class="keyword">where</span> ename=<span class="string">'SMITH'</span>;</span><br></pre></td></tr></table></figure>
+
+<p>为什么加索引比没有加索引时间更长？</p>
+<ol>
+<li>数据量太小</li>
+<li>回表</li>
+<li>覆盖索引</li>
+<li>组合索引</li>
+<li>最左匹配</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Oracle%E8%A1%A8%E8%AE%BE%E8%AE%A1/" rel="tag"># Oracle表设计</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/09/Mysql%E4%BA%8B%E5%8A%A1%E6%B5%8B%E8%AF%95/" rel="next" title="Mysql事务测试">
+                <i class="fa fa-chevron-left"></i> Mysql事务测试
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/02/13/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B8%89%E8%8C%83%E5%BC%8F/" rel="prev" title="数据库设计三范式">
+                数据库设计三范式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#表的创建"><span class="nav-text">表的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表结构的修改"><span class="nav-text">表结构的修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#约束-constraint"><span class="nav-text">约束 constraint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引"><span class="nav-text">索引</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

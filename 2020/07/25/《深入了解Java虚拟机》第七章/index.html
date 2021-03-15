@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="虚拟机类加载机制," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="第七章 虚拟机类加载机制7.1 概述在Class中描述的信息最终都需要加载到虚拟机中之后才能被运行和使用。本章主要讲虚拟机如何加载class文件，class文件中的信息加载后会发生什么变化。虚拟机加载机制：JVM把描述类的数据从Class文件加载进入内存，通过校验、转换解析、初始化，形成虚拟机能够直接使用的java类型的过程。· 和其他在编译期间需要连接的语言不同，java语言在运行期间类型的加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《深入了解Java虚拟机》第七章">
+<meta property="og:url" content="http://yoursite.com/2020/07/25/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%83%E7%AB%A0/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="第七章 虚拟机类加载机制7.1 概述在Class中描述的信息最终都需要加载到虚拟机中之后才能被运行和使用。本章主要讲虚拟机如何加载class文件，class文件中的信息加载后会发生什么变化。虚拟机加载机制：JVM把描述类的数据从Class文件加载进入内存，通过校验、转换解析、初始化，形成虚拟机能够直接使用的java类型的过程。· 和其他在编译期间需要连接的语言不同，java语言在运行期间类型的加载">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200728175851256.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200728180601337.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200729213903150.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200729214550167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-07-25T13:50:15.000Z">
+<meta property="article:modified_time" content="2020-07-29T14:57:16.580Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="虚拟机类加载机制">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200728175851256.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/25/《深入了解Java虚拟机》第七章/"/>
+
+
+
+
+
+  <title>《深入了解Java虚拟机》第七章 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/25/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%83%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《深入了解Java虚拟机》第七章</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-25T21:50:15+08:00">
+                2020-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index">
+                    <span itemprop="name">阅读记录</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="第七章-虚拟机类加载机制"><a href="#第七章-虚拟机类加载机制" class="headerlink" title="第七章 虚拟机类加载机制"></a>第七章 虚拟机类加载机制</h1><h2 id="7-1-概述"><a href="#7-1-概述" class="headerlink" title="7.1 概述"></a>7.1 概述</h2><p>在Class中描述的信息最终都需要加载到虚拟机中之后才能被运行和使用。本章主要讲虚拟机如何加载class文件，class文件中的信息加载后会发生什么变化。<br><strong>虚拟机加载机制</strong>：JVM把描述类的数据从Class文件加载进入内存，通过校验、转换解析、初始化，形成虚拟机能够直接使用的java类型的过程。<br>· 和其他在编译期间需要连接的语言不同，java语言<font color = #F9000>在运行期间类型的加载、连接、初始化</font>，所以java语言天生具有<font color = #F9000>动态扩展性</font>。例如接口可以在运行时再指定实现的实现类。还有现在可以在运行时，用户通过预置或自定义加载器，从网上直接加载一个<font color = #F9000>二进制流</font>作为代码一部分。这种动态组装应用广泛，从简单的JSP到复杂的OSGi技术，都是基于java语言在运行期间进行类加载的特性。<br>约定：<br>    1. 每个Class文件都有代表一个接口或者类的可能，后文未明确指出，默认同时蕴含两种可能性。<br>    2. 与上章一致，提到的Class文件并不是特指真的存储在磁盘中的文件，而是一串<font color = #F9000>二进制字节流</font>，存在形式不限。如磁盘文件，网络，数据库，内存，动态产生等。</p>
+<h2 id="7-2-类加载的时机"><a href="#7-2-类加载的时机" class="headerlink" title="7.2  类加载的时机"></a>7.2  类加载的时机</h2><p><img src="https://img-blog.csdnimg.cn/20200728175851256.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>· 加载、验证、准备、初始化和卸载这五个阶段的顺序是确定的，类型的加载过程必须按照这个顺序<font color = #F9000>开始</font>（可能会在一个阶段执行时调用另一个阶段），但是<font color = #F9000>解析阶段</font>不一定：某些情况下可以在初始化之后开始，这是为了支持java运行时绑定特性（动态绑定）。<br>· 第一阶段加载开始时间由虚拟机的具体实现自由把握。不过初始化在开始了前三个阶段后，在面对以下六种情况（<font color = #F9000>有且只有</font>）必须立即<strong>对类初始化</strong>：</p>
+<ol>
+<li>遇到new、getstatic、putstatic、invokestatic这四个指令时，类型没有初始化。生成这四条<font color = #F9000>指令</font>的典型java代码场景：<br>· 使用new实例化对象<br>· 调用一个类型的静态方法<br>· 读取或者设置一个类型的静态字段（被final修饰、已在编译期把结果放到常量池的静态字段除外）</li>
+<li>使用java.lang.reflect的方法对类型进行<font color = #F9000>反射调用</font>的时，类型没有初始化。</li>
+<li>虚拟机启动时，用户需要指定一个要执行的主类（main方法所在的类），虚拟机会先初始化这个<font color = #F9000>主类</font>。</li>
+<li>初始化类的时候，发现这个类的父类没有被初始化，先触发其<font color = #F9000>父类的初始化</font>。</li>
+<li>当一个接口在中定义了<font color = #F9000>默认方法</font>（被default修饰），如果由这个接口的实现类发生初始化，那该接口要在它之前被初始化。</li>
+<li>当使用jdk7新加入的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果为REF_getStatic、REF_putStatic、REF_invokeStatic、REF_newInvokeSpecial四种类型的方法句柄，并且这个<font color = #F9000>方法句柄</font>对应的类没有进行初始化，先触发其初始化。<br>这六种场景中的行为称为“对一个类型的<font color = #F9000>主动引用</font>”。除此之外的所有引用类型的方式都不会触发初始化，称为“<font color = #F9000>被动引用</font>”。</li>
+</ol>
+<ul>
+<li>对于静态字段，只有直接定义这个字段的类才会被初始化。<br>例如通过子类来引用父类中定义的静态字段，只会触发父类初始化。是否触发子类加载和验证阶段，取决于虚拟机的具体实现。</li>
+<li>通过数组定义来引用类，不会触发此类的初始化。<br>例如SuperClass[] sca = new SuperClass[10]; 不会触发类org.fenixsoft.classloading.SuperClass的初始化阶段，但会触发另一个名为“[Lorg.fenixsoft.classloading.SuperClass”的类的初始化阶段。这是一个由虚拟机自动生成的，直接继承于Object的子类，创建动作由newarray触发。这个类代表了一个元素类型为org.fenixsoft.classloading.SuperClass的一维数组，数组中应有的属性方法都在这个类中实现。因为越界检查封装在数据访问的指令中，所以比起c/c++直接翻译为指针的移动，java对数组访问更加安全。</li>
+<li>A类引用B类的常量，并不会触发B类的初始化。因为在编译阶段通过常量传播优化，直接将要调用的常量值存储到A类的常量池中，之后对于这个常量的引用，都转换成对自身常量池的引用了。也就是说，当编译成class文件后，这两个类就不存在任何联系了。</li>
+</ul>
+<h2 id="7-3-类加载的过程"><a href="#7-3-类加载的过程" class="headerlink" title="7.3  类加载的过程"></a>7.3  类加载的过程</h2><h3 id="7-3-1-加载"><a href="#7-3-1-加载" class="headerlink" title="7.3.1 加载"></a>7.3.1 加载</h3><p>步骤：</p>
+<ol>
+<li>从类全限定名中获取这个类的二进制字节流</li>
+<li>将这个字节流所代表的静态存储结构转变为<font color = #F9000>方法区的运行结构</font></li>
+<li>在内存中生成一个代表该类的java.lang.Class对象，作为访问这个类的入口<br>· 虚拟机实现的灵活度极大。如第一步只是说获取，获取的地方、方式都可以自由发挥：</li>
+<li>从Zip压缩包中获取，如 JAR、WAR格式</li>
+<li>从网络中获取，如Web Applet</li>
+<li>运行时计算生成，如动态代理技术。用一个方法特定接口生成代理类的二进制字节流<br>……<br>· 在整个类加载阶段，非数组类型的加载中获取二进制流的过程最具有可控性。加载阶段既可以使用JVM内置的引导类加载器完成，也可以使用自定义的类加载器（重写类加载器的findClass()、loadClass()方法）完成。<br>· 对于数组类而言，情况有所不同。因为数组类本身不通过类加载器创建，而是JVM本身在内存中直接构造出来的。不过数组元素类型是需要靠类加载器完成的。</li>
+</ol>
+<ul>
+<li>如果数组的组件类型为引用类型，通过递归根据上面的加载过程加载出来的。数组将被标识在加载此组件类型的类加载器的类名称空间中。</li>
+<li>如果数组的组件类型不是引用类型，JVM将会把数组标记为与在引导类加载器关联。<br>· 数组类的可访问性与数组组件类型一致，如果组件类型不是引用类型，默认public。<br>· 加载阶段结束后，虚拟机外的二进制字节流就按照虚拟机设定的格式存储在方法区中了，方法区的数据存储格式是自定义的。<br>· 通常来说加载阶段与连接阶段部分动作（如字节码文件格式验证）是交叉进行的，只需保持两个阶段固定的<strong>开始顺序</strong>即可。</li>
+</ul>
+<h3 id="7-3-2-验证"><a href="#7-3-2-验证" class="headerlink" title="7.3.2 验证"></a>7.3.2 验证</h3><p>验证是连接阶段的第一步，为了保证class文件的字节流包含的信息符合《java虚拟机规范》的全部约束，防止字节码危害到虚拟机安全。<br>java语言本身是相对安全的，不能越界访问，跳转到不存在代码等（会抛出异常、拒绝编译）。但是由于class文件不止由java源文件编译而来，还可以从网上加载或者在二进制编辑器中得到二进制字节流，不安全的动作能够在字节码层实现。这会威胁到java虚拟机安全。所以验证阶段是必不可少的。2011年《java虚拟机规范》开始较为详细地建立了验证的约束与规则。验证阶段主要包括：</p>
+<ol>
+<li><p><strong>文件格式验证</strong><br>验证字节流是否符合class文件格式的规范，能否被当前版本的虚拟机处理。保证字节流正确解析存储在方法区内。<br>验证内容包括且不限于：<br>(1) 是否以魔术开头<br>(2) 主、次版本号是否在当前JVM接受范围内<br>(3) 常量池是否有不被支持的常量类型<br>(4) 指向常量的各种索引值中是否有指向不存在或不符合类型常量<br>……<br>只有这个阶段是基于二进制字节流进行的，通过这个阶段，字节流就能被允许进入JVM方法区中进行存储。之后三个验证阶段都是基于方法区的存储结构进行的。</p>
+</li>
+<li><p><strong>元数据验证</strong><br>对类的元数据信息进行语义校验，保证描述的信息符合《java虚拟机规范》的要求。<br>验证内容包括且不限于：<br>(1) 这个类是否有父类（除了object类，其他都应该有父类）<br>(2) 这个类是否继承了不被允许继承的类<br>(3) 如果该类不是抽象类，是否实现了父类或接口要求实现的所有方法<br>……</p>
+</li>
+<li><p><strong>字节码验证</strong>（最复杂）<br>根据数据流和控制流分析，确保程序语义符合规范，就是检查方法体中进行校验分析，保证在运行期间不会出现对虚拟机危害的行为。<br>验证内容包括且不限于：<br>(1) 栈操作数据类型和指令代码序列时刻保持一致<br>(2) 保证任何跳转指令不会跳转到方法体以外的字节码指令<br>(3) 保证方法体中的类型转换都是有效的，例如把一个子类对象赋值给父类数据类型是安全的，反过来不行<br>……<br>不能通过字节码验证的程序一定存在问题，但通过了不一定就肯定安全。<br>数据流和控制流分析十分复杂耗时，JDK6后进行了优化，将尽可能多的校验措施挪到了javac编译器里进行。具体来说，在code的属性表中增加了一项“StackMapTable”属性，只需要检查该属性里面的记录是否合法即可，不需要再根据程序推导这些状态的合法性。即将字节码验证的类型推导变为类型检查。</p>
+</li>
+<li><p><strong>符号引用验证</strong><br>最后一个阶段的校验行为发生在虚拟机将符号引用转化为直接引用的时候，这个转化动作在连接的第三阶段——解析阶段中发生。符号引用验证，是对类自身以外的各类信息进行匹配性校验。看是否缺少或者禁止访问该类所依赖的外部类、方法、字段等。目的是为了确保解析行为能顺利进行。如果无法通过验证会报错。如java.lang.IllegalAccessError、java.lang.NoSuchFieldError、java.lang.NoSuchMethodError等。<br>验证内容包括且不限于：<br>(1) 符号引用中的全限定名是否能找到对应的类<br>(2) 在指定类中是否存在符合方法描述符及简单名称所描述的方法、字段<br>(3) 符号引用中类、方法、字段的可访问性是否能被当前类访问</p>
+</li>
+</ol>
+<p>7.3.3 准备</p>
+<blockquote>
+<ul>
+<li>只要是对象实例，必然会在java堆中分配。</li>
+<li>所有Class相关的信息都应该存放在方法区之中，但方法区的实现不同虚拟机可以灵活处理。JDK7以后Hotspot虚拟机选择把静态变量和类型在java语言一端的映射Class对象存放在一起，存储于java堆之中。</li>
+</ul>
+</blockquote>
+<p>准备阶段是正式为<font color = #F9000>类变量</font>（静态成员变量）分配内存、设置初值的阶段。从<font color = #F9000>逻辑概念</font>上讲，这些变量是在方法区中分配的，jdk7及之前，Hotspot虚拟机使用永久代实现方法区，完全符合这种逻辑概念；但jdk7之后，类变量与class对象一起放在Java堆中，这时候方法区只是一个逻辑上的表述了。</p>
+<p>注意：</p>
+<ol>
+<li>准备阶段内存分配仅包括类变量，不包括实例变量，实例变量会在对象实例化的时候随对象一起分配在java堆中。</li>
+<li>设置的初始值【一般为】数据类型的零值。例如<code>public static int a = 123</code>准备阶段后为0，而不是123.因为这时候还未开始执行任何java方法，把a赋值为123的putstatic指令是在程序被编译后，存放在类构造器<clinit>()方法之中，所以要等到类初始化阶段才会被赋值为123。<br><img src="https://img-blog.csdnimg.cn/20200728180601337.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ol>
+<p>【特殊情况】：如果类字段的字段属性表中存在ConstantValue属性，那么编译时javac会为该变量生成ConstantValue属性，在准备阶段虚拟机就会根据ConstantValue属性的设置将变量值赋值。例如<code>public static final int a = 123</code>准备阶段后为123。</p>
+<h3 id="7-3-4-解析"><a href="#7-3-4-解析" class="headerlink" title="7.3.4 解析"></a>7.3.4 解析</h3><p>解析阶段是JVM将常量池内的符号引用替换为直接引用的过程。</p>
+<blockquote>
+<p>· <strong>符号引用</strong>：符号引用是用一组符号来描述所要引用的目标。符号可以是任意字面量。<br>各虚拟机能够接受的符号引用必须是一致的，因为符号引用的字面量形式明确定义在《java虚拟机规范》的class文件格式中。符号引用与虚拟机的内存布局无关，引用的目标也不一定是已加载到虚拟机中的内容。<br>· <strong>直接引用</strong>：能够直接或者间接地定位到目标。<br>与虚拟机内存布局直接相关，同一个符号引用在不同的虚拟机实例上翻译出来的直接引用一般不同。引用的目标也一定已经加载到虚拟机中了。</p>
+</blockquote>
+<p>解析阶段开始时间不固定，只是要求在执行getstatic、invokedynamic、instanceof等17个用于<font color = #F9000>操作符号引用</font>的字节码指令之前，对他们所使用的符号引用进行解析。所以虚拟机实现可以根据需要，在类被加载器加载时就对符号引用解析，还是等到一个符号引用被使用前去解析。</p>
+<p>对同一个符号引用进行多次解析请求是很常见的事。<br><strong>除了invokedynamic指令</strong>，虚拟机实现可以对第一次解析的结果进行缓存，从而避免解析动作重复进行。如果一个符号引用之前已经被成功解析过，那么之后的解析请求也会一直成功；如果第一次失败，其他指令对这个符号的解析请求也会失败。静态：刚完成加载阶段，还未开始执行代码就可以提前进行解析。<br><strong>对于invokedynamic指令</strong>，当碰到前面已经由该指令触发过的符号引用，并不意味着这个解析结果对其他invokdynamic指令也同样生效。因为这个指令本身用于动态语言支持，它对应的引用称为“<font color = #F9000>动态调用点限定符</font>”。动态：当程序实际执行到这条指令时，解析动作才能进行。</p>
+<p>解析动作主要针对：</p>
+<table>
+<thead>
+<tr>
+<th>符号引用</th>
+<th>对应的常量池的常量类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类或接口</td>
+<td>CONSTANT_Class_info</td>
+</tr>
+<tr>
+<td>字段</td>
+<td>CON-STANT_Fieldref_info</td>
+</tr>
+<tr>
+<td>类方法</td>
+<td>CONSTANT_Methodref_info</td>
+</tr>
+<tr>
+<td>接口方法</td>
+<td>CONSTANT_InterfaceMethodref_info</td>
+</tr>
+<tr>
+<td>方法类型</td>
+<td>cCONSTANT_MethodType_info</font></td>
+</tr>
+<tr>
+<td>方法句柄</td>
+<td><font color = #F9000>CONSTANT_MethodHandle_info</font></td>
+</tr>
+<tr>
+<td>调用点限定</td>
+<td><font color = #F9000> CONSTANT_Dynamic_info</font>和<font color = #F9000>CONSTANT_InvokeDynamic_info </font></td>
+</tr>
+<tr>
+<td>注：后四种与动态语言支持相关。</td>
+<td></td>
+</tr>
+</tbody></table>
+<ol>
+<li><strong>类或接口的解析</strong><br>假设当前代码所处的类为D，如果要把一个从未解析过的符号引用N解析为一个类或者接口C的直接引用，那虚拟机完成整个过程需要三步：<br>1）如果C不是一个数组类型，那么虚拟机把代表N的全限定名传给D的类加载器去加载这个C。在加载过程中，由于元数据验证、字节码验证的需要，可能会触发其他相关类的加载动作，例如父类或者实现的接口。一旦加载过程出现异常，解析过程失败。<br>2）如果C是一个数组类型，N的描述符类似“[Ljava/lang/Integer”形式，那么先按照规则1加载数组元素类型“java.lang.Integer”，接着由虚拟机生成一个代表该数组维度和元素的数组对象。<br>3）若1，2没有异常，C在虚拟机中实际上已经成为一个有效类或接口了，但解析完成前还需要进行符号引用验证，确定D是否具备访问C的权限，不具备抛出IllegalAccessError。JDK9引入模块化后，还需要检查模块间访问权限。</li>
+</ol>
+<blockquote>
+<p><strong>“D拥有C的访问权限”</strong>意味着以下三条中至少存在一条：</p>
+<ul>
+<li>被访问类C是public，并且与访问类D处于同一个模块</li>
+<li>被访问类C是public，与访问类D不处于同一个模块，但C允许D的模块进行访问</li>
+<li>被访问类C不是public，但与访问类D处于同一个包</li>
+</ul>
+</blockquote>
+<ol start="2">
+<li><strong>字段解析</strong><br>要解析一个未被解析过的字段符号引用：<br>1）对字段表内class_index项中的索引的CONSTANT_Class_info符号引用（就是字段所属类或接口C的符号引用）进行解析；<br>2）如果这个解析过程出现异常，字段符号引用解析将失败；如果解析成功，对C进行后续字段的搜索：<br>&emsp;① 如果C本身包含了简单名称和字段描述符都与目标匹配的字段，则返回这个字段的直接引用，查找结束。<br>&emsp;② 否则，如果C中实现了接口（或者C不是Object类），那么会向上递归查找各个接口（或父类），如果在接口（或父类）中包含了简单名称和字段描述符都与目标相匹配的字段，直接返回这个字段的直接引用，查找结束。<br>&emsp;③否则，查找失败，抛出NoSuchFieldError异常。<br>&emsp;如果成功返回引用，将会对该字段进行权限验证，不具备抛出IllegalAccessError异常。</li>
+</ol>
+<p>以上规则能够保证JVM获得字段唯一的解析结果。实际中，Javac编译器更严格。如果有个同名字段同时出现在某个类的接口和父类中，或者同时在自己或父类的多个接口中出现，Javac可能拒绝编译。</p>
+<ol start="3">
+<li><p><strong>方法解析</strong><br>方法解析的第一步与字段解析一样，先解析出方法表的class_index项中索引的方法所属类或接口C的符号引用，如果成功，按照以下进行搜索：<br>&emsp;① 因为在class文件格式中，类和接口的方法符号引用的常量类型定义是分开的，所以如果在类的方法表中发现class_index索引的C是接口，直接抛出IncompatibleChangeError异常（不相容交换错误）。<br>&emsp;② 如果通过第一步，在C中查找是否有简单名称和描述符都匹配目标的方法，有的话返回这个方法的直接引用，查找结束。<br>&emsp;③ 否则，在类C的父类中递归查找是否有都匹配的方法，有则返回直接引用，查找结束。<br>&emsp;④ <font color = green>否则，在类C实现的接口列表及它们的父接口中递归查找都匹配的方法，如果存在，说明C是一个抽象类，查找结束，抛出AbstractMethodError异常。</font><br>&emsp;⑤ 否则，宣告查找失败，抛出NoSuchMethodError。<br>&emsp;如果查找成功返回了直接引用，将会对这个方法进行权限验证，不具备抛出IllegalAccessError异常。</p>
+</li>
+<li><p><strong>接口方法解析</strong><br>同样需要先解析出接口方法表class_index项中索引的方法所属类或接口C的符号引用，如果解析成功，进行后续搜索步骤：<br>&emsp;① 与类方法解析相反，如果在接口方法表中发现class_index中的索引C是个类而不是接口，直接抛出IncompatibleClassChangeError异常。<br>&emsp;② 如果通过第一步，在C中查找是否有简单名称和描述符都匹配目标的方法，有的话返回这个方法的直接引用，查找结束。<br>&emsp;③ 否则，在类C的父接口中递归查找（查找范围包括Object类中方法）是否有都匹配的方法，有则返回直接引用，查找结束。<br>&emsp;④ 对于规则③，由于java的接口允许多继承，如果C的不同父接口中有多个与目标匹配的方法，就从这些中返回一个并结束查找。但与字段查找类似，有的Javac编译器有可能会按照更严格约束拒绝编译。<br>&emsp;⑤ 否则，宣告查找失败，抛出NoSuchMethodError异常。</p>
+</li>
+</ol>
+<p>在JDK9前，Java接口中所有方法都默认public，也没有模块化的访问约束，所以不存在访问权限问题。<br>JDK9中增加了接口的静态私有方法和模块化，所以也会有可能抛出IllegalAccessError异常。</p>
+<h3 id="7-3-5-初始化"><a href="#7-3-5-初始化" class="headerlink" title="7.3.5 初始化"></a>7.3.5 初始化</h3><p>&emsp;类的初始化阶段是类加载过程中最后一个阶段，在之前的几个阶段，除了加载阶段用户应用程序可以通过自定义类加载器的方式局部参与外，其他都是完全由JVM主导控制。初始化阶段，JVM才真正开始执行类中编写的Java程序代码，将主导权交给应用程序。<br>&emsp;在准备阶段，变量已经赋值过一次零值的初始值。<font color = #F9000>初始化阶段就是执行<clinit>()方法的过程。</font><br>· <clinit>()是Javac编译器自动生成物。<br>· <clinit>()是<strong>编译器自动收集类中</strong>的<strong>所有类变量的赋值动作</strong>和<strong>静态语句块中的语句</strong>合并产生的。<br>· 编译器收集的顺序是由语句在源文件中出现的顺序决定的。静态语句块中只能访问到定义在静态语句块之前的变量，定义在它之后的变量只能赋值不能访问。<br>· <clinit>()与实例构造器<init>()方法不同，不需要显式地调用父类构造器，<strong>JVM会保证在执行子类的<clinit>()方法之前父类的<clinit>()方法已经执行完毕</strong>。所以JVM中第一个被执行的<clinit>()方法一定是Object。<br>· 父类中定义的静态语句块优先于子类的变量赋值操作。<br>· <clinit>()方法对类或接口来说并不是必不可少的。如果一个类中没有静态语句块，也没有对变量的赋值动作，编译器就不会为该类生成此方法。<br>· 接口中不可使用静态语句块，但可以有变量赋值操作。但与类不同的是，执行接口的<clinit>()方法不需要先执行父接口的<clinit>()。<strong>只有当父接口中定义的变量被使用时，父类接口才会被初始化</strong>。同样，<strong>接口的实现类在初始化时也不会执行接口的<clinit>()方法</strong>。<br>· JVM必须保证一个类的<clinit>()方法在多线程环境中被正确地加锁同步，如果多个线程同时去初始化一个类，当一个线程执行这个类的<clinit>()方法时，别的线程需要阻塞等待，直到活动线程完毕。之后别的线程也不会再进行初始化该类，因为同一个类加载器下，一个类只会初始化一次。<br>· 如果在一个类的<clinit>()方法中有耗时长的操作，就可能造成多进程阻塞。</p>
+<h2 id="7-4-类加载器"><a href="#7-4-类加载器" class="headerlink" title="7.4 类加载器"></a>7.4 类加载器</h2><p>JVM将“通过一个类全限定名获取描述该类的二进制字节流”这个动作放到虚拟机外面实现，实现这个动作代码称为“类加载器”。</p>
+<h3 id="7-4-1-类与类加载器"><a href="#7-4-1-类与类加载器" class="headerlink" title="7.4.1 类与类加载器"></a>7.4.1 类与类加载器</h3><p>· 类本身和它的类加载器共同确定了这个类在JVM中的唯一性。每个类加载器都有一个独立的类名称空间。<br>· 加载类的类加载器不同，这两个类一定不相等。</p>
+<h3 id="7-4-2-双亲委派模型"><a href="#7-4-2-双亲委派模型" class="headerlink" title="7.4.2 双亲委派模型"></a>7.4.2 双亲委派模型</h3><p>· 从JVM角度来看，类加载器可分为两种：<br>1）启动类加载器。c++语言实现，是虚拟机自身一部分<br>2）其他所有类加载器。java语言实现，独立于虚拟机外部<br>· 从java开发人员角度来看，自从jdk1.2之后，java一直保持着<font color = #F9000>三层类加载器、双亲委派的类加载结构</font>。</p>
+<p><strong>启动类加载器</strong>：这个类加载器负责把存放在<JAVA_HOME>\lib目录，或者被参数-Xbootclasspath指定的路径中存放的，并且能够被虚拟机正确识别的类库加载到虚拟机内存中。启动器类无法被java程序直接引用，如果要委派给引导类加载器中，使用null值替代即可。</p>
+<p><strong>扩展类加载器</strong>：它负责加载<JAVA_HOME>\lib\ext目录，或者被java.ext.dirs系统变量指定的路径中所有类库。<br>· 是java类库的扩展机制。jdk9之后被模块化天然扩展能力取代。<br>· 此类加载器在类ClassLoader中以java代码形式实现的，所以可直接在程序中使用它来加载class文件。</p>
+<p><strong>应用程序类加载器</strong>：负责加载用户路径（ClassPath）上所有类库。<br>· 由AppClassLoader类实现，也叫做“系统类加载器”。<br>· 开发者也可以直接在代码中使用这个类加载器。<br>· 一般应用程序如果没有自定义自己的类加载器，默认用这个。</p>
+<p>JDK9前java应用都需要由这三种类加载器互相配合完成加载的，用户还可以加入自定义类加载器进行扩展。这些类加载器间的协作关系也被称为类加载器的<font color = #F9000>双亲委派模型</font>：<br><img src="https://img-blog.csdnimg.cn/20200729213903150.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ol>
+<li>除了启动类加载器，都有父类加载器。</li>
+<li>父子关系<font color = #F9000>通常</font>（该模型JDK1.2引入，是一个最佳推荐模型，<font color = #F9000>并非强制性约束</font>）使用组合关系来复用父加载器代码。</li>
+<li>工作过程：一个类加载器收到了类加载的请求，先不断将委托上派，最终到达启动类加载器。只有当父加载器反馈无法完成这个加载请求（搜索范围没有找到需要的类），子加载器才会去尝试加载。</li>
+<li>代码逻辑：先检查请求加载的类型是否被加载过，没有则调用父加载器的loadClass()方法，如果父加载器为空，默认使用启动类加载器作为父加载器。如果父类加载器加载失败，抛出ClassNotFoundException异常的话，才调用自己的findClass()方法尝试加载。</li>
+<li>好处：保证同一个类被同一个类加载器加载。反之如果没有双亲委派模型，系统中可能会出现多个不同的类，程序混乱。</li>
+</ol>
+<h3 id="7-4-3-破坏双亲委派模型"><a href="#7-4-3-破坏双亲委派模型" class="headerlink" title="7.4.3 破坏双亲委派模型"></a>7.4.3 破坏双亲委派模型</h3><p><strong>第一次“破坏”</strong>：jdk1.2之前，用户已经自定义了类加载器代码，java设计者们在引入双亲委派模型时不得不做出一些妥协，增加protected方法findClass()，让用户尽可能重写该方法，保证写出来的类加载器符合双亲委派规则。</p>
+<p><strong>第二次“破坏”</strong>：模型自身缺陷导致。双亲委派模型解决了各个类加载器工作时基础类型一致性问题，但是如果有基础类型，但是又需要调用回用户代码，就会出现问题。<br>因此java设计者引入了：<font color = #F9000>ContextClassLoader (线程上下文类加载器)</font>。这个类加载器可以通过Thread类中的方法设置。如果创建线程时还没设置，就从父线程中继承一个，如果在应用程序的全局范围内都没有设置过，就默认为应用程序类加载器。<br>这是一种父类加载器去请求子了加载器完成类加载行为的逆向类加载器。java中涉及SPI（服务提供者接口）的加载基本都采用该方式，如JDBC等。<br>为了不让SPI有多个服务提供者时候，采用硬编码判断，JDK6后引入ServiceLoader类，以META-INF/services中的配置信息，辅以责任链模式，给SPI的加载提供了一种方案。</p>
+<p><strong>第三次“破坏”</strong>：由于用户对程序<font color = #F9000>动态性</font>的追求导致的。<br>· 动态性：代码热替换、模块热部署等。其实就是希望java应用程序能够像鼠标这样的外设一样，即插即用，不用关机重启。<br>· OSGI实现模块化热部署的关键是它自定义的类加载器机制的实现。每一个程序模块（Bundle）都有一个自己的类加载器，当要替换一个bundle时，就连同类加载器一起换掉，实现代码的热替换。<br>· OSGI环境下，类加载器不是双亲委派模型推荐的树状结构，而是发展为更复杂的<font color = #F9000>网状结构</font>。当收到类加载请求时，OSGI将按照以下步骤顺序搜索：</p>
+<ol>
+<li>将以java.*开头的类，委派给父类加载器加载</li>
+<li>否则，将委派列表名单内（配置文件org.osgi.framework.bootdelegation中定义）的类，委派给父类加载器加载</li>
+<li>否则，检查是否在Import-Package中声明，如果是，则委派给Export类的Bundle的类加载器加载</li>
+<li>否则，检查是否在Require-Bundle中声明，如果是，则将类加载请求委托给required bundle的类加载器</li>
+<li>否则，查找当前Bundle的ClassPath，使用自己的类加载器加载</li>
+<li>否则，查找类是否在自己的Fragment Bundle 中，如果在，则委派给Fragment Bundle的类加载器加载</li>
+<li>否则，查找Dynamic Import-Package（Dynamic Import只有在真正用到此Package的时候才进行加载）的Bundle，委派给对应Bundle的类加载器加载</li>
+<li>否则，类查找失败<br>除了开头两点符合双亲委派规则的原则，剩余都是平级类加载器中查找的。</li>
+</ol>
+<h2 id="7-5-Java模块化系统"><a href="#7-5-Java模块化系统" class="headerlink" title="7.5 Java模块化系统"></a>7.5 Java模块化系统</h2><p>jdk9中引入了java模块化系统（Java Platform Module System，<font color = #F9000>JPMS</font>）。<br>· 为了实现模块化的关键目标——<font color = #F9000>可配置的封装隔离机制</font>，JVM对类加载架构做了相应调整。JDK9的模块不仅同之前jar包那样仅充当代码容器，还包含：</p>
+<ul>
+<li>依赖其他模块的列表</li>
+<li>导出的包列表，即其他模块可以使用的列表</li>
+<li>开放的包列表，即其他模块可以反射访问模块的列表</li>
+<li>使用的服务列表</li>
+<li>提供服务的实现列表<br>· 可配置的封装隔离机制，首先要解决JDK9之前<font color = #F9000>基于类路径（classpath）来查找依赖的可靠性问题</font>。此前，如果类路径缺失运行时依赖类型，只有当代码运行到发生该类型加载、链接时才会报错。但是jdk9以后，如果启动了模块化封装，模块能够声明对其他模块的显示依赖，jvm在启动时会检查依赖关系在运行期是否完备，如果缺失直接启动失败。<br>· 其次解决了<font color = #F9000>原来类路径上跨JAR文件的public类型访问问题</font>。JDK9之后，必须声明哪一些public的类型可以被哪一些模块访问。这种访问控制也是在类加载中完成的。</li>
+</ul>
+<h3 id="7-5-1-模块兼容性"><a href="#7-5-1-模块兼容性" class="headerlink" title="7.5.1 模块兼容性"></a>7.5.1 模块兼容性</h3><p>为了使封装隔离机制能兼容原来的类路径查找机制，JDK9提出了“<strong>模块路径</strong>（ModulePath）”：某个类库到底是模块还是传统jar包，只取决于存放在哪个路径上。</p>
+<p>模块化系统按照以下规则，来保证使用传统类路径依赖的java程序能直接运行在jdk9及以上的版本（<font color = #F9000>向后兼容</font>），保证了传统程序可以访问到所有标准类库模块中导出的包。<br>    - <strong>JAR文件在类路径的访问规则</strong>：所有类路径下的JAR文件及其他资源文件，都被视为自动打包在一个<font color = #F9000>匿名模块</font>里。这个模块几乎没有任何隔离。<br>    - <strong>模块在模块路径的访问规则</strong>：模块路径下的具体模块只能访问到它列明的依赖模块和包，匿名模块中所有内容对<font color = #F9000>具体模块</font>不可见，即看不到传统jar包。<br>    - <strong>JAR文件在模块路径的访问规则</strong>：如果把一个传统的、不包含模块定义的JAR文件放置到模块路径中，它就会变成一个自动模块。尽管不包含module-info.class，但<font color = #F9000>自动模块</font>默认依赖于整个【模块路径】中所有模块，也默认导出自己的包。</p>
+<p><strong>模块间的管理和兼容性问题</strong>：如果一个模块有很多版本，就只能由开发人员在编译打包时人工选择正确版本的模块来保证依赖的正确性。<br>· Java模块系统目前不支持在模块定义中加入版本号来管理和约束依赖，也不支持版本选择功能。<br>· JDK9加入class文件格式的Module属性，用户可以在编译时指定模块版本，也存在API接口在运行时获得模块版本号。<br>· 但“JPMS目的不是代替OSGi”，希望维持一个足够简单的模块化系统。但Jigsaw仿佛在刻意给OSGi让出空间，使得IBM不反对Jigsaw，代价是JPMS不可能拥有OSGi那样的支持多版本模块并存、支持运行时热替换、热部署模块的能力。所以JDK9后实现这种目的，只能将OSGi和Jigsaw混合使用，没有内置Java模块化系统和Java虚拟机中，必须<font color = #F9000>通过类加载器实现</font>。<br>· JVM内置的JVMTI接口提供了一定程度的运行时修改类的能力，不过有很多限制。不可能直接用来实现OSGi那样的热替换和多版本并存，可以用在IDEA，Eclipse这些IDE上做HotSwap(指IDE编辑方法的代码后不需要重启即可生效)。</p>
+<h3 id="7-5-2-模块化下的类加载器"><a href="#7-5-2-模块化下的类加载器" class="headerlink" title="7.5.2 模块化下的类加载器"></a>7.5.2 模块化下的类加载器</h3><p>为了兼容性，JDK9并未从根本上动摇三层类加载器架构以及双亲委派模型。不过模块化下的类加载器为了模块化系统的施行，主要进行了如下几方面的变动：</p>
+<ol>
+<li>扩展类加载器被<font color = #F9000>平台类加载器</font>取代。整个JDK都基于模块化构建（原来的rt.jar和tools.jar被拆分成10个JMOD文件），先天具有了可扩展性，扩展类加载器没有存在必要，无需再保留<JAVA_HOME>\lib\ext目录。类似的，新版JDK中也取消了<JAVA_HOME>\jre目录，因为可以根据组合构建出程序运行所需的JRE。</li>
+<li><font color = #F9000>平台类加载器、应用程序类加载器都不再派生自URLClassLoader</font>，如果有程序依赖这个类或特有方法，那么代码很可能在JDK9及更高版本中崩溃。<br>· 现在，启动类加载器、平台类加载器、应用程序类加载器都继承于<code>jdk.internal.loader.BuiltinClassLoader</code>。在这个类中实现了在新的模块化架构下，如何从模块中加载的逻辑，以及模块中资源可访问性的处理。<br>· 启动类加载器现在是在JVM内部和java类库共同协作实现的类加载器尽管有了BootClassLoader这样的Java类，但为了与之前的代码保持兼容，所有获得启动类加载器的场景中仍然会返回null，而不是BootClassLoader的实例。<br><img src="https://img-blog.csdnimg.cn/20200729214550167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+<li>JDK9中虽然仍维持着三层类加载器和双亲委派的架构，但委派关系发生了变动。当平台及应用程序类加载器收到类加载请求，在委派给父加载器加载之前，要先判断该类是否能够归属到某个系统模块中，如果可以就先委派给负责该模块的类加载器完成加载。<br>Java模块化系统明确规定了三个类加载器负责各自的加载模块。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" rel="tag"># 虚拟机类加载机制</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/23/09-Collection%EF%BC%8C%E6%B3%9B%E5%9E%8B/" rel="next" title="09-Collection，泛型">
+                <i class="fa fa-chevron-left"></i> 09-Collection，泛型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/29/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E5%85%AB%E7%AB%A0/" rel="prev" title="《深入了解Java虚拟机》第八章">
+                《深入了解Java虚拟机》第八章 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第七章-虚拟机类加载机制"><span class="nav-text">第七章 虚拟机类加载机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-概述"><span class="nav-text">7.1 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-类加载的时机"><span class="nav-text">7.2  类加载的时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-类加载的过程"><span class="nav-text">7.3  类加载的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-1-加载"><span class="nav-text">7.3.1 加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-2-验证"><span class="nav-text">7.3.2 验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-4-解析"><span class="nav-text">7.3.4 解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-5-初始化"><span class="nav-text">7.3.5 初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4-类加载器"><span class="nav-text">7.4 类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-1-类与类加载器"><span class="nav-text">7.4.1 类与类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-2-双亲委派模型"><span class="nav-text">7.4.2 双亲委派模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-3-破坏双亲委派模型"><span class="nav-text">7.4.3 破坏双亲委派模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-5-Java模块化系统"><span class="nav-text">7.5 Java模块化系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-1-模块兼容性"><span class="nav-text">7.5.1 模块兼容性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-5-2-模块化下的类加载器"><span class="nav-text">7.5.2 模块化下的类加载器</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

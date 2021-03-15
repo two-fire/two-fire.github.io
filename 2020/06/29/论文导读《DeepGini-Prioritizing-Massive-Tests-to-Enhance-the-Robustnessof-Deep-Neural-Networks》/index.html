@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="论文导读,大创,DNNs测试," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="大创第二次讨论论文 DeepGini：优先进行大规模测试以增强深度神经网络的鲁棒性原文地址  思考问题 已解决⭐  重点  Abstract 为给定输入定义正确输出的测试预言在自动测试中通常不可用。 为了获取理论信息，基于DNN的系统的测试任务通常需要提前进行人工贴标签。  DeepGini，一种基于DNN统计视角设计的测试优先级划分技术。这样的统计角度使我们能够将测量错误分类概率的问题减少到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文导读《DeepGini:Prioritizing Massive Tests to Enhance the Robustnessof Deep Neural Networks》">
+<meta property="og:url" content="http://yoursite.com/2020/06/29/%E8%AE%BA%E6%96%87%E5%AF%BC%E8%AF%BB%E3%80%8ADeepGini-Prioritizing-Massive-Tests-to-Enhance-the-Robustnessof-Deep-Neural-Networks%E3%80%8B/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="大创第二次讨论论文 DeepGini：优先进行大规模测试以增强深度神经网络的鲁棒性原文地址  思考问题 已解决⭐  重点  Abstract 为给定输入定义正确输出的测试预言在自动测试中通常不可用。 为了获取理论信息，基于DNN的系统的测试任务通常需要提前进行人工贴标签。  DeepGini，一种基于DNN统计视角设计的测试优先级划分技术。这样的统计角度使我们能够将测量错误分类概率的问题减少到">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629182257282.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629182426943.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020062918170837.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_2,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629181801338.png">
+<meta property="article:published_time" content="2020-06-29T09:15:38.000Z">
+<meta property="article:modified_time" content="2020-07-12T13:44:36.817Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="论文导读">
+<meta property="article:tag" content="大创">
+<meta property="article:tag" content="DNNs测试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200629182257282.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/29/论文导读《DeepGini-Prioritizing-Massive-Tests-to-Enhance-the-Robustnessof-Deep-Neural-Networks》/"/>
+
+
+
+
+
+  <title>论文导读《DeepGini:Prioritizing Massive Tests to Enhance the Robustnessof Deep Neural Networks》 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/29/%E8%AE%BA%E6%96%87%E5%AF%BC%E8%AF%BB%E3%80%8ADeepGini-Prioritizing-Massive-Tests-to-Enhance-the-Robustnessof-Deep-Neural-Networks%E3%80%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">论文导读《DeepGini:Prioritizing Massive Tests to Enhance the Robustnessof Deep Neural Networks》</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-29T17:15:38+08:00">
+                2020-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E5%88%9B/" itemprop="url" rel="index">
+                    <span itemprop="name">大创</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E5%88%9B/DNNs%E6%B5%8B%E8%AF%95/" itemprop="url" rel="index">
+                    <span itemprop="name">DNNs测试</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>  大创第二次讨论论文</p>
+<h2 id="DeepGini：优先进行大规模测试以增强深度神经网络的鲁棒性"><a href="#DeepGini：优先进行大规模测试以增强深度神经网络的鲁棒性" class="headerlink" title="DeepGini：优先进行大规模测试以增强深度神经网络的鲁棒性"></a>DeepGini：优先进行大规模测试以增强深度神经网络的鲁棒性</h2><p><a href="https://arxiv.org/pdf/1903.00661.pdf" target="_blank" rel="noopener">原文地址</a></p>
+<blockquote>
+<p><font color=green >思考</font></br><br><font color=#FF9000 >问题</font></br><br> 已解决⭐ </br><br> <font color=#FF4500 >重点</font></p>
+</blockquote>
+<h3 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h3><ol>
+<li><p>为给定输入定义正确输出的测试预言在自动测试中通常不可用。 为了获取理论信息，基于DNN的系统的测试任务通常需要提前进行人工贴标签。</p>
+</li>
+<li><p>DeepGini，一种基于DNN统计视角设计的测试优先级划分技术。这样的统计角度使我们能够将测量错误分类概率的问题减少到测量固定杂质的问题，使我们能够快速识别可能错误分类的测试。</p>
+</li>
+<li><p>DeepGini在优先考虑有效性和效率方面的测试方面优于现有的基于覆盖的技术。并且由DeepGini优先进行的测试在提高DNN质量方面更为有效。特别针对图像分类DNN</p>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3></li>
+<li><p>背景：常规软件测试依靠程序员手写建立业务逻辑，而DNN测试依靠数据驱动的编程范例<font color=#FF9000 >（data-drivenprogramming paradigm）</font>，所以足够的带有oracle信息的数据对于基于DNN的软件错误行为的检测十分重要。</p>
+</li>
+<li><p>问题：无法自动测试Oracle。</p>
+</li>
+<li><p>启发：在测试基于DNN的系统时，软件测试人员通常将注意力集中在那些可能导致系统运行不正常的测试上，因为诊断这些测试可以洞察程序中的各种问题。 这一事实自然促使我们提出一种对测试进行优先级排序的技术，以便可以在其他测试之前对引起故障的测试进行标记和分析。</p>
+</li>
+<li><p>现有测试优先级排序技术：代码覆盖率用作指导优先级排序过程的度量， 两种主要的基于覆盖的技术称为覆盖总数测试和覆盖范围附加测试优先级划分[46]。<br> 覆盖总数测试方法主要是如果它覆盖更多程序元素，我们就优先选择它进行测试。<br> 覆盖范围附加测试方法首选的测试则是是否可以覆盖更多之前测试未发现的程序元素。<br> 上述的基于覆盖的方法预期效果不是很好。<br> 原因：</p>
+<ol>
+<li>这些标准是用来衡量测试充分性的，使用这些覆盖标准测试DNN后，往往不清楚如何提高DNN的质量</li>
+<li>需要非常高的时间复杂度O(mn^2)</li>
+</ol>
+</li>
+<li><p>直观地讲，如果DNN为每个类别输出相似的概率，则DNN可能会将测试分类为错误的类别。</p>
+</li>
+<li><p>缺点：我们的方法需要运行所有测试以获得输出矢量</p>
+</li>
+<li><p>本文实验思路：将DeepGini与使用现有神经元覆盖标准的基于覆盖的方法进行比较。 从两个方面评估了我们方法的有效性。 首先，我们计算平均故障检测百分比（APFD）[46]的值，这是评估优先级排序技术的标准方法。 其次，我们评估我们的技术是否可以提高DNN的质量。 为此，我们在训练集的前面添加了优先级最高的测试，并将重新训练的DNN的准确性与原始训练进行了比较。</p>
+<h3 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h3><p>深度学习和测试优先级的背景知识</p>
+</li>
+<li><p>Neuron Coverage Criteria（NAC（k），神经元激活覆盖率）<br> 定义为覆盖神经元数量与神经元总数的比率，k值自设，神经元输出值大于k认为它被激活。</p>
+</li>
+<li><p>k-Multisection Neuron Coverage (KMNC(k)，k-多段神经元覆盖率）<br> 假设神经元的输出位于一个区间[lowo，higho]中，在大多数情况下，单个测试必须覆盖每个神经元的一部分。 只有极少数的测试没有覆盖间隔中的一个部分，而是覆盖了边界，即（-∞，lowo]和[higho，+∞）。（KMNC（k））定义为覆盖部分数与部分总数之比。 因此，几乎所有单个测试的KMNC（k）覆盖率都相同。</p>
+</li>
+<li><p>Neuron Boundary Coverage (NBC(k)，神经元边界覆盖）<br> 与KMNC（k）不同，NBC（k）并非旨在覆盖[lowo，higho]中的所有部分，而是旨在覆盖（-∞，lowo]和[higho，+∞）的边界。<br> 定义为覆盖边界数与边界总数之比。<br> 度量了给定测试输入集覆盖极端案例区（上边界区和下边界区）的程度。由于每个神经元都有一个上限和一个下限，因此边界总数是神经元数的两倍。</p>
+</li>
+<li><p>Strong Neuron Activation Coverage (SNAC(k)，强神经元激活覆盖率）<br> 可以看作是NBC(K)的特例。<br> 定义为覆盖上边界的数目与上边界总数的比率，其中上边界总数实际上等于DNN中的神经元数目。</p>
+</li>
+<li><p>Top-kNeuron Coverage (TKNC(k)，top-k神经元覆盖）<br> 度量的是每一层中成为激活值最大的前k个神经元的数量。<br> 定义为每一层上的前k活跃的神经元的总数与DNN中的神经元总数的比率。<br> 当且仅当神经元输出结果不小于神经元层中第k个最大值时，我们认为这个神经元被这个测试覆盖。<br> 这个度量只能用于将两个测试集与一个以上的测试进行比较。</p>
+</li>
+<li><p>Likelihood- and Distance-based Surprise Coverage (LSC(k)and DSC(k)，基于可能性和距离的意外覆盖）</p>
+<ul>
+<li><p>SA: 意外充分性(Surprise Adequacy )<br>  衡量新用例相对于训练集中用例的多样性程度.指标越大分类器越容易分错。<br>  SA旨在衡量<strong>给定新输入</strong>相对于<strong>用于训练的输入</strong>的相对新颖性,是DL系统如何对未知输入做出反应的指标。<br>  两种计算方法：<br>  · LSA: 基于可能性的SA (Likelihood-based Surprise Adequacy)<br>  采用核密度估计（KDE）来获得输入数据的分布密度函数。在选定Nl层后,对于所有的训练集中的用例,每个用例使用核函数计算该用例与新输入x的激活迹的差值。<br>  概率密度降低了,证明输入更加稀有,概率密度增高了,证明输入更加相似。<br>  · DSA: 基于距离的SA (Distance-based Surprise Adequacy)</p>
+</li>
+<li><p>SC: 意外覆盖率 (Surprise Coverage)<br>被覆盖的段数除以总段数<br>一组具有较高SC的输入是一组多样化的输入    </p>
+</li>
+</ul>
+</li>
+<li><p>基于覆盖率的测试优先级<br> · 覆盖率的尽早最大化将导致早期发现故障。</p>
+<ul>
+<li>Coverage-Total Method (CTM)：<br>· 总是选择覆盖率最高的测试<br>· O（nlogn）<ul>
+<li>Coverage-Additional Method (CAM)<br>· 根据先前选择的反馈选择下一个测试。<br>· 选择一个可以覆盖更多未发现的代码结构的测试。<br>· 在达到最大覆盖率之后，我们可以使用CTM对其余未优先测试进行  优先级排序。<font color=#FF9000 >ACDB为什么不行？</font><br>· O(mn^2)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="Approach"><a href="#Approach" class="headerlink" title="Approach"></a>Approach</h3><p>对测试进行优先排序的方法及其在提高DNN质量方面的应用</p>
+<ol>
+<li><p>两次随机取样有不同结果的概率如下，概率越低，纯度越高。<br><img src="https://img-blog.csdnimg.cn/20200629182257282.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p><img src="https://img-blog.csdnimg.cn/20200629182426943.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>即使DNN将输入测试分成两个以上的类，ξ也具有类似的分布：</p>
+</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/2020062918170837.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_2,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>    · ξ（t1）&gt;ξ（t2）暗示t1更有可能被错误分类。 因此，对于一组优先测试，我们需要运行测试以收集输出，然后根据ξ的值对这些测试排序。<br>    · 假设我们有四个测试A、B、C和D，DNN试图将它们分类为三个类别。 表2显示了它们的输出向量和ξ的值。 根据ξ的值，我们可以对测试ABCD进行优先排序。<br>    <img src="https://img-blog.csdnimg.cn/20200629181801338.png" alt="在这里插入图片描述"><br>4. 一般情况下，我们可以在训练集上增加更多的测试，并重新训练DNN以增强其鲁棒性。DeepGini可在有限的时间预算内增强DNN健壮性。因为DeepGini在前面优先处理的测试比在后面优先处理的测试更能有效地提高DNN质量，而且比在前端优先但基于覆盖的优先技术更能有效地提高DNN的质量。<br>    DeepGini有效性背后的原理实际上遵循了主动机器学习的理论，它倾向于在决策边界附近的测试。</p>
+<h3 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h3><ol>
+<li>实现了我们的方法以及各种基于神经元覆盖的测试优先级排序方法。<a href="https://github.com/deepgini/deepgini" target="_blank" rel="noopener">https://github.com/deepgini/deepgini</a></li>
+<li>每个比较实验都在四个模式下进行，涉及两个方面：（1）使用CTM或CAM对测试进行优先级排序；和（2）在原始数据集中对测试进行优先级排序或对结合原始测试和对抗性测试的测试进行优先级排序</li>
+<li>DeepGini是否可以找到比基于神经元覆盖的方法更好的测试排列？<br> 计算故障检测平均百分比（APFD）， 较高的APFD值表示更快的误分类检测率</li>
+<li>DeepGini比基于神经元覆盖的方法更有效吗？<br> 通过记录优先排序的时间成本来提供答案。某些优先级排序方法无法在数小时内完成，这在工业环境中不可行。<font color=#FF9000 >跟题目有什么关系？</font></li>
+<li>DeepGini可以指导DNN的再培训以提高其准确性吗？<br> 利用对抗测试来回答。测试集T和验证集V，我们将前1％，2％，··，10％的测试加回到训练集中，并重新训练新的DNN。我们不会添加超过50％的测试来重新训练DNN， 因为我们观察到DNN的准确性不会随着更多测试而发生显着变化。使用V，我们计算新DNN的准确性。答案是可以。</li>
+</ol>
+<h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><p>介绍了测试优先级排序（RQ1和RQ2）的结果，然后分析了我们的方法是否可以更好地指导DNN的再训练（RQ3）。</p>
+<ol>
+<li><p>我们将DeepGini的结果与现有的两组基于覆盖的方法：（1）NAC，NBC和SNAC； （2）TKNC，LSC，DSC和KMNC</p>
+</li>
+<li><p>结果：<br> <strong>（效力和效率 问题1，2）</strong><br> • DeepGini能够在2秒内确定成千上万次测试的优先级<br> • DeepGini的APFD故障检测平均百分比非常接近1</p>
+</li>
+</ol>
+<p><strong>第一组：NAC，NBC，SNAC</strong><br>    • 不足0.5％的测试足以达到以下三个覆盖率标准的最大覆盖率，无论其参数设置如何：NAC，NBC和SNAC<br>    • 在MNIST的10,000个原始测试中，非常少量的测试就足以实现最大覆盖率：NAC（0.75），22个测试可以达到最大覆盖率（84％）；NBC（0.5），有5个测试可以达到最大覆盖率（0.97％）； SNAC（0.5），有5个测试可以达到最大覆盖率（2％）。由于我们可以很快达到最大覆盖率，因此CAM将很快退化为CTM，因此，对于这些数据集，CAM的有效性和效率几乎与CTM相同。<br>效力：图四绘制了检测到的错误分类测试的百分比（y轴）与优先级​​测试百分比（x轴）的对比。<br>    • 首先，与NAC，NBC和SNAC相比，DeepGini获得了更高的APFD值。<br>    • 其次，如图4中的虚线所示，基于神经元覆盖的优先级排序方法，有时甚至比随机优先级策略还差。<br>效率：表5<br>    • 对于原始测试集，NAC，NBC和SNAC基于CAM的优先级排序过程分别花费至少2、5、7秒，而DeepGini仅花费0.45秒。<br>    •  类似地，对于带有对抗性示例的测试集，我们发现三个基线的基于CAM的优先级排序过程花费了超过11秒的时间，而DeepGini仅花费了2秒的时间。<br>    • 这些数据表明DeepGini与NAC，NBC和SNAC相比具有更高的效率<br><strong>第二组：TKNC，LSC，DSC，KMNC</strong><br>    • 每个测试的TKNC，LSC和DSC覆盖率均相同，而与参数k无关<br>    • 因此，如果我们使用这些覆盖率指标对测试进行优先级排序，则⭐CTM无法正常工作（5.1.2节）CTM本来就是按照覆盖率的大小进行优先级排序的，覆盖率相同了就无法排序了。 不幸的是，使用这些覆盖率指标，CAM也无法很好地工作。 主要原因是少于5％的测试足以实现最大覆盖率。 在对5％的测试进行优先级排序后，CAM会退化为CTM，无法按照上述说明进行操作。<br>    • 如果我们使用KMNC来对测试进行优先级排序，则CTM无法正常工作，因为几乎所有单个测试都具有相同的KMNC覆盖率，而与参数k无关。 但是，KMNC可以使用CAM优先级排序方法。 因此，我们仅将基于KMNC的CAM与我们的优先级方法进行比较：<br>效力：<br>    • DeepGini在优先测试的有效性方面明显优于四个基准<br>效率：<br>    • 表5显示，基于这些覆盖率指标的优先级排序方法比我们的方法慢20倍-2000倍</p>
+<pre><code>**（问题3）**
+图5-a和图5-b展示了LeNet-5在MNIST上的结果。 曲线显示了再训练后DNN的准确性
+ 在表6中，我们用前10％的优先测试对DNN进行了重新训练后，还提供了精度值。从表中可以看出，虽然基线标准可以达到0.83-0.85的准确度，但DeepGini可以将准确度值提高到0.96。</code></pre><p>对于其中一些标准，我们观察到原始测试的很小一部分（约1％至5％）足以实现最大覆盖率。覆盖率标准无法区分不同的测试。在我们的实验中，随机优先排序策略甚至优于NAC和TKNC，这意味着这些覆盖标准可能会误导发现新的错误DNN行为。<br>KMNC标准在有效性和效率方面都未能很好地发挥作用。 还需要进行更多的研究，以探索其潜力和改进之处。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E8%AE%BA%E6%96%87%E5%AF%BC%E8%AF%BB/" rel="tag"># 论文导读</a>
+          
+            <a href="/tags/%E5%A4%A7%E5%88%9B/" rel="tag"># 大创</a>
+          
+            <a href="/tags/DNNs%E6%B5%8B%E8%AF%95/" rel="tag"># DNNs测试</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/25/VS2017%E7%AC%AC%E4%B8%80%E6%AC%A1c-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%90%8E%E5%88%9B%E5%BB%BAcpp%E6%96%87%E4%BB%B6%E8%BF%90%E8%A1%8C%E6%97%B6%E6%8A%A5%E9%94%99%EF%BC%9A%E6%9C%AA%E5%B0%86%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E8%AE%BE%E7%BD%AE%E5%88%B0%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9E%E4%BE%8B/" rel="next" title="VS2017第一次c++环境配置后创建cpp文件运行时报错：未将对象引用设置到对象的实例">
+                <i class="fa fa-chevron-left"></i> VS2017第一次c++环境配置后创建cpp文件运行时报错：未将对象引用设置到对象的实例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/29/%E3%80%8A%E5%9B%BE%E8%A7%A3TCP-IP%E3%80%8B%E6%A6%82%E8%BF%B0/" rel="prev" title="《图解TCP/IP》概述">
+                《图解TCP/IP》概述 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#DeepGini：优先进行大规模测试以增强深度神经网络的鲁棒性"><span class="nav-text">DeepGini：优先进行大规模测试以增强深度神经网络的鲁棒性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Abstract"><span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Background"><span class="nav-text">Background</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Approach"><span class="nav-text">Approach</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Experiment"><span class="nav-text">Experiment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-text">Result</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

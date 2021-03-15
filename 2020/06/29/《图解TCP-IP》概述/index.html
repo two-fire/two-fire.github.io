@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="阅读,计算机网络," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="思考问题 已解决⭐  重点  目录  6.23 第一章 网络基础知识   6.24 第二章 TCP&#x2F;IP基础知识   6.26 第三章 数据链路   6.28 第四章 IP协议   6.29 7.1 第五章 IP协议相关技术   7.2 第六章 TCP与UDP   7.3 7.4 第七章 路由协议   7.5 7.5 第8章 应用层协议 第9章 网络安全6.23第一章 网络基础知识    协议如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《图解TCP&#x2F;IP》概述">
+<meta property="og:url" content="http://yoursite.com/2020/06/29/%E3%80%8A%E5%9B%BE%E8%A7%A3TCP-IP%E3%80%8B%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="思考问题 已解决⭐  重点  目录  6.23 第一章 网络基础知识   6.24 第二章 TCP&#x2F;IP基础知识   6.26 第三章 数据链路   6.28 第四章 IP协议   6.29 7.1 第五章 IP协议相关技术   7.2 第六章 TCP与UDP   7.3 7.4 第七章 路由协议   7.5 7.5 第8章 应用层协议 第9章 网络安全6.23第一章 网络基础知识    协议如">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629215143293.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200702093341765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629215518558.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629221529923.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629215620856.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629215650461.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020062922022373.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629220448662.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629220509259.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_8,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629220553195.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629220608609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629220649170.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629220706859.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629231752278.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629231805404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629231856784.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629231916215.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200629231936454.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701092144316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701092248799.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701092357560.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701092548902.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701093011935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701125153763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020070112530392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701133501140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701134818234.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701155810750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701155845835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701160026932.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200701163902118.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200702093756686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200702093946683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200703205625792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200703205806341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020070515261247.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200705153010662.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200704100635589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200704100700838.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200704100738486.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200704100758701.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200705095432536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200705095457545.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200706160920722.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200706161006574.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-06-29T13:31:14.000Z">
+<meta property="article:modified_time" content="2020-08-21T05:01:20.786Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="阅读">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200629215143293.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/29/《图解TCP-IP》概述/"/>
+
+
+
+
+
+  <title>《图解TCP/IP》概述 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/29/%E3%80%8A%E5%9B%BE%E8%A7%A3TCP-IP%E3%80%8B%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《图解TCP/IP》概述</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-29T21:31:14+08:00">
+                2020-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index">
+                    <span itemprop="name">阅读记录</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p><font color=green >思考</font></br><br><font color=#FF9000 >问题</font></br><br> 已解决⭐ </br><br> <font color=#FF4500 >重点</font></p>
+</blockquote>
+<p>目录</p>
+<ul>
+<li><a href="#623">6.23</a><ul>
+<li><a href="#第一章-网络基础知识">第一章 网络基础知识</a></li>
+</ul>
+</li>
+<li><a href="#624">6.24</a><ul>
+<li><a href="#第二章-tcpip基础知识">第二章 TCP/IP基础知识</a></li>
+</ul>
+</li>
+<li><a href="#626">6.26</a><ul>
+<li><a href="#第三章-数据链路">第三章 数据链路</a></li>
+</ul>
+</li>
+<li><a href="#628">6.28</a><ul>
+<li><a href="#第四章-ip协议">第四章 IP协议</a></li>
+</ul>
+</li>
+<li><a href="#629">6.29</a></li>
+<li><a href="#71">7.1</a><ul>
+<li><a href="#第五章-ip协议相关技术">第五章 IP协议相关技术</a></li>
+</ul>
+</li>
+<li><a href="#72">7.2</a><ul>
+<li><a href="#第六章-tcp与udp">第六章 TCP与UDP</a></li>
+</ul>
+</li>
+<li><a href="#73">7.3</a></li>
+<li><a href="#74">7.4</a><ul>
+<li><a href="#第七章-路由协议">第七章 路由协议</a></li>
+</ul>
+</li>
+<li><a href="#75">7.5</a></li>
+<li><a href="#75-1">7.5</a><ul>
+<li><a href="#第8章-应用层协议">第8章 应用层协议</a></li>
+<li><a href="#第9章-网络安全">第9章 网络安全</a><h1 id="6-23"><a href="#6-23" class="headerlink" title="6.23"></a>6.23</h1><h2 id="第一章-网络基础知识"><a href="#第一章-网络基础知识" class="headerlink" title="第一章 网络基础知识"></a>第一章 网络基础知识</h2></li>
+</ul>
+</li>
+</ul>
+<p>协议如同交流中的语言。是一组事先约定的通信规则的集合。<br>TCP/IP并非ISO（国际标准化组织）制定，而是IETF所倡导推进的业界公认标准。<br>协议的分层：优劣<br>osi参考模型与osi协议区别</p>
+<ul>
+<li>osi协议是以osi参考模型为基础制定的每个阶层的协议和每两层之间的接口的标准。</li>
+<li>osi参考模型粗略定义了每层的“作用”,即每层需要涉及哪些功能的“协议”；“协议”对每一层的“作用”进行详细定义。<br>传输层只管数据在通信双方节点间数据的可靠传输。<br>网络层与数据链路层的区别 </li>
+<li><font color=#FF9000>网络层负责端到端数据的传输，将整个数据发送到最终目标地址（怎么实现的?）</font>而数据链路层是每个区间内的通信，进行数据处理。</li>
+</ul>
+<p><font color=green >思考：</font>会话层负责数据何时发送，连接断开的时间，而数据链路层进行路由，网络层负责将数据端到端传输。<font color=#FF9000>那为什么网络层还不保证数据可达性？</font><br><font color=#FF4500 >网络层负责地址管理和路由选择，数据链路层进行互联设备间的传送。</font></p>
+<p>MAC（介质访问控制）地址/物理地址/硬件地址：识别连接到同一传输介质上的设备。物理层中包含该地址信息的首部附加到从网络层转发过来的数据上。</p>
+<p><font color=green >总结思考:</font>ISO参考模型：第七层应用层：文件传输等；第六层表示层：规定数据传输的标准格式设备特有格式和标准数据格式的转换；第四层第五层会话层：确定何时建立和关闭链接，<font color=#FF4500 >通信管理</font>；第五层第四层传输层：保证数据的正确传输；第三层网络层：端到端数据的传输；第二层数据链路层：控制在同一传输介质中的各台设备之间的通信，数据的传输；第一层物理层：附加包含MAC地址的首部，比特流与电磁波等传输介质的互换，根据目的地址进行数据传输。</p>
+<h1 id="6-24"><a href="#6-24" class="headerlink" title="6.24"></a>6.24</h1><p> TCP/IP采用分组交换技术。<br>· 电路交换需要提前建立链接。<br>· 计算机与路由器、路路之间常为一条通信线路。<font color=#FF9000>电路交换呢？</font><br>· 地址的特性：唯一性（MAC,IP地址），层次性（IP地址）<br>MAC是负责最终通信的地址，是由设备制造商对每块网卡进行指定的。但由于它的不分层，所以IP地址在寻址过程中必不可少。<br>· <font color=#FF9000>⭐交换机和路由器区别？</font><br>· <font color=#FF4500 >MAC寻址参考地址转发表，IP寻址参考路由控制表。<br>交换机查看地址转发表，路由器和主机查看路由控制表。p53</font><br><font color=#FF9000>· 主机将数据给了交换机，交换机怎么根据mac地址转发表确定发送给哪个路由器？</font><br><font color=#FF4500>转发表中有各个设备的MAC地址，不需要手动设置，会每次根据这次的记录自动生成（自学）。以太网交换机就是网桥。可以根据数据链路层每个目标MAC地址来确定哪个网络端口发送数据。</font></p>
+<p><font color=green>· 思考：</font>因为分组报文的转发，网桥是根据MAC地址处理，路由器根据IP地址处理。路由器和主机在寻址的时候。</p>
+<p>· 传输速率（又称带宽）高是指单位时间传输的数据量大而不是速度快。<br>· 主机间实际传输速率又叫吞吐量。单位与带宽均为bps。吞吐量的衡量内容包括但不仅为带宽。<br>· 网卡（NIC/网络适配器/LAN卡）：计算机连入网络的设备。<br>· 中继器：物理层延长网络的设备，可以增强信号，有的还可以转换信号，但不能校验和在不同传播速度的媒介间转发。<br>提供多端口的也称作集线器（Hub）。<br>· 网桥/二层交换机：第二层数链层连接两个网络的设备。没有连接网段个数限制，基本只连接相同类型的网络，有时也可以连接传输速率不同的网络。可校验帧，控制网络流量（通过地址自学机制，<font color=#FF9000>⭐过滤功能</font>）<br><font color=#FF4500>过滤功能指带有一定特殊参数的IP数据报才能通过路由器。参数可以是发送端主机、接收端主机、TCP\UDP端口号、TCP的SYN(连接请求包)或ACK标志等。</font><br>· 交换集线器（具有网桥功能的Hub）也属于网桥一种。<br>· 路由器/三层交换机：第三层网络层面连接两个网络，转发分组报文的设备。</p>
+<p><font color=green>· 思考：</font>路由器连接两个网络。路由器需要根据分层的IP地址，查找路由控制表，把分组报文发送到另一个路由器。网桥是数据链路层连接两个网络，又因为数链层是实现一个区域内的通信，不需要分层，只需要唯一性的MAC地址就可以完成。<font color=#FF4500>见底下分层包中的结构图</font><br>· 路由器是网络层设备，所以TCP/IP中，网络层的地址就成了IP地址。网桥是数据链路层设备，MAC地址是物理地址。<br>路由器会分割数据链路，使得数链层的广播无法继续传播。这也分担了网络负荷。有的也具备一定网络安全功能。<br>· 4<del>7层交换机：分析收发数据，进行特定处理，如带宽控制。如负载均衡器。<br>· 网关：和4</del>7层交换机一样，负责传输层及以上的对数据进行控制处理，但还有协议的翻译。<br>代理服务器是一种应用网关（在相同的协议之间转发数据）。为了控制流量。<br><font color=#FF9000>具体代理服务器的处理？</font><br><img src="https://img-blog.csdnimg.cn/20200629215143293.png" alt="在这里插入图片描述"><br><font color=#FF4500>代理服务器代替服务器提供服务</font><br><font color=green>思考：</font>信号物理层调整（放大转换），然后向上到数据链路层储存重构，去掉错误的帧，转发到物理层。物理层判断网络路径，再转发至目标地址.</p>
+<p>· 以前访问由个人，企业自行管理的服务器居多，现在多为利用数据中心发布信息。<br>· 云：利用虚拟化技术，资源（包括cpu,内存）虚拟化，实现按需分配资源</p>
+<h2 id="第二章-TCP-IP基础知识"><a href="#第二章-TCP-IP基础知识" class="headerlink" title="第二章 TCP/IP基础知识"></a>第二章 TCP/IP基础知识</h2><p>· TCP/IP网络出现背景：电路交换网络容灾性差，分组交换技术不仅在这方面有优势，而且可以同时并发通信提高效率。<br>· 阿帕网是互联网网的鼻祖。</p>
+<h1 id="6-26"><a href="#6-26" class="headerlink" title="6.26"></a>6.26</h1><p>· 互联网的每个网络由主干网和末端网构成，每个网络间由NOC连接。然后每个ISP的异构网络又需要IX连接。<br>NOC：网络操作中心 ；IX：网络交换中心；ISP：网络提供商<br>· <strong>TCP/IP协议分层模型</strong><br><img src="https://img-blog.csdnimg.cn/20200702093341765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>&emsp;· 硬件<br>&emsp;· 网络接口层：为NIC使用提供驱动程序<br>（硬件+网络接口层：网络通信层）<br>&emsp;· 互连网层<br>   &emsp;&emsp;· IP协议：非可靠性传输协议，不会重发。与互联网连接的主机、路由器必须实现IP功能，其他的设备不必要。<br><font color=#FF9000>为什么？</font><br><img src="https://img-blog.csdnimg.cn/20200629215518558.png" alt="在这里插入图片描述"></p>
+<p>  &emsp;&emsp;· ICMP协议：IP数据包如果传送不到目的端，就发送通知异常<br>&emsp;· 传输层<br>   &emsp;&emsp;· TCP协议：互连网层面向有连接的传输层协议。能够保证通信可达，能正确处理传输过程中的异常状况<br>   &emsp;&emsp;· UDP协议：面向无连接。<font color=#FF9000>为什么？</font><br><img src="https://img-blog.csdnimg.cn/20200629221529923.png" alt="在这里插入图片描述"></p>
+<p>&emsp;· 应用层（osi模型会话层及以上）<br>  &emsp;&emsp; · 浏览器和服务器间通信用的是HTTP协议（属于OSI模型的应用层），传输的主要数据格式是HTML（属于OSI模型的表示层）<br>  &emsp;&emsp; · 发送电子邮件用的协议是 SMTP（Simple Mail Tranfer Protocol），现在电子邮件的格式由MIME协议扩展后（属于OSI模型的表示层）<br>  &emsp;&emsp; · 文件传输 FTP 。在传输文件时候，会建立两个TCP连接，一个是发送连接请求时需要用到的控制连接，一个是传输数据时需要用到的数据连接。这两种连接都属于会话层功能。<br>   &emsp;&emsp;· 远程登陆 TELENT和SSH协议<br>   &emsp;&emsp;· 网络管理 采取SNMP协议（Simple Network Management Protocol）。管理设备的一段叫做管理器，被管理的设备叫做SNMP代理。在代理端保存着网络接口信息、异常数据量等，管理器访问这些信息需要通过MIB（Management Information Base）访问。在TCP/IP网络管理中，SNMP属于应用层协议，MIB属于表示层协议。<br><img src="https://img-blog.csdnimg.cn/20200629215620856.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="!\["></p>
+<p>分层包中的结构:<br><img src="https://img-blog.csdnimg.cn/20200629215650461.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><font color=#FF9000>很多NIC产品不是发给自己的包也不丢弃数据，为什么能用于监控网络流量？</font></p>
+<p><font color=green>思考 e.g：</font><br>· 甲用计算机A向乙的计算机B发送电子邮件的过程：<br>    1. 应用程序处理<br>    在点击发送那一刻，开始TCP/IP通信。<font color=#FF4500>首先进行编码处理（表示层）；之后由于软件的不同，何时发送数据不同（会话层）；应用在发送数据那一刻建立TCP连接，利用连接发送数据。</font><del>查找接收端的邮箱地址，存在则开始发送数据包。</del><br>    2. TCP模块的处理<br>    TCP根据应用的指示（会话层），提供将数据准确端到端发送的可靠传输。数据前附加一个TCP首部，包含源，目标端口号，序号，校验和，如果数据异常则请求重新发送，正常则发送到下一层网络层。<br>    3. IP模块的处理<br>    查找接收端<del>IP</del><font color=#FF4500>MAC</font>地址，如果尚不知道，可以利用ARP（address resolution protocol）协议来查找，把IP地址和上层用到的TCP/UDP协议类型封装到IP首部，<font color=#FF4500>判断后面封装的数据是TCP/UDP的信息</font>，全部交给下层进行传输。<br>    4. 网络接口（以太网驱动）的处理<br>    以太网首部包括发送端、接收端的MAC地址，<font color=#FF4500>以及标志以太网类型的以太网数据的协议，</font>尾部添加循环校验码<font color=#FF4500>（处理中的FCS）</font><br>· 计算机B接收的过程<br>    1. 网络接口（以太网驱动）的处理<br>    <font color=#FF4500>接收到以太包后，从首部找到mac地址判断是否为自己的包，不是则丢弃。是的话，查看标志类型域，确定数据类型。此例中是IP包，交给IP处理。</font>议类型无法识别，丢弃。<br>    2. IP模块的处理<br>    判断IP地址是否与自己匹配，若匹配，接收数据并查找上一层协议，如果是TCP就交给TCP处理。<font color=#FF4500>对于有路由的情况下，路由器查路由控制表，如果不是本网络接收，则发送到下一个网络。</font><br>    3. TCP模块的处理<br>    计算校验和，<font color=#FF4500>检测是否按照序号在接收数据，检测端口号确定应用程序。</font><del>如果数据被破坏则请求重新发送。路由器查路由控制表，如果不是本网络接收，则发送到下一个网络。</del><font color=#FF4500>数据接收完毕，发送“确认回执”给发送端，如果该信息未能到达，发送端就会一直发送。<br>    数据完整接收后，传到端口号识别的应用程序。</font><br>    4. 应用程序处理<br>    <font color=#FF4500>直接接收发送端的数据。解析后获得收件人为乙的地址。如果B上没有乙的邮箱，B返回发送端“无此收件地址”的报错。有的话，</font>邮件保存到本地硬盘上。若保存正常运行，返回“处理正常”的回执，否则“处理异常”。</p>
+<p>SNS（Social Network Service）社交网络，基于TCP/IP应用。<br><img src="https://img-blog.csdnimg.cn/2020062922022373.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="第三章-数据链路"><a href="#第三章-数据链路" class="headerlink" title="第三章 数据链路"></a>第三章 数据链路</h2><p>· 数据链路，指OSI参考模型中数据链路层，有时也指以太网、无线局域网等通信手段。也可以被视为网络传输中的最小单位，互联网“数据链路的集合”<br>· MAC地址基本上是独一无二的。如果一台主机启动多个虚拟机，只能由虚拟软件设置MAC地址给多个虚拟网卡，这时候很难保证MAC地址的独一无二了。<br>· 共享介质型网络： 基本采取半双工通信，并对介质进行访问控制，包括争用方式和令牌传递方式。<br>  · 争用方式，也叫CSMA（载波监听多路访问）<br>  · 改良版CSMA——CSMA/CD方式：发送数据时候一直检测电压（这种硬件属于同轴电缆），若超出规定范围认为是发生冲突。发生后，发送一个阻塞报文，放弃发送帧，在随机延时一段时间后发。<br>  · 令牌传递方式<br>· 非共享介质网络：网络中每个站直连交换机，交换机来转发帧。 发送端和接收端并不共享网络，一般采用全双工模式<br>  · 交换集线器,也叫以太网交换机。就是有多个端口的网桥。<font color=#FF9000><br>TCP或UDP等传输协议中的端口另有其他含义。是指什么？</font><br>  · MAC地址没有层次性，所以转发表的大小和设备数量有关。如果终端过多，可考虑将网络分成多个数据链路，分层管理。<br>  · 交换机转发方式有直接转发和存储转发（需检验FCS位）<br>· 解决网络中的环路问题：<br>  1.生成树；<br>  2.源路由：可以判断源地址是通过哪个网桥实现传输的，并将帧写入RIF（Routing Information Field），网桥根据这个RIF来发送帧给目标地址。<br>· VLAN可以通过不修改硬件线路，只修改网络结构来进行分散网络负载等操作。VLAN技术附加到网桥/2层交换机上，可以切断所有VLAN间的通信，从而提高网络的承载效率。（<font color=#FF9000>是因为减小了网络负载吗</font>⭐<font color=#FF4500>是的。它可以按端口号区分多个网段，从而区分广播数据传播范围</font>）但异构的网段间必须利用具有路由功能的交换机（如3层交换机）或通过路由器才能通信.<font color=#FF9000>为什么路由功能可以？</font><br>· TAG VLAN：跨交换机的VLAN。在交换机传输帧时，以太网首部加入VID标签识别帧发送到哪个网段。<br>· 以太网：是一种作为传输方式的数据链路。使用同轴电缆或双绞线电缆，可以决定其中0，1可以被解释为何种电子信号。<br>· 计算机内部表现值为二进制：1K=1024，1M=1024K<br>· 传输速度以时钟频率决定，1K =1000,1M=1000K<br>· FDDI 光纤分布式数据接口：有时间限制的令牌环访问方式。是目前传输速率最快的LAN技术中的一种，100Mbps。而且由于有主环和备用环，故障容错能力很强。<br>· 以太网、FDDI与OSI模型中数链层和物理层均有关。<br>· 以太网帧前面有个前导码部分。由8个8位字节组成，末尾有个起始帧定界符（Start Frame Delimiter）11。以太网中将最后2bit”11”称为SFD，IEEE802.3将最后8bit称为SFD<br><img src="https://img-blog.csdnimg.cn/20200629220448662.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>· 数据链路层又细分为介质访问控制层(MAC， Media Access Control)和逻辑链路控制层（LLC，Logical Link Control）。<br>· MAC层根据不同数据链路特有的首部信息进行控制，LLC层根据不同数据链路共有的首部信息进行控制。<br><img src="https://img-blog.csdnimg.cn/20200629220509259.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_8,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>· 无线通信<br>  · WiMAX：使用微波在家庭或者企业实现无线通信的一种方式，属于无线MAN<br>  · ZigBee ：主要应用于家电的远程控制。短距离低功耗的无线通信技术。<br>· PPP点对点协议，属于osi模型中纯粹的数据链路层。· 数据开始传输前先建立一个PPP连接。之后可进行身份验证等。PPP主要功能中包括不依赖上层的LCP（Link Control Protocol）协议和依赖上层的NCP（Network…）协议。当上层为IP,此时的NCP也叫IPCP协议。<br>  · LCP负责建立，检测，断开数据链路连接，设置最大接受单元MRU（Maximum Receive Unit），设置验证协议（PAP或者CHAP），设置是否进行通信质量监控<br>  · NCP建立和配置不同网络层协议<br>  · IPCP负责IP地址设置以及是否进行TCP/IP首部压缩等协商。<br>  · PAP密码认证协议 （password authentication protocol）：建立连接时两次握手，明文传输<br>  · CHAP挑战握手认证协议（Challenge Handshake ）：使用一次性密码OTP。建立连接后也可以继续进行密码交换。<br>· HDLC就是每个帧前后加8字节01111110（标识码）进行区分，发送帧时，如果帧内出现5个连续的1，后面必须插入一个0。而在接收帧时，去掉0(增删0，计算FCS会给COU处理，增加计算机负担）。而PPP是基于高级数据链路控制协议（HDLC）制定出来的，所以格式与此相同，如下：<br><img src="https://img-blog.csdnimg.cn/20200629220553195.png" alt="在这里插入图片描述"></p>
+<p>· 有的互联网接入服务商会在以太网中利用PPPoE（PPP over Ethernet）提高PPP功能。因为单纯以太网没有验证功能，也没有建立断开连接的处理，无法按时收费。利用PPP可帮各家ISP有效管理用户。<br><img src="https://img-blog.csdnimg.cn/20200629220608609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>· ATM（Asynchronous Transfer Mode）是以一个叫信元的单位进行传输的面向连接的数据链路。多用于广域网的连接。没有发送权限设置，易引发网络拥堵。ATM扩展了TDM（时分复用设备），时隙不要求连续，一个帧所占用的时隙也不固定。只是增加了5字节的首部，增加了网络开销，一定程度上降低了通信速度，但提高了线路利用率。<br><img src="https://img-blog.csdnimg.cn/20200629220649170.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200629220706859.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>但是一旦有一个信元出错，就会重发最多192个信元。<br>· POS（package over SDH/SONET）是一种在SDH（SONET）上进行包通信的一种协议。<br>SDH（synchronization digital hierarchy，同步数字体系）；SONET(synchronization optical NETwork，同步光纤网络)<br>SDH（SONET）是光纤上传输数字信号的物理层规范。<br>· FDDI 分布式光纤数据接口 ，令牌环网拓展产物<br>（基本不用）<br>· Toking Ring令牌环网（基本不用）<br>· 光纤通道 ：实现高速数据通信的一种数据链路。广泛用于搭建SAN（Storage Area Network，存储域网络，服务器与多台存储设备间高速传输数据的网络）<br>· HIPPI 连接超大计算机<br>· HDMI （High-definition Multimedia Interface，高清晰度多媒体接口）通过一根缆线实现数字信号高品质传输，1.4版后可以传输以太帧。<br>· iSCSI 将个人电脑连接硬盘的SCSI标准应用于TCP/IP网络上的一种标准。把SCSI命令和数据包含进IP包进行数据传输。可以使用网络上直连的大规模硬盘。<br>· DOCSIS是有线电视传输数据的行业标准。<br>· ADSL 对模拟电话线扩展，在家到电信局交换机之间，设置分离器，让音频信号（低频）和数字信号（高频）不互相干扰。<br>· FTTH 光纤到家</p>
+<h1 id="6-28"><a href="#6-28" class="headerlink" title="6.28"></a>6.28</h1><p>公共网络<br>· VPN虚拟专用网络，连接距离较远的地方<br>   · IP-VPN<br>     在IP网络（互联网）上建立VPN。服务商提高MPLS（multiprotocol label switching，多协议标签交换）网，根据IP包中的Label，从而进行用户区分，形成密闭私有网络。<br>   · 企业互联VPN<br>     采用IPsec技术，对VPN通信中的IP包进行验证和加密，在互联网上构造一个密闭私有网络。<br>   · 广域以太网<br>     IP-VPN是IP层的连接，而广域以太网则是在作为数据链路层的以太网上利用VLAN实现VPN技术。</p>
+<h2 id="第四章-IP协议"><a href="#第四章-IP协议" class="headerlink" title="第四章 IP协议"></a>第四章 IP协议</h2><p>· IP网际协议，负责将数据包发送给最终的目标计算机，因此IP能让任何两台计算机通信。<br>· <strong>主机</strong>：配有IP地址，但不能进行路由控制。<strong>路由器</strong>（IPV4中叫做<strong>网关</strong>）：配有IP地址，还能进行路由控制。统称<strong>节点</strong>。<br>· 网络层和数据链路层间的关系：<br>  数链层提供直连两个设备间的通信，而作为网络层的IP则负责在没有直连的两个网络间进行通信传输。</p>
+<p>需要这两个分层才能实现向最终目标地址通信。<br>· IP寻址<br>   · <font color=#FF9000>⭐为什么不能数据链路层也用IP寻址？</font><br>    <font color=#FF4500>因为IP地址需要设备上线后，才能根据他进入了哪个子网分配的，在未分配时我们需要根据MAC地址来区分不同设备。</font><a href="https://www.zhihu.com/question/21546408/answer/149670503" target="_blank" rel="noopener">参考知乎</a><br>   · 数据链路的类型对IP地址形式透明<br>· 路由控制<br>   · IP包在网络中一个个跳间被转发。<br>   · 数据链路实现某一区间（一跳）内的通信。一跳是指源MAC地址到目标MAC地址间的传输帧的区间。也就是，主机或者路由器网卡不经过其他路由器而能直接到达的相邻主机或路由器网卡间的一个区间。<br>   · 在一个区间内，电缆通过交换集线器或者网桥相连，而不会通过路由器或者网关。<br>   · <font color=#FF9000>网桥是数据链路层上连接两个网络的，一个网络的范围到达如何定义的？</font><br>   <font color=green>思考：如果没有IP地址，网桥需要向世界发送包来获得下一个MAC地址，并且需要一张巨大的表来维护所学的MAC地址。显然网络可能会崩溃。</font><br>· 不同数据链路最大区别就是最大传输单位（MTU）不同。MTU在以太网中1500字节，FDDI中4352字节，ATM中9180字节。所以IP进行分片处理，这样可以忽略途中的MTU，抽象化了数据链路层。<br>· IP采用面向无连接的原因：1.为了简化，2. 为了提速。需要连接时，可以委托上一层提供服务。<br>· IP只是负责将数据发给目标主机，是否收到、是否错误都不考虑。上层的TCP则负责保证对端主机确实接收到数据。如果让IP具有传输功能，协议的实施和编程会变得很复杂。<br>· IP地址并非根据主机台数配置的，而是每台主机的每一块网卡（NIC）都需要设置，一块网卡可以配置多个IP地址。而且一台路由器通常配置两个以上网卡，所以IPV4的32位IP地址不够用。<br>· IP地址包括网络标识和主机标识两部分，以子网掩码区分。</p>
+<h1 id="6-29"><a href="#6-29" class="headerlink" title="6.29"></a>6.29</h1><p>· IP地址分成四类地址。<br>  网络地址<br>  · A类：0.0.0.0~127.0.0.0 （开头0）后24位为主机标识<br>  · B类：128.0.0.0~191.255.0.0（开头10）后16位为主机标识<br>  · C类：192.0.0.0~223.255.255.0（开头110）后8位为主机标识<br>  · D类：224.0.0.0~239.255.255.255（开头1110）没有主机标识。<br>· 主机地址全为1，为广播地址<br>  · 本地广播的IP包会被路由器屏蔽<br>  · 直接广播可以在不同的网络直接广播。<br>· IP多播1110之后28位为多播的组编号<br>  · 将包发送给特定组内的所有主机。<br>  · 既可以穿透路由器，又可以实现只给必要的组发送数据包。<br>  · 多播使用D类地址，从224.0.0.0~224.0.0.255的范围不需要路由控制，同一链路内实现多播，在这范围之外设置多播地址会给全网所有组内成员发送多播的包。<br>  · 所有主机必须属于224.0.0.1的组，所有的路由器必须属于224.0.0.2的组。除了地址之外，还需要IGMP（Internet Group Management Protocol）等协议的支持。<br>· 子网掩码：对应的IP地址网络标识部分为1，主机地址部分为0。子网掩码必须是首位开始连续的1。<br>· CIDR（Classless Inter-Domain Routing，无类型域间选路）：采用任意长度分割IP地址的网络标识和主机标识。<br>  · 连续多个C类地址划分到一个较大网络内，并通过路由集中方式降低路由器负担。<br>· VLSM（Variable Length Subnet Mask，可变长子网掩码）  ：可随时修改组织内各部门的子网掩码的机制<br>· 私有IP地址：在同个域里保持唯一。<br>  · A类（10/8），B类（172.16/12)，C类（192.168/16）为私有IP，其他的都为全局IP。<br>  · 配有私有IP的主机和配有全局IP的互联网主机通过NAT技术可以实现通信。<br>· 全局IP地址（公网地址）：基本保证在整个互联网范围内保持唯一。任播情况，多台主机或路由器可配同一个IP。<br>  · 对于FTTH,ADSL服务，网络提供服务商直接给用户分配全局IP，用户每次重连，该IP地址都可能变化。<br>· 现在普遍采用方式：LAN中设置私有地址，通过少数设置全局IP地址的代理服务器，结合NAT的设置进行互联网通信。这时IP地址个数不限于LAN中主机个数，而是代理服务器和NAT的个数决定。<br><font color=green>思考：IP地址到底是动态的还是固定唯一的？其实要分类型讨论。</p>
+<ol>
+<li>我们设备上所显示出来的动态ip地址是ISP通过NAT技术整出来的内网ip，不是公网ip。公网IP由专门的机构统一分配、管理，在互联网上具有唯一性。私网IP无法联入互联网，只能在局域网使用。当然，如果需要连接互联网，每个局域网的出口，都有一个公网IP。</li>
+<li>IP地址静态还是动态分配，取决于管理人员如何设置。家用WIFI之所以能在你断开网络后，仍然分配到原来的那个IP地址，这是因为设备本身的默认设置，在一定时间内，A先使用了这个IP，继续把这个IP给A用。除非A很长都不用，设备再换给B用。（地址池租期）</font><br>· 路由控制<br>· 路由控制表的形成：静态路由控制，管理员手动设置；动态路由控制：刷新<br>· 路由控制表由“路由协议”制作而成。<br>· 默认路由：一张路由表上包含了所有网络及其子网信息时使用。0.0.0.0/0<br>· 主机路由：基于主机网卡上配置的IP地址本身进行路由<br>· 环回地址：同一台计算机上进行网络通信时的一个默认地址，127.0.0.1。主机名是localhost。使用这个IP或主机名，数据包不会流向网络。<br>· 路由汇总，也叫路由表的聚合：减少路由条目，减少网络开销<br>· 数据链路不同，MTU相异。原因是不同数据链路的使用目的不同。<br>· 经过分片之后的IP数据报只会在目的主机被重组（以防丢失包，等待30s），经过路由器可以做分片但是不能重组。<br>· 路径MTU发现<br>&emsp;· 背景：分片太小，网络利用率低；太大分片容易丢失。<br>&emsp;·  Path MTU指发送端到目的端不需要分片时最大分片大  小。<br>&emsp;· 过程：以UDP情况为例，发送端IP首部设置不分片，发送IP包，如果分片过大，被丢弃。因为UDP没有请求重发机制，所以由ICMP发送不可达消息回去，并重新设置分片大小。也就是UDP层传回来的“UDP首部+UDP数据”在IP层被分片。（对于IP不区分首部和数据），如此反复，直到所有分片到达目的主机后被重组，再传给UDP层。<br>（<font color=#FF4500>缓存期10min，过后重新做路径MTU发现</font>）<br>&emsp;· 对于TCP情况，根据路径MTU大小计算出最大段长度（MSS），然后再进行数据报发送，也就是IP层不会进行分层处理。</li>
+</ol>
+<p>IPv4 32比特，一般写为4个8位字节；<br>IPv6 128比特，一般写成8个16位字节。<br>从4-&gt;6，需要将网络中所有主机和路由器IP地址重新设置，任务大。<br>IPv6特性：<br>· IP地址扩大，依旧适应网络分层<br>· 性能提升。包首部长度采用固定40字节，不再采用首部校验码。只由发送端进行分片处理。<br>· 支持即插即用功能。即使没有DHCP服务也可实现自动分配IP地址。<br>· 采用认证和加密功能。防伪造IP和线路窃听（IPsec）<br>· 多播、Moblie IP成为扩展功能。<br>Pv6地址表示：16比特为一组，冒号隔开，一般十六进制表示。如果出现连续的0，可以用两个冒号隔开。一个IP地址只允许出现一次双冒号。<br>IPv6地址结构<br><img src="https://img-blog.csdnimg.cn/20200629231752278.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200629231805404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>· 全局单播地址：前64位为网络标识（，后64位为主机标识。从IPv6地址查看定位设备难。因为接口ID中保留64比特版的MAC地址可以是“临时地址”。<br><img src="https://img-blog.csdnimg.cn/20200629231856784.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>· 链路本地单播地址：通常接口ID中保留64比特的MAC版地址。<br><img src="https://img-blog.csdnimg.cn/20200629231916215.png" alt="在这里插入图片描述"></p>
+<p>· 唯一本地地址：不进行互联网通信时使用的地址。<br><img src="https://img-blog.csdnimg.cn/20200629231936454.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>&emsp;为了提高安全性，企业内部网络与互联网不连接，通信时通过NAT或者网关（代理）进行。<font color=#FF9000>进行的过程？</font><br><img src="https://img-blog.csdnimg.cn/20200701092144316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>版本</strong>：值为4，代表IPv4<br><strong>IHL</strong>（Internet Header Length）：表示IP首部大小，单位为4字节(32比特)<br><strong>TOS</strong>：来表明服务质量，但基本未使用。之后分成两个字段。<br>· <span id="DSCP"><em>DSCP</em>（Differential Services Dodepoint，差分服务代码点），现统称DiffServ，用来质量控制，6比特组成。</span><br><img src="https://img-blog.csdnimg.cn/20200701092248799.png" alt="在这里插入图片描述"><br>· <em>ECN</em>（Explicit Congestion Notification，显式拥塞报告），2比特组成。第6位的ECT（ECN-Capable Transport）用于通告上层TCP协议是否处理ECN。路由器转发ECN为1的包时，如果拥堵，CE（Congenstion Experienced）位置1。<br><strong>总长度</strong>：IP首部与数据部分合起来的总字节数。该字段长16比特，所以IP包最大长度2^16（65535）字节。<br><strong>标识</strong>：16比特组成，用于分片重组。不同分片标识值一定不同，标识值相同的分片也不一定是同一分片。（目标地址、源地址、协议不同都算不同分片）<br><strong>标志</strong>：<br><img src="https://img-blog.csdnimg.cn/20200701092357560.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>片偏移：13比特组成，标识每一分段相对于原始数据的位置。最多可表示2^13(8192)个相对位置。<font color=#FF4500>单位为8字节</font>，8<em>81922=6536字节的位置。<br>生存时间：8比特，指可以中转多少个路由器（最多256个）。直到变为0丢弃。<br>协议：表示IP首部的下一个首部属于哪个协议。<br>首部校验和：只校验数据报的首部，不校验数据部分。确保IP数据报不被破坏。（<font color=#FF4500>1补数计算</font>）<br>*</em>源地址**<br><strong>目标地址</strong><br><strong>可选项</strong>：长度可变，通常只在进行实验或诊断时使用。包括安全级别，源路径，路径记录，时间戳。<br><strong>填充</strong>：如果有可选项，要将首部长度通过填充0，调整为32比特整数倍。<br><strong>数据</strong>：将IP上层协议也当作数据进行处理。  </p>
+<p>IPv6数据报格式如下图。<strong>省略了首部校验和字段</strong>。因为TCP和UDP在做校验和计算时候使用伪首部，可以验证IP地址和协议的正确性。因此即使IP层无法提供可靠传输，TCP/UDP层也可以提供可靠传输服务。<strong>识别码成为可选项，IPv6首部和可选项均由8字节构成。</strong><br><img src="https://img-blog.csdnimg.cn/20200701092548902.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>通信量类</strong>（Traffic Class）：相当于TOS字段。<br><strong>流标号</strong>（Flow Label）：准备用于服务质量（QoS）控制。不使用时每一位设为0.进行控制时，设为随机数，利用可设置流的协议RSVP（Resource Reservation Protocol）在路由器上进行QoS设置。<font color=green>流标号是个无意义索引值，用来方便路由器检索服务质量的控制信息的。</font>当流标号、源地址、目标地址三项都一致，才认为是一个流。<br><strong>有效载荷长度</strong>：指包的数据部分。而IPv4的TL是包括首部在内的所有长度。当有可选项时，包括可选项的数据长度。<br><strong>下一个首部</strong>：相当于IPv4协议字段。但在有IPv6扩展首部情况下，表示后面第一个扩展首部的协议类型。<br><strong>跳数限制</strong>：同IPv4中TTL。</p>
+<p><strong>IPv6扩展首部</strong>：IPv6首部长度固定，无法将可选项加入其中。就通过扩展首部代替，进行功能扩展。<br>· 通常位于IPv6首部和TCP/IP首部中间。<br>· <font color=#FF9000>IPv4可选项长度固定为40字节</font>，但IPv6扩展首部无限制。⭐<font color=#FF9000>文章上面不是说长度可变？</font><br>根据选项的不同，该字段时可变长，从1字节到40字节。用来支持拍错、测量以及安全等措施。<a href="https://blog.csdn.net/u011784495/article/details/71636993" target="_blank" rel="noopener">参考博客</a><br>· IPv6扩展首部还可以包括扩展首部协议和下一个扩展首部字段。当需要分片时，可以使用扩展首部。<br>· IPv6扩展首部还可以包括扩展首部协议和下一个扩展首部字段。当需要分片时，可以使用扩展首部。<br><img src="https://img-blog.csdnimg.cn/20200701093011935.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="7-1"><a href="#7-1" class="headerlink" title="7.1"></a>7.1</h1><h2 id="第五章-IP协议相关技术"><a href="#第五章-IP协议相关技术" class="headerlink" title="第五章 IP协议相关技术"></a>第五章 IP协议相关技术</h2><p>· 主机根据实际IP包通信，需要实现将应用中使用的地址映射为IP地址。<br>· 数据链路层也不适用IP地址，在以太网情况下只使用MAC地址传输IP数据报。<br><strong>DNS</strong>（Domain Name System）：可以将字符串自动转换为具体IP地址<br>· 适用于IPv4，IPv6<br>· 起初为方便记忆，出现主机识别码。可为每台计算机赋予唯一主机名。需要不断更新下载最新hosts文件。现不用。<br><img src="https://img-blog.csdnimg.cn/20200701125153763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· DNS系统产生，它可以维护用来表示组织内部主机名（域名）和IP地址间对应关系的数据库。<br>&emsp;<em>UNIX和Windows中，”nslookup 主机名“可返回对应IP地址</em><br>· 域名服务器：管理所在层域的相关信息<br>· 域名解析器：进行DNS查询的主机和软件<br> · DNS查询原理：解析器先向域名服务器进行查询处理，如果没有，则到根域名服务器查找，查找到返回给解析器。<br>· DNS如同互联网中的分布式数据库，管理许多信息。如，由IP地址查主机名的信息PTR，上层或下层域名服务器IP地址的映射的NS记录；注册了邮箱地址和邮件接收服务器的主机名的MX记录等。</p>
+<p><strong>ARP</strong>（Address Resolution Protocol）：一种解决地址问题的协议。<br>· 以目标IP为线索定位下一个应接收数据分包的网络设备对应的MAC地址。如果目标主机不在同一链路，IPv4下通过ARP查找下一跳路由器的MAC地址。IPv6中，用ICMPv6替代发送邻居探索消息。<br>· 工作机制：广播发送ARP请求包，被同一链路所有主机和路由器接收解析。一致的返回ARP响应表。<br><img src="https://img-blog.csdnimg.cn/2020070112530392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>&emsp;接收端、发送端获取到的MAC地址缓存到ARP缓存列表中一段时间。<br><strong>RARP</strong>（reverse…）：从MAC地址定义IP地址的一种协议。<br>· 平时通过个人电脑设置IP地址，也可以通过<a href="#DHCP">DHCP</a>（Dynamic Host Configuration Protocol）自动分配获得IP地址。然而使用嵌入式设备（如打印机等）时，会遇到没有输入接口或无法通过DHCP动态获取IP地址的情况。此时可使用RARP<br>· RARP请求包和RARP响应包</p>
+<p><strong>代理ARP</strong>(Proxy ARP)：ARP包通常会被路由器隔离。但采用代理ARP的路由器可以将ARP请求转发给临近网段。</p>
+<p><strong>辅助IP的ICMP</strong>：确认IP包是否成功送达目标地址，通知发送中被抛弃的IP包的原因，改善网络设置等。<font color=#FF4500>仅支持IPv4</font>。<br>· 因为基于IP进行工作，例如通知消息使用IP进行发送。所以无法保证服务质量。<br>· 在ICMP中，包以明文方式像TCP/UDP一样通过IP进行传输。ICMP的功能并不是传输层的补充，而应该把ICMP考虑为IP一部分。<br>· ICMP消息分为两大类：通知出错原因的错误消息；用于诊断的查询消息。<br>· ICMP目标不可达消息；ICMP重定向消息：有更好的发送路由；ICMP超时信息；ICMP回送消息：常用ping命令，判断对端主机是否可达。<br>ICMPv6：作用扩大。IPv4没有ICMP可以工作，但IPv6不能没有ICMPv6。<br>· 从IP定位MAC地址的协议从ARP变为ICMP的邻居探索消息。它融合了IPv4的ARP、ICMP重定向和ICMP路由选择消息等功能，还提供了自动设置IP地址的功能（但ICMPv6中没有DNS服务器的通知功能，所以实际上这个功能需要与DHCPv6组合使用实现）<br>·  ICMPv6中ICMP分为两大类：错误消息和信息消息<br>· IPv4中使用ARP采用广播，IPv6邻居请求消息中利用多播传输。</p>
+<span id="DHCP">
+**DHCP**（Dynamic Host Configuration Protocol）：实现自动设置IP地址，统一管理IP地址分配</span>
+· 支持IPv4，IPv6
+· 只要连接到网络，就能实现TCP/IP通信。实现即插即用：物理上一连通，无需专门设置即可使用设备。
+· 提高容灾性，架设不止一台DHCP服务器
+
+<p><img src="https://img-blog.csdnimg.cn/20200701133501140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>·  使用DHCP之前，需要一台DHCP服务器，很多时候由该网段的路由器充当。然后在DHCP服务器上设置可分配的IP地址、子网掩码、默认路由。</p>
+<ol>
+<li>客户端首先会广播发送一个<font color=#FF4500>dhcp discovery</font>报文，要求设置IP地址和网络掩码。</li>
+<li>服务器收到客户端发来的发现报文后，单播回复一个<font color=#FF4500>dhcp offer</font>报文（包含IP地址、租约信息、dns等），同时dhcp服务器也会生成一个租期表格（ip地址、租期、mac）。ps：此处为单播主要是原因是交换机有这client的mac列表，所以可以单播回复，减少资源消耗。</li>
+<li>客户端收到服务器来的提供报文后，广播发送一个<font color=#FF4500>dhcp request</font>报文。包含自己的IP地址信息，目的是为了①告诉别的DHCP服务器，我已经有地址了，你们之前准备分给我的地址，你们可以收回了。②告诉选中的DHCP，我选择你了，你的地址我准备用了。</li>
+<li>服务器收到客户端发来的应答报文后，会发送一个<font color=#FF4500>dhcp ack</font>或<font color=#FF4500>dhcp nak</font>。服务器检测后可以用，就回复ACK，如果地址冲突或者无效就回复NAK，客户端重新获取地址。</li>
+<li>DHCP网络设置结束，可进行TCP/IP通信。<br><a href="https://www.cnblogs.com/dsl146/p/10331120.html" target="_blank" rel="noopener">参考博文</a><br>· DHCP服务器在分配IP地址前发送ICMP回送请求包，确认无应答；DHCP客户端针对获得的IP地址发送ARP请求包，确认无应答。</li>
+</ol>
+<p><strong>DHCP中继代理</strong>：<br>· 学校等大规模网络环境中，如果将DHCP服务器分设到各个路由器上，不好管理。需要DHCP中继代理——对不同网段的IP地址分配由一个DHCP服务器统一管理。<br>· 不需要每个网段架设一个DHCP服务器，只需要每个网段设置一个DHCP中继代理。<br>· DHCP客户端向DHCP中继代理发送DHCP请求包，而中继代理在收到之后单播发送给DHCP服务器。服务器端收到后再由原路线返回应答。<br><img src="https://img-blog.csdnimg.cn/20200701134818234.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>NAT</strong>（Network Address Translator）：用于私有地址转成全局IP地址的技术。<strong>NAPT</strong>，还可以转换TCP、UDP端口号从而实现⭐<font color=#FF9000>用一个全局IP地址与多主机通信（怎么实现？）</font><font color=#FF4500>生成NAPT表，正确转换地址和端口的组合，令多个客户端同时与服务器进行通信。现在提到NAT，多指NAPT，也称<strong>IP伪装</strong>或<strong>Multi NAT</strong>。</font><br>· IPv4和IPv6均有使用。在两者间的通信常使用NAT-PT。<br><img src="https://img-blog.csdnimg.cn/20200701155810750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· 在NAT(NAPT)路由器内部，有一张<strong>自动生成</strong>的用来转换地址的表。<br>· 当私有网络中多台机器同时与外部通信，仅转变IP地址，全局IP地址可能不够用。解决：采用NAPT方式。<br><img src="https://img-blog.csdnimg.cn/20200701155845835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>NAT-PT(NAPT-PT)</strong>：PT是Protocol Translation的缩写。严格说，NAT-PT用来翻译IP地址，NAPT-PT用来翻译IP首部与端口号的。<br>· NAT-PT将IPv6的首部转换为IPv4的首部。这样只有IPv6地址的主机就可与IPv4地址的主机通信了。<br>· NAT-PT有多种形式，包括结合DNS和IP首部替换的DNS-ALG（应用层网关）<br>· NAT-PT问题：</p>
+<ol>
+<li>无法从NAT外部向内部服务器建立连接</li>
+<li>转换表开销</li>
+<li>NAT重启后，TCP连接重置<br>· 解决：</li>
+<li>改用IPv6。普及度不容乐观</li>
+<li>“NAT穿越”：在NAT内侧（私有IP地址的一边）主机上运行的应用，发送一个虚拟网络包给NAT外侧。NAT生成转换表。 应用可与NAT路由器通信，生成转换表，并将NAT路由器上附属的全局IP地址传给应用。<font color=green>(向外部固定服务器注册，服务器上保存一张含全局IP地址和端口号的表)</font>这样，外侧内侧间可进行通信。<br><a href="https://blog.csdn.net/whoamiyang/article/details/51992208" target="_blank" rel="noopener">参考博客</a></li>
+</ol>
+<p><strong>IP隧道</strong>：网络层后追加网络层首部的通信方式。<br>· 可以让夹着IPv4C网络的A，B能够正常通信。IP隧道将从A网络发过来的IPv6的包统合成一个数据，再追加一个IPv4首部，转发给C。<br><img src="https://img-blog.csdnimg.cn/20200701160026932.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>IP多播相关技术</strong><br>· MLD（Multicast Listener Discovery）多播监听发现：确认是否有接收端。是IPv4中IGMP（Internet Group Management Protocol）和IPv6中ICMPv6的重要功能之一。<br>· IGMP(MLD)两大作用：</p>
+<ol>
+<li>向路由器表明想要接收多播信息，并通知想接收多播的主机地址。路由器会了解主机，并发送消息给其他路由器，准备接收多播消息。多播消息的发送路径则由多播路径协议决定。</li>
+<li>IGMP(MLD)探听。支持IGMP(MLD)探听的交换集线器可以过滤多播帧，降低网络负荷。</li>
+</ol>
+<p><strong>IP任播</strong>：多个服务器一个IP地址，就近处理<br>· 主要用于110，119系统。IP任播应用中最为有名的是DNS根域名服务器。适用IPv4，IPv6<br>· 限制：无法保证第一个包和第二个包发送给了同一个主机。</p>
+<p><strong>通信质量控制</strong><br><strong>RSVP</strong>（Resolution Reservation Protocol）包括两个内容：</p>
+<ol>
+<li><strong>提供点对点的详细优先控制（IntServ）</strong>。针对特定应用（源、目IP地，源、目端口，协议号完全内容一致）间的通信进行质量控制。<br> · InServ在必要时要求在路由器上进行设置，也称”流量控制”。实现这种控制的协议为RSVP。RSVP传送控制包，并在发送端和接收端间所有路由进行质量控制设定。路由器随后根据这些设定进行处理。<br> · 机制负杂，大型网络实施困难。提出DiffServ<br><img src="https://img-blog.csdnimg.cn/20200701163902118.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+<li>提供相对较粗粒度的优先控制（DiffServ）<br>进行DiffServ质量控制的网络叫做DiffServ域。在域中的路由器会对所有进入该域IP包首部的<a href="#DSCP">DSCP字段</a>进行替换。对期望被优先处理的包设置优先值。<br>· 根据供应商的合作要求控制，机制简单，实用性较好。</li>
+</ol>
+<p><strong>显示拥塞通知</strong>（ECN，Explicit Congestion Notification）<br>· 为解决TCP通过数据包实际损坏情况判断是否发生拥塞的方法，不能在数据包损坏前减少包发送量，在IP层使用<strong>显示拥塞通知机制</strong>，即ECN。<br>· <strong>ECN机制</strong>：在发送包IP首部中记录路由器是否遇到拥塞，并在返回包的TCP首部中通知是否发生拥塞。拥塞检测在网络层中进行，而拥塞通知在传输层进行，这两层的互相协作实现了通知拥塞功能。<br><img src="https://img-blog.csdnimg.cn/20200702093756686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="7-2"><a href="#7-2" class="headerlink" title="7.2"></a>7.2</h1><p><strong>Mobie IP</strong><br>· 背景：IP地址中“网络地址”表示全网中子网的位置，因此不同地域它的值不同。手机等移动设备每连接到不同的子网，都会由DHCP或手动分配到不同的IP地址。<br>与移动设备通信时，所连接的子网一旦发生变化，则无法通过TCP继续通信。因为TCP是面向连接的协议，自始至终需要发送端和接收端主机IP不变。UDP情况也不行。<font color=#FF9000>(原因？)</font>不过UDP面向非连接，可在应用层面处理IP地址问题。但很麻烦。<br>· Mobie IP在主机所连接子网IP变化时，主机IP地址仍然保持不变。<br>· 工作机制：移动之后经代理通信。对于移动前正在进行的通信，代理装作移动主机发送ARP消息，并接收以移动主机为目标地址的数据包，相当于“中转站”，采用IP隧道把消息转发给移动主机。对于常规的IP包，进行常规路由控制<font color=green>（此时采用移动地址进行通信）</font>。<br><img src="https://img-blog.csdnimg.cn/20200702093946683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ol>
+<li>移动主机（MH：Moblie Host）：指移动了位置，IP地址不变的设备。未移动时，连接的网络为归属网络，IP地址叫归属地址，移动了也不会改变。移动了会被设置成所处子网中的IP地址，称为移动地址（CoA，Care-of Address）</li>
+<li>归属代理（HA：Home Agent）：处于归属网络下，监控移动设备位置，并转发数据给MH。</li>
+<li>外部代理（FA：Foreign Agent）：使用于支持移动主机的移动设备。所有需要接入网络的移动主机都需要使用它。<br>· 问题：</li>
+<li>为了提高安全，一个域可以设置成，若非是从本域发送过来的包，则丢弃。进行常规路由控制时，当移动主机向通信节点发送数据包时，为了保证位置的透明性，移动主机的源地址设置为自己的归属地址。目的地路由器很可能会丢弃这个包。为避免，移动主机向通信对端发送IP包要经过归属代理（双向隧道）但效率太低。</li>
+<li>IP包三角形路线效率低。</li>
+<li>没有外部代理的网络不能通信。</li>
+</ol>
+<p><strong>Moblie IPv6</strong>解决了这些问题：</p>
+<ol>
+<li>IPv6首部源地址中赋予移动地址，不让防火墙丢弃。通信节点接收到后，自动把数据包的源地址替换成归属地址，保证透明性。</li>
+<li>不经过归属代理进行通信。</li>
+<li>外部代理功能由实现Moblie IPv6的移动主机自己承担。<br><a href="http://www.doc88.com/p-6631786224184.html" target="_blank" rel="noopener">详细请参考该博客</a><br>必须移动主机、通信对端都支持Mobile IPv6，才可实现上述所有功能。</li>
+</ol>
+<h2 id="第六章-TCP与UDP"><a href="#第六章-TCP与UDP" class="headerlink" title="第六章 TCP与UDP"></a>第六章 TCP与UDP</h2><p><strong>传输层的作用</strong><br>· 一个应用程序可以有多个端口号<br>· 在UNIX系统中：服务端程序称为守护进程。例如：http的服务端程序是httpd（http守护进程），sshd……只需要启动一个可以代表他们接收客户端请求的inetd（互联网守护进程）服务程序即可。它是一种超级守护进程。它接收到客户端请求后，会创建（fork）一个新的进程并转换（exec）为sshd等各个守护进程。<br>· 确认请求发给哪个守护进程，通过端口号。<br>· TCP是面向连接的、可靠的流协议。流，意味着数据不中断。例如发送10次100字节的消息，接收端接收到的就是1000字节连续数据。<br>  具备“顺序控制”、“重发控制”、“流控制（流量控制）”、“拥塞控制”、提高网络利用率等功能。<br>· UDP不具备可靠性的数据报协议。可确保发送消息的大小。例如发送一个100字节的消息，那么消息长度的数据也会发送给接收端，让接收端以100字节为长度接收数据。<br>· TCP主要用于在传输层有必要实现可靠传输的情况。而UDP主要用于实时性和高速传输有较高要求的情况，如电话等。此外，在多播或广播通信中也使用UDP<font color=#FF9000>（why？是因为不需要保证可靠性，而且可以降低网络开销吗）</font>RIP，DHCP等基于广播的协议也需要依赖UDP。<br>· API：应用编程接口，操作系统提供的类库。使用TCP/UDP通信时，广泛使用套接字（Socket）的API。<br><img src="https://img-blog.csdnimg.cn/20200703205625792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>端口号</strong>：传输层中的识别地址，也称程序地址<br>· TCP/IP或UDP/IP通信中常采用5个信息量来识别一个通信:源IP地址、目标IP地址、协议号、源端口号、目标端口号。<br>· 确定端口号：<br>    1. 标准既定的端口号（静态方法）：0<del>1023为知名端口号，正式注册的端口号在1024</del>49151间。<br>    2. 时序分配法（动态方法）：客户端应用程序不需要自己设置端口号，全权交给操作系统分配。在49152~65535间。<br>· 不同的传输协议可以使用相同的端口号，只要端口一致，都将分配给同一种程序处理。但处理不会相互影响。例如，数据到达IP层，根据协议号的不同，传给相应的协议模块进行处理。</p>
+<p><strong>UDP</strong>（User Datagram Protocol）<br>· 收到数据那一刻，立即按照原样发送到网络上的一种机制。<br>· 没有流量控制，不负责重发，包顺序混乱无纠正。这些功能交给UDP的应用程序处理。<br>·常用于：<br>    1. 包较少的通信（DNS、SNMP等）<br>    2. 即时通信（视频、音频）<br>    3. 广播通信（广播、多播）<br>    4. 限定于LAN等特定网络中的应用通信</p>
+<h1 id="7-3"><a href="#7-3" class="headerlink" title="7.3"></a>7.3</h1><p><strong>TCP</strong><br>· 常用于：数据量较多，对可靠性要求较高<br>· TCP通过检验和、序列号、确认应答、重发机制、连接管路、窗口控制等实现可靠传输。<br>· 序列号（seq）是按顺序给发送数据的每个八位字节编上序号。初始序列号（ISN）随机，一个段在网络中寿命小于ISN生成器，所以默认初始序列号唯一。如果一段时间未得到确认应答，认为丢失，并重发。重发超时的时间，为每次发包时计算出的往返时间（RTT）+ 偏差 + ε。<br>· UDP不用检查对端是否能通信，但TCP需要通信前发一个SYN包请求建立连接并等待确认应答。在通信结束时会进行断开连接的处理（FIN包）<br>· 三次握手：一个连接的建立与断开，至少需要来回发七个包。从SYN到FIN，必须是同一个IP地址。<br><img src="https://img-blog.csdnimg.cn/20200703205806341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>⭐<font color=#FF9000>为什么是三次握手？</font><a href="https://www.zhihu.com/question/24853633" target="_blank" rel="noopener">知乎参考</a><br>· 在三次握手中，可计算出MSS（Maximum Segment Size，最大消息长度），这是TCP传送数据的分割大小单位。<br>· TCP窗口满，就对多个段同时进行确认应答的处理。在收到确认之前，缓存区保存这些数据。错误需要重发。<br>· 高速重发控制：在窗口较大，又出现报文丢失下，同一个序号的确认应答将会被重复三次返回。则发送端对对应的数据段重发。<br>· <strong>流控制</strong>：让发送端根据接收端实际接收能力控制发送的数据量。大小限度就是窗口大小。过了重发时间没收到窗口更新通知，则发送窗口探测，获取最新窗口大小信息。<br>· <strong>拥塞控制</strong>：“拥塞窗口”就是网络此刻能承受的、通信时的最大数据量。选择拥塞窗口和接收端主机通知的窗口大小中小的那一个，发送更小一点的值。<br>初始窗口设为1，之后指数增长，到达阈值，线性增长。<strong>超时重发</strong>时，执行<strong>慢启动</strong>算法。阈值调整为拥塞窗口的一半大小，同时同时设置拥塞窗口大小为1，进入慢开始阶段。到达阈值，实行规避算法。<strong>重复确认应答</strong>进行高速重发控制时，执行<strong>快恢复</strong>算法。阈值大小设为现在拥塞窗口大小的一半，窗口大小为慢启动阈值+3个数据段（MSS）的大小。<br>· 提高网络利用率：<br>Nagle算法，延迟发送的一种机制。满足以下其中之一，才能发送数据：</p>
+<ol>
+<li>可以发送最大段长度（MSS）的数据时</li>
+<li>已发送的数据都已经收到确认应答时<br>延长确认应答：为解决糊涂窗口综合征（如果接收端每次立即回复确认应答，因为刚接收完数据，缓存区是满的，只能返回一个较小窗口，导致发送端以这个大小进行后续的数据发送），收到数据后，延迟一段时间应答，最多0.5s。TCP文件传输中，绝大部分两个数据段返回一次应答。<br>捎带应答：发送端收到接收端的确认应答后，先不马上发送确认应答。而是在下一次发送数据时，捎带发送确认应答。</li>
+</ol>
+<h1 id="7-4"><a href="#7-4" class="headerlink" title="7.4"></a>7.4</h1><p>· UDP-Lite，UDP扩展协议。功能在UDP基础上修改了校验和的范围可以自行决定。设置不校验的部分即使发生错误也忽略不计。<br>· SCTP，流控制传输协议。与TCP相似，是可靠的传输层协议。<br>特点：</p>
+<ol>
+<li>以消息为单位收发。TCP中接收端并不知道发送端决定的消息大小。</li>
+<li>支持多重宿主。TCP当从以太网切换到无线LAN时，会断开连接。但SCTP中，各自的NIC会获得不同IP地址，所以连接不会断开。</li>
+<li>支持多数据流通信。TCP中建立多个连接才能进行通信的效果<font color=#FF9000>（⭐？为什么）</font>，SCTP中一个连接就能进行通信。<br><font color=#FF4500>举例说明：</font><br><img src="https://img-blog.csdnimg.cn/2020070515261247.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200705153010662.png" alt="在这里插入图片描述"><br>· DCCP，数据报拥塞控制协议。辅助UDP的传输层协议。<br>特点：</li>
+<li>与UDP一样，不能提供发送数据的可靠运输</li>
+<li>面向连接，在建立和断开连接上具有可靠性</li>
+<li>能进行拥塞控制。“类似TCP（TCP-Like）拥塞控制”和“TCP友好升级控制”（TCP-Friendly Rate Control）</li>
+</ol>
+<p>UDP首部格式<br><img src="https://img-blog.csdnimg.cn/20200704100635589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· 包长度：UDP首部和数据的长度和，单位为8位字节。<br>· 校验和需要对UDP伪首部进行校验。因为TCP/IP中识别一个进行通信的应用需要五大因素，其中三项“源IP地址”、”目标IP地址”、“协议号”在IP首部里，对5项都进行校验，从而实现IP首部不可靠情况下提供可靠通信传输。</p>
+<p>TCP首部格式<br><img src="https://img-blog.csdnimg.cn/20200704100700838.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· 序列号：初始序列号通过SYN包传送给接收端主机。在建立、断开连接时发送的SYN、FIN包虽然并不携带数据，但会增加一字节序列号。<br>· 数据偏移：表示TCP传输的数据部分从TCP包的哪个位开始计算，可看成TCP首部长度。该字段四位，<font color=#FF4500>单位为四字节（即32位）</font>。例如TCP首部为20字节长，那数据偏移为5。<br>· 保留：用于实验目的<br>· 控制位<br><img src="https://img-blog.csdnimg.cn/20200704100738486.png" alt="在这里插入图片描述"><br>URG（Urgent Flag）：为1时，有紧急数据要处理。<br>ACK：=1，确认应答字段变为有效。<br>PSH（Push Flag）：=1，立即将收到数据传给上层应用协议。<br>RST（Reset Flag）：=1，TCP连接异常，强制断开。<br>SYN（Synchronize Flag）：=1，希望建立连接。<br>FIN（Fin Flag）：=1，希望断开连接。<br>· 窗口大小：单位8位字节。如果窗口为0，发送一字节的窗口探测，了解最新窗口大小。<br>· 校验和：与UDP类似，但是TCP校验和无法关闭。利用伪首部校验。<br><img src="https://img-blog.csdnimg.cn/20200704100758701.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· 紧急指针：URG=1时有效，从数据部分的首部到紧急指针为紧急数据。如何处理紧急数据属于应用问题。紧急指针也用做表示数据流分段的标志。<br>· 选项：根据数据偏移进行控制，因此长度最大为40字节。<br><font color=#FF9000>为什么是40？</font><br><font color=#FF4500>1）TCP首部：由 20字节的固定长度 和 可变长字段（选项和填充）组成。<br>2）TCP首部总长度：由TCP头中的“数据偏移”字段决定。该字段占4bit，取最大的1111时，也就是十进制的15，TCP首部的偏移单位为4byte，那么TCP首部长度最长为15*4=60字节。<br>3）选项和填充 的长度：＝ TCP首部总长度 － 20字节的固定长度。由2）的计算可知，TCP首部总长度最大为60字节，那么“选项和填充”字段的长度最大为40字节。填充是为了使TCP首部为4byte的整数倍。</font><br><a href="https://blog.csdn.net/mary19920410/article/details/72857764" target="_blank" rel="noopener">参考博文</a></p>
+<p>最大吞吐量 = 窗口大小/RTT</p>
+<h2 id="第七章-路由协议"><a href="#第七章-路由协议" class="headerlink" title="第七章 路由协议"></a>第七章 路由协议</h2><p>· 路由控制分静态路由和动态路由。静态路由是在路由器和主机中事先人为设置好路由信息，而动态路由，管理员只需要设置好协议，路由器定时与相邻路由器互发信息进行信息交换。<br>· 路由控制范围常用路由协议为EGP外部网关协议，IGP内部网关协议。路由协议是用来保证路由信息正确的。<br>· ISP、区域网络都属于自治系统AS。AS内部动态路由采用IGP，AS之间的路由控制采用EGP。<br>· IGP中还可以使用RIP路由信息协议，RIP2，OSPF开放式最短路径优先等协议。EGP中使用的是BGP边界网关协议。<br>· 路由控制算法：<br>    1. <strong>距离向量</strong>算法DV根据距离（也就是经过的路由器个数作为代价）和方向决定目标网络或目标主机位置。每个路由器掌握的信息都不相同。<br>    使用该算法的路由协议：RIP、RIP2<br>    2. <strong>链路状态</strong>算法则根据每个网络的成本作为代价（为每条链路赋予一个权重，选择总代价最小的那条）。每个路由器掌握的信息同步，保存的是网络拓扑结构图。即使网络中有环路，也能进行稳定路由控制。<br>    使用该算法的路由协议：OSFP<br>RIP<br>· RIP广泛应用LAN。路由控制信息每30s向全网广播，若没收到路由控制信息等到第6次后（180s）断开连接。<br> &emsp; · 根据距离向量库生成路由控制表。<br> &emsp; · RIP中包类型只有一种，利用路由控制信息，一本确认是否连接网络，一边传送网络信息。<br> &emsp;· RIP不交换子网掩码信息，但可以用于子网 掩码的网络环境。<font color=#FF9000>（“该情况下需要注意的点”这部分没有看懂）</font><br> &emsp; · 为了解决无限计数问题（其中某个网络断开，其他的路由器并不知道，在之后的广播中，其他路由器仍然把原来的距离发送给连接故障的路由器，从而使得路由距离不断增加），有两种方法：</p>
+<ol>
+<li>最长距离不超过16；</li>
+<li>水平分割。规定路由器不再把所收到的路由消息原路返回给发送端。<br>但在有环路情况下，依旧无法解决。采用“毒性逆转”和“触发更新”两种方法。毒性逆转指当网络中发生链路断开时，将这个无法通信的消息传播出去，即发送一个距离为16的消息。触发更新是指当路由信息发生变化时，不等待30s就立即发送出去。</li>
+</ol>
+<p>· RIP2改良RIP：</p>
+<ol>
+<li>使用多播</li>
+<li>与OSPF相似，支持在其交换的路由信息中加入子网掩码信息</li>
+<li>与OSPF的区域相似，在同一个网络中可以使用逻辑上独立的多个RIP</li>
+<li>与OSPF相似，RIP包中携带密码，能识别才接收数据，否则忽略</li>
+<li>通常用于把从BGP等获得的路由控制信息通过RIP传递到AS内</li>
+</ol>
+<h1 id="7-5"><a href="#7-5" class="headerlink" title="7.5"></a>7.5</h1><p><strong>OSPF</strong><br>· OSPF引入区域概念，这是将一个AS划分为若干个更小的范围。<br>   · 根据拓扑信息生成路由控制表<br>   · 根据不同作用分为5种类型的包<br><img src="https://img-blog.csdnimg.cn/20200705095432536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· LAN中10s发送一个HELLO包，直到第四次（40s）后仍无反馈认为连接断开。之后无论连接断开或恢复连接，都会发送链路状态更新包通知变化。<br>· 链路状态更新包传达的消息分为：网络LSA（网络链路状态通告）和路由器LSA。一个是以网络为中心生成的信息，一个是以路由器。<br>· 主干区域，所有区域都与它连接。与外部相连接的：AS边界路由器；只与主干区域内连接的：主干路由器；区域内的：内部路由器；连接区域与主干区域的：区域边界路由器<br>· 末端区域，区域边界路由器只有一个的区域。它的区域边界路由器将成为默认路径传送路由信息。所以它不需要了解其他各个网络的距离。</p>
+<p><strong>BGP</strong><br>· 只有BGP，RIP，OSPF共同进行路由控制，才能进行整个互联网的路由控制。<br>· BGP路由控制表由网络地址和下一站路由器组成，它会根据所要经过的AS个数来进行路由控制。使用路径向量协议。能检测出环路，并且支持策略路由（在发送数据包时，可以选择或者指定所要通过的AS）</p>
+<p><strong>MPLS多协议标记交换技术</strong><br>· 路由技术基于IP地址中最长匹配原则进行转发，而标记交换则对每个IP包设定一个标记值来进行转发。<br><img src="https://img-blog.csdnimg.cn/20200705095457545.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· 如果数据链路本身有有一个相当于标记的信息，只需要直接进行映射。如果没有（比如以太网）就需要追加一个垫片头，包含标记信息。介于IP首部和数据链路首部之间。<br>· MPLS中可通过高速硬件实现转发。利用标记生成虚拟的路径（标记交换路径LSP），并在上面实现IP等数据包的通信。所以，IP网也可以提供基于MPLS的通信质量控制、带宽保证和VPN等功能。</p>
+<h1 id="7-5-1"><a href="#7-5-1" class="headerlink" title="7.5"></a>7.5</h1><h2 id="第8章-应用层协议"><a href="#第8章-应用层协议" class="headerlink" title="第8章 应用层协议"></a>第8章 应用层协议</h2><p>· 应用层协议：让应用进行特定通信处理，相当于OSI参考模型中5、6、7层协议。<br>· <strong>远程登陆</strong>：为了实现TSS分时系统环境，将主机和终端关系应用到计算机网络的一个结果，即实现从自己本地计算机登录到网络另一端计算机功能的应用。通过TELNET和SSH两种协议。<br>· TELNET利用TCP的一条连接，向主机发送文字命令并在主机上执行。<br>· SSH是加密的远程登陆系统。端口转发（将特定端口号所收到的消息转发到特定IP地址和端口号）情况下，SSH客户端程序、SSH服务端程序都起到一个网关作用。<br>· <strong>文件传输</strong>：FTP协议是两个相连计算机间进行文件传输时使用的协议。需要在登录到对方计算机后才能进行相应操作。<br>· FTP通过两条TCP连接：一条控制，一条数据传输（建立方向与控制相反）。<br>· 控制使用TCP21号端口；传输通常使用20号，出于安全考虑，普遍使用随机数分配。<br>· <strong>电子邮件</strong>：SMTP协议提供电子邮件服务，为了实现高效发送，在传输层使用TCP协议。<br>· 早期是写好后内容保存到发送端主机硬盘中，然后两台主机建立TCP连接，邮件发送到接收端主机硬盘。发送正常结束后，再从本地硬盘删除邮件。如果途中发现对端计算机因没插电，或未连网等原因接受失败，等待一段时间后重发。<br><img src="https://img-blog.csdnimg.cn/20200706160920722.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· 只使用SMTP只能处理文本格式邮件。MIME在SMTP上使用，可以发送静态图像，动画，声音等各种数据。相当于表示层。<br>· 个人电脑不可能长时间开机状态，因此引入POP协议。用于接收电子邮件的协议。当发送端邮件根据SMTP转发到一直处于插电状态的POP服务器，客户端再根据POP协议从POP服务器接收邮件。<br>· IMAP也是接收邮件协议。不同于POP的邮件由客户端进行处理，MAP中邮件由服务器进行处理。所以不必从服务器上下载所有的邮件就可以阅读。在不同的计算机上打开邮箱，也能保持同步。</p>
+<p>· <strong>WWW</strong>：访问信息的手段与位置（URI）、信息的表现形式（HTML）、信息转发（HTTP）等操作。<br>· HTTP默认80端口，工作机制：服务端向服务器的80端口建立一个TCP连接，然后在这个TCP连接上进行请求和应答以及数据报文的发送。在HTTP1.0中，每个命令和应答都会触发一次TCP连接的建立和断开，HTTP1.1开始，允许在一个TCP连接上发送多个命令与应答。<br>· CGI（Common Gateway Interface）是web服务器调用外部程序时所使用的一种服务器应用的规范。在一般web通信中，是按照客户端需求，将保存至web服务器硬盘中的数据转发，这样每次获得的就是同样的静态数据。引入CGI后，客户端每次请求会触发web服务器端运行另一个程序，客户端所输入的数据也会传送给这个外部程序。该程序运行结束后，会将生成的HTML和其他数据再返回给客户端。<br>· Cookie：web应用为了获得用户信息而使用的机制。cookie常用于保存登录信息或网络购物中放入购物车的商品信息。web服务器用Cookie在客户端保存信息，这样就不用放到服务器里了。<br>· 网络管理 SNMP，基于UDP协议，可能会丢包。<br>· SNMP的处理可以分为从设备读取数据（Fetch）和向设备写入数据（Store）。网络设备状况发生变化，通知SNMP管理器使用Trap，这样即使没有管理器到代理的请求，也能设备发生变化时候获得代理发来的通知。<br>· SNMP中的交换信息是MIB（Management Information Basde），MIB是在树形结构的数据库中为每个项目附加编号的一种信息结构，能在网络上传输，相当于SNMP的表示层。SNMP可以将MIB值写入代理，也可以读取。使用易于理解的数字序列访问信息。<br>· RMON：MIB是监控网络中某个设备接口（某个点）的众多参数构成，而RMON是监控网络上线路的众多参数组成（一条线）。可监控内容也增加了，如网络流量统计等。<br>· RTP实时协议：用UDP实现实时多媒体通信时需要附加一个表示报文顺序的序列号字段。设置时间戳和数字序列号，接收端对统一时间戳的数据进行排序，掌握是否丢包。<br>· MPEG决定数字压缩规范<br>· P2P：<br><img src="https://img-blog.csdnimg.cn/20200706161006574.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· 不支持P2P的环境：在服务器与客户端分离型的环境中，服务器要在一个互联网能够访问到的地方，而客户端在NAT内测也不会有问题，但P2P不行。它必须具备从互联网越过NAT令双方终端能够访问的功能。</p>
+<h2 id="第9章-网络安全"><a href="#第9章-网络安全" class="headerlink" title="第9章 网络安全"></a>第9章 网络安全</h2><p>· PKI（公钥基础结构）用户通过CA颁发的“数字证书”验证通信时对方的真实性。公钥信息可以用于加密数据或验证对应私钥的签名。使用公钥信息加密后的数据，只能由持有数字证书的一方读取。<br>· 公钥加密：银行手上有公钥和私钥，公钥是对外公布的。客户使用公布的公钥加密信息，并发送给银行，银行收到了密文，使用自己的私钥解密恢复明文。只有私钥才能解密公钥加密的密文。<br>· 私钥签名：我用私钥加密，由于大家都知道我的公钥，所以都能看到我的内容。A说有人冒充我。我就把信，内容为B，用私钥加密，发给A，告诉他用我的公钥解密是否能看到B。能用我的公钥解密数据，说明肯定是用我的私钥加的密。那么只有我知道我的私钥，所以这封信肯定是我发的，就能确认我的身份了。<br>· 加密是指利用密钥对明文的数据加密成密文数据的过程。<br>· VPN 通过IPsec加密IP包：</p>
+<ol>
+<li>传输模式：主机进行加密解密，只加密TCP首部和数据部分。</li>
+<li>隧道模式：VPN路由器进行加密解密，包括IP首部在内的整个IP包加密，并追加IP首部。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E9%98%85%E8%AF%BB/" rel="tag"># 阅读</a>
+          
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag"># 计算机网络</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/29/%E8%AE%BA%E6%96%87%E5%AF%BC%E8%AF%BB%E3%80%8ADeepGini-Prioritizing-Massive-Tests-to-Enhance-the-Robustnessof-Deep-Neural-Networks%E3%80%8B/" rel="next" title="论文导读《DeepGini:Prioritizing Massive Tests to Enhance the Robustnessof Deep Neural Networks》">
+                <i class="fa fa-chevron-left"></i> 论文导读《DeepGini:Prioritizing Massive Tests to Enhance the Robustnessof Deep Neural Networks》
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/10/Java%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/" rel="prev" title="01-Java基本语法">
+                01-Java基本语法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#6-23"><span class="nav-text">6.23</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一章-网络基础知识"><span class="nav-text">第一章 网络基础知识</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-24"><span class="nav-text">6.24</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章-TCP-IP基础知识"><span class="nav-text">第二章 TCP&#x2F;IP基础知识</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-26"><span class="nav-text">6.26</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第三章-数据链路"><span class="nav-text">第三章 数据链路</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-28"><span class="nav-text">6.28</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第四章-IP协议"><span class="nav-text">第四章 IP协议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-29"><span class="nav-text">6.29</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-1"><span class="nav-text">7.1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第五章-IP协议相关技术"><span class="nav-text">第五章 IP协议相关技术</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-2"><span class="nav-text">7.2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第六章-TCP与UDP"><span class="nav-text">第六章 TCP与UDP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-3"><span class="nav-text">7.3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-4"><span class="nav-text">7.4</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第七章-路由协议"><span class="nav-text">第七章 路由协议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-5"><span class="nav-text">7.5</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-5-1"><span class="nav-text">7.5</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第8章-应用层协议"><span class="nav-text">第8章 应用层协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第9章-网络安全"><span class="nav-text">第9章 网络安全</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

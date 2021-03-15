@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="two-fire" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="3.4 进程控制3.3.3 进程状态和转换三状态： 五状态： 七状态： 3.3.4 进程控制块（PCB）· 是一个操作系统为管理进程设置的数据结构· 是进程存在的唯一标识· 作用：    - 进程的创建：为该进程创理一个PCB    - 进程的终止：回收它的PCB    - 进程的组织管理：通过对PCB的组织管理实现· 内容：    1. 进程描述信息。如本进程的标识；它的父进程标识；用户标识。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《操作系统教程》概述">
+<meta property="og:url" content="http://yoursite.com/2020/08/21/%E3%80%8A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%99%E7%A8%8B%E3%80%8B%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="3.4 进程控制3.3.3 进程状态和转换三状态： 五状态： 七状态： 3.3.4 进程控制块（PCB）· 是一个操作系统为管理进程设置的数据结构· 是进程存在的唯一标识· 作用：    - 进程的创建：为该进程创理一个PCB    - 进程的终止：回收它的PCB    - 进程的组织管理：通过对PCB的组织管理实现· 内容：    1. 进程描述信息。如本进程的标识；它的父进程标识；用户标识。">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821130631465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821130727222.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821130752148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821130851487.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821131123953.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821131155396.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821131221136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821131221136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821131502640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821131616317.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821132512739.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821132713788.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821132858712.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821132933364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821133113177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821133138496.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200821133201782.png#pic_center">
+<meta property="article:published_time" content="2020-08-21T04:58:29.000Z">
+<meta property="article:modified_time" content="2020-09-02T07:06:47.934Z">
+<meta property="article:author" content="two-fire">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200821130631465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/08/21/《操作系统教程》概述/"/>
+
+
+
+
+
+  <title>《操作系统教程》概述 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/21/%E3%80%8A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%95%99%E7%A8%8B%E3%80%8B%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《操作系统教程》概述</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-21T12:58:29+08:00">
+                2020-08-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>3.4 进程控制<br>3.3.3 进程状态和转换<br>三状态：<br><img src="https://img-blog.csdnimg.cn/20200821130631465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>五状态：<br><img src="https://img-blog.csdnimg.cn/20200821130727222.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>七状态：<br><img src="https://img-blog.csdnimg.cn/20200821130752148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>3.3.4 进程控制块（PCB）<br>· 是一个操作系统为管理进程设置的数据结构<br>· 是进程存在的唯一标识<br>· 作用：<br>    - 进程的创建：为该进程创理一个PCB<br>    - 进程的终止：回收它的PCB<br>    - 进程的组织管理：通过对PCB的组织管理实现<br>· 内容：<br>    1. 进程描述信息。如本进程的标识；它的父进程标识；用户标识。<br>    2. 进程控制信息。进程当前状态，优先级，进程间同步和通信等。<br>    3. 所拥有的资源和使用情况。<br>    4. CPU现场保护信息。</p>
+<p> · 多采用链表的组织方式。可以更好地完成动态插入删除。如果比较固定，也可以采用索引表方式。</p>
+<p>3.4.1 进程创建<br>引起创建的三个主要事件：<br>    1. 系统初始化时；<br>    2. 用户请求创建一个新进程<br>    3. 正在运行的进程执行了创建进程的系统调用<br><code>fork()</code>:</p>
+<blockquote>
+<p>0 : 在父进程中，返回值为子进程的id值<br>0： 在子进程中，返回值为0，表示当前进程是子进程<br>-1：创建失败</p>
+</blockquote>
+<p>3.4.2进程的阻塞和唤醒</p>
+<p>3.6 处理器调度<br>三级调度<br>    1. 高级调度（作业调度、宏观调度、长程调度）<br>    任务：将作业从后备队列中装人内存<br>    2. 中级调度（平衡负载调度、中程调度）<br>    任务：内存资源紧张的时候，将一些进程换出主存，使之进入挂起态。调整系统负荷。<br>    3. 低级调度（进程调度、短程调度）<br>    任务：按照某种原则决定就绪队列中的哪个进程获得CPU</p>
+<p>3.7 作业的管理和调度<br>作业<br>· 定义：用户需要计算机完成某项任务时要求计算机所做工作的集合。<br>· 四个阶段：<br>    1. 作业提交：从输入设备到外存的后备队列中<br>    2. 作业收容：后备队列中等待进入内存执行<br>    3. 作业执行：在内存中执行<br>    4. 作业完成<br>· 作业和进程区别：<br>    1. 作业是用户向计算机提交的任务实体；<br>    进程是完成任务的执行实体，是向系统申请分配资源的基本单位<br>    2. 作业由若干进程组成<br>    3. 作业的概念主要用于批处理系统；<br>    进程的概念用于所有的多道程序系统中</p>
+<p>两个指标：<br>    1. 作业平均周转时间：<br>    假设<code>n</code>个作业，其中作业<code>i</code>进入系统时间为<code>Si</code>，它被选中执行，得到结果的时间（完成时间）为<code>Ei</code>，其周转时间为<code>Ti = Ei - Si</code>，则这批作业平均周转时间为T = （T1 + T2 + … + Tn）/ n<br>    · 有时间单位<br>    · Ti不是完成时间 - 进入内存时间（开始时间）<br>    2. 平均带权周转时间：<br>    <code>ri</code>为作业<code>i</code>的实际执行时间。则带权周转时间为<code>Wi = Ti/ri</code><br>    W = （T1/r1 + T2/r2 + … + Tn/rn）/n<br>    · 是一个比值，没有时间单位<br>注：T 不同调度算法对同一个作业流的性能衡量；W 同一调度算法对不同作业流的性能衡量。</p>
+<p>作业调度算法<br>    1. FCFS算法（先来先服务调度算法）<br>    根据作业提交的先后次序分派CPU<br>    2. SJF算法（短作业优先调度）<br>    根据作业的估计运行时间分派CPU<br>    3. HRN算法（高响应比调度）<br>    相应比R = 作业周转时间/作业运行时间 = 1+等待时间/(估计)运行时间<br>    4. HPF算法（基于优先数调度）<br>    5. 均匀调度算法<br>    6. 最短剩余时间优先调度算法</p>
+<p>3.9 线程<br>目的：将进程以更细的粒度切分，以低开销进一步提高系统并发度。<br>定义：轻量级进程，是进程的一个运行实体，作为CPU的调度单位。</p>
+<p>线程资源：<br>· 系统引入线程后：<br>    - 调度单位——线程<br>    - 资源分配单位——进程<br>· 线程只拥有少量在运行时必不可少的资源<br>· 同一个进程中的所有线程共享进程的地址空间和资源</p>
+<p>线程和进程比较：<br>【资源】进程是资源分配的基本单位；同进程内的线程共享进程的资源<br>【调度时】不同进程有不同地址空间；同个进程内所有线程有相同地址空间<br>【开销】进程切换开销大；同进程的线程切换开销小<br>【关系】进程间关系较疏远；同进程的线程间关系较紧密</p>
+<p>线程的优越性：<br>    1. 快速关联切换<br>    2. 系统开销小<br>    3. 通信易实现<br>    4. 线程个数比进程多的多</p>
+<p>4.5 死锁<br>死锁检测<br>进程资源分配图如下：<br><img src="https://img-blog.csdnimg.cn/20200821130851487.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<pre><code>- 图中，如果能消去此进程的所有边，成为孤立结点。经一系列简化，所有进程都成为孤立结点，则该图是可完全简化的，否则为不可完全简化的。
+- 【死锁定理】系统为死锁的充分条件是：当且仅当该状态的“进程-资源分配图”是不可完全简化的。</code></pre><p>死锁的解除：<br>    1. 资源剥夺法。从其他进程那里剥夺资源给死锁进程。<br>    2. 撤销进程法。撤销死锁进程。</p>
+<p>第五章 存储管理<br>5.1 分区存储管理<br>· os中的离散和连续是物理空间上的分配，而DS中的链表和数组是逻辑空间上的分配。</p>
+<p>分类：（根据划分分区的时机不同）<br>· 连续分配<br>    - 固定分区分配<br>    · 内存启动时，划分成若干个大小固定的分区，每个进程占一个分区<br>    · 固定：分区个数固定；分区大小固定（大小相等；不相等）</p>
+<pre><code>- 可变（动态）分区分配
+基本思想：
+作业执行过程中，根据作业大小找到一个空闲的分区，并进行划分。
+分配算法：
+1）首次适应法：
+· 思想：空闲分区地址递增排列。进行分配时，从空闲分区开始位置查找，直到第一个满足大小要求的分区，再按照作业大小划分出一块。
+· 特点：保留了内存高地址部分大的空闲分区；低地址部分存在许多碎片。
+2）循环首次适应法（下次适应法）：
+· 思想：首次适应法的变形。进行内存分配时，从上次找到的空闲分区的下一个空闲区开始查找
+· 特点：对存储空间利用更均衡；没有保留大的空闲分区
+3）最佳适应法：
+· 思想：空闲分区容量递增排列。从开始位置开始查找
+· 特点：没有保留大的空闲分区；划分后有许多碎片
+4）最坏适应法：
+· 思想：空闲分区容量递减排列。只检查第一个空闲分区。
+· 特点：没有保留大的空闲分区；每次只用查第一个空闲分区
+回收算法：
+根据回收区与空闲分区的位置关系，分为四种情况。回收后系统中空闲分区个数不同。</code></pre><p>· 离散分配<br>    - 分页式存储管理<br>    - 分段式存储管理<br>    - 段页式存储管理</p>
+<p>· 分区移动技术：合并分散的小空闲分区 —&gt; 大空闲分区。允许作业在运行过程中在内存中移动，必须采用动态重定位方法。<br>· 覆盖技术<br>· 交换技术：把内存中暂时不能运行的进程或暂时不用的程序和数据，换到外存。把已经具备运行条件的进程，或进程所需的程序或数据换入内存。</p>
+<p>5.2 页式存储管理<br>一、概念<br>页：逻辑空间划分成大小相等的若干个页，又称页面。<br>块：物理空间划分成大小相同的若干块，又叫页框。（每页的大小和每块的大小相同，一般大小为2的幂，512B~4MB）</p>
+<p>二、数据结构<br>页表：<br>    - （索引）页号(页面号)和块号(页框号)的对应关系<br>    - 系统为每个装入内存的进程建立一张相应的页表<br>请求表：<br>    - 用来确定进程的地址空间的各页在内存中的实际位置关系<br>    - 记录每个进程页表的起始地址，还有所需的页面数<br>存储页面表<br>    - 记录系统中物理块的使用情况<br>    - 二维数组表示一维物理空间使用情况</p>
+<p>三、地址转换（重定位）</p>
+<blockquote>
+<p>页的大小：L；逻辑地址：LA；页号对应的块号：b</p>
+</blockquote>
+<p>十进制计算过程：<br>页号P = LA / L<br>页内偏移地址d = LA % L<br>物理地址PA = b*L+d<br><img src="https://img-blog.csdnimg.cn/20200821131123953.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>十六进制计算过程：<br>E.g<br><img src="https://img-blog.csdnimg.cn/20200821131155396.png#pic_center" alt="在这里插入图片描述"></p>
+<p>根据页面大小得到位数。这里是12。LA转换成二进制，后12位不变，为d；前四位根据页表查询块号（页号推出页框号）。物理地址PA就是它们再转换成16进制。该过程通常由硬件完成。</p>
+<p>如果给出物理地址—-&gt;对应的虚拟地址：根据页面大小得到位数。LA转换成二进制，后面的偏移地址不变。由前面的页框号推出页号。虚拟地址就是再转换为16进制。</p>
+<p>四、快表<br>· 无快表的分页式<br>两次访问内存：①形成物理地址(PA)要访问页表，页表在内存中。②PA访问数据，也在内存。<br>普通内存：平均o（n），最好o（logn）</p>
+<p>· 快表机制：<br>    1. o（1）即可以得到内存<br>    2. 快表是页表的子集，存放当前访问最频繁的页表项<br>    3. 介质不是内存。是有并行查询能力的高速寄存器组，称为相联存储器，构成一张快表，按内容查找</p>
+<p>· 快表机制的地址转换：<br>根据页号P查快表。若命中，得到块号b（快表时间+访问内存时间）；若未命中，接着查页表，得到b（页表时间+访问内存时间）因为查页表和快表的操作是并行的。<br><img src="https://img-blog.csdnimg.cn/20200821131221136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>五、页面的共享与保护<br>页式分配的离散分配灵活的特点，允许两个及以上进程共享程序库中的例程（复杂），或公共数据的同一副本（简单，可以将共享的数据页面安排在地址空间的任意一个页面上）<br>分页不利于页面共享。对于库例程必须使共享页面具有相同的页号，或者要在地址之间重叠。</p>
+<p>5.3 段式存储管理<br>一、基本思想<br>    1. 作业空间划分成若干段，每段定义一组逻辑信息。每个段地址不一定连续，段内编号连续<br>    2. 装人程序分段装入<br>    3. 系统以段为单位分配内存，每个段分配一个连续内存。段表记录起始地址<br>    4. 标识进程的地址时，要同时给出段名和段内地址。地址空间是二维的<br>    5. 段长由相应的逻辑信息组决定</p>
+<p>二、段的地址转换<br>设置段表，包含段号，段始址，段长度。查找段表，找到每个段对应的内存区，实现从逻辑段–&gt;物理内存区的映射。<br>与页式存储管理相同。</p>
+<p>分配和回收与可变分区类似</p>
+<p>三、段的共享和保护<br>共享：<br>共享段表<br>保护：<br>    1. 越界检查<br>    2. 存取控制检查<br>    3. 环保护机制<br>    将所有进程进行分层。<br>    0环：属于操作系统内核，管理I/O操作、存储管理功能，可使用特权指令，访问所有段和页面。<br>    1环：某些重要的实用程序、操作系统服务，如系统调用管理程序。<br>    2环：共享库的过程和函数<br>    3环：一般应用程序<br>    访问较高特权环，需要采用调用服务的方式。</p>
+<p>四、段和页的比较<br>相同：<br>    1. 离散分配<br>    2. 地址映射机构实现地址转换<br>不同：<br>    1. 页是物理单位，为了减少内存碎片<br>    段是逻辑单位，为了满足用户需求<br>    2. 页的大小固定，在系统初始化时完成<br>    段的大小取决于用户所编写的程序<br>    3. 页式管理中，逻辑地址是一维的<br>    段式管理中，逻辑地址是二维的</p>
+<p>五、碎片<br>碎片：无法被利用的存储空间<br>固定分区管理：有内存碎片——每个分区中<br>可变分区管理：有外部碎片——这些空闲空间过小，不能被利用<br>分段式：有外部碎片——可以通过分区移动技术，将若干碎片拼凑利用<br>分页式：有页内碎片（属于内部碎片）——最后一页往往装不满 </p>
+<p>说明：内部碎片不好消除，外部碎片可以通过分区移动消除</p>
+<p>5.4 虚拟机存储管理<br>· 虚拟存储（VM）：用外存来虚拟内存，逻辑上扩充内存容量<br>· 程序访问局部性原理：指CPU对指令和数据在时间、空间、顺序上往往集中在一定的范围内。<br>    - 时间局部性：某条指令/某个数据结构被访问，则在不久一段时间内可能再次被访问<br>    - 空间局部性：某个存储单元被访问，则在不久一段时间内，附近的存储单元可能被访问<br>    - 顺序局部性：程序执行是在内存中的连续地址进行的；只有遇到跳转才会到一个不连续的地址空间<br>基于此，可以只把当前作业所需的程序和数据装入内存就能启动运行：<br>    • 一次性装入内存<br>多次装入内存 / 理论基础是局部性原理 （时间顺序局限性）/ 基于结构化程序设计（三种基本结构——顺序分支循环）<br><img src="https://img-blog.csdnimg.cn/20200821131221136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>· 基本思想：<br>    1. 基于程序执行的局部性原理，将当前正在使用的部分装入内存就能启动运行（部分装入）<br>    2. 如果访问的程序和数据不在内存中，则系统将这部分装入内存。（请求调入）<br>    3. 如果内存中没有足够存储空间，则需要将内存中暂不用的信息移到外存（部分对换）<br>    特点：离散，虚拟，多次，对换<br><img src="https://img-blog.csdnimg.cn/20200821131502640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>· 特点：<br>    1. 离散性：内存分配采用离散分配，将一个进程分成多个部分<br>    2. 虚拟性：逻辑上扩充内存容量<br>    3. 多次性：进程多个部分分多次调入内存<br>    4. 对换性：允许进程部分在运行过程中换入换出到对换区</p>
+<p>· 实现方法：请求页式/段式/段页式存储管理<br>· 请求分页式存储：<br>    • 请求页式存储管理的页表<br><img src="https://img-blog.csdnimg.cn/20200821131616317.png#pic_center" alt="在这里插入图片描述"><br>    · 中断位：判断页是否在内存中，若不在则产生缺页中断<br>    · 访问位：<br>    记录该页在一段时间被访问的次数，或记录该页最近已经有多长时间未被访问。<br>    提供给置换算法在选择换出页面时参考<br>    · 修改位：表示该页在调入内存后是否被修改过<br>    · 外存地址：指出该页在外存上的地址<br>    • 地址转换：快表命中；页表命中；缺页中断<br>    • 页面调入策略：<br>    · 请页式调入：确保只有被访问的页才调入内存<br>    · 预调式调入：系统动态预测进程最可能要访问的那些页面，使用前预先调入，常一次调入连续多个页面</p>
+<pre><code>• 页面清除策略：清除内存中某些页面。要考虑何时把修改过的页面写回外存
+· 请页式清除：仅当一页选中要被置换，且之前它被修改过，才把这个页面写入外存。                                                
+· 预约式清除 ：对更改过的页面，在被置换前就把它们都写回外存。
+
+• 页面分配策略
+分配物理块数
+    a. 固定分配
+    b. 可变分配
+淘汰页面置换
+    c. 局部置换：本进程内
+    d. 全局置换：页面置换算法作用范围是整个系统
+ab,bc,bd √
+固定分配全局置换 ×
+
+• 页面置换算法
+① 最佳页面置换算法（OPT）：永不使用的或最长时间内不再被访问的页面被置换（将来）</code></pre><p>【理想化，性能评价依据】</p>
+<pre><code>② 先进先出（first-in first-out FIFO 算法） 内存中驻留时间最久的页面（过去）                                                    Belady 贝莱德异常 分配物理块数增加了，缺页次数增加了
+
+③最近最久未使用页面置换算法（least recently used LRU ）最近一段时间内最长时间没有被访问过的页面（过去）
+符合局部性原理
+工程实际上使用的是该算法的改进（时钟置换算法 clock，二次机会法 ）
+④时钟置换算法 （也称最近未使用算法NRU）是LRU和FIFO的折衷
+![在这里插入图片描述](https://img-blog.csdnimg.cn/2020082113194446.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center)
+
+·内存中所有的页面链接为循环队列                                      
+· 每页设置一位访问位，若某页被访问，置1
+· 一个页面首次装入内存，其访问位置1
+过程：
+1）置换时，从指针当前指向的页面开始扫描。
+2）先检查访问位。把遇到的所有“访问位”为1的页面“访问位”清0，检查下个页面；遇到“访问位”为0的页面置换掉，指针推进一步。
+
+⑤改进的时钟算法
+把访问位（引用位）和修改位结合起来使用：
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200821132135239.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center)
+1）选择最佳淘汰页面，从指针当前位置开始，扫描循环队列。
+扫描过程中不改变引用位，把遇到的第一个r=0，m=0作为淘汰页面。
+2）如果1失败，再从原位置开始，查找r=0且m=1的页面，把遇到的第一个这样的页面作为淘汰页面，而在扫描过程中，把所扫过的页面的引用位r置0。
+思考：为什么会有修改过但未被访问过的情况（r=0，m=1）？
+因为每次算法结束后都没有更改过修改位，最多只是置零访问位
+⑥最少使用置换算法（LFU）当前为止访问次数最少的页面
+
+• 性能分析
+缺页率和进程 工作集的关系：
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20200821132154808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center)</code></pre><p>6.1 设备管理<br>按传输速率分：<br>    1. 低速设备：(几B<del>几百B) 键盘、鼠标、语音输入/输出设备<br>    2. 中速设备：(千B) 打印机<br>    3. 高速设备：(数十MB</del>数百MB) 磁盘<br>按信息交换单位分：<br>    1. 字符设备：键盘、鼠标、打印机<br>    I/O采用中断驱动方式；不可寻址(不能指定源、目地址)<br>    2. 块设备：磁盘<br>    I/O采用DMA方式；可寻址<br>从资源分配角度分：<br>    1. 独占设备：一段时间内只允许一个进程访问<br>    打印机<br>    2. 共享设备：一段时间内允许多个进程交替访问<br>    磁盘<br>    3. 虚拟设备：虚拟技术将独占设备（本质上）改造成共享设备（用户角度）<br>    共享(虚拟)打印机：用磁盘来虚拟打印机</p>
+<p>设备的功能和任务<br>    1. 实现设备并行性，提高系统利用率<br>    ①设备与CPU并行<br>    ②设备之间并行<br>    2. 采用动态分配方式分配设备，提高设备利用率<br>    3. 采用缓冲技术，提高系统效率<br>    4. 为方便用户使用，屏蔽设备物理特性，实现设备独立性</p>
+<p>6.2 I/O控制方式<br>宗旨：减少主机对外设的干涉，以便有更多时间进行计算处理。<br>分类：<br>    1. 程序之间查询控制方式（询问方式）<br>    主机重复查询外设直到准备就绪。<br>    · 没有中断，没有实现CPU与设备的并行<br>    · 传送单位是字，每传一个字需要CPU干涉<br>    2. 中断方式<br>    · 引入中断机制，实现了CPU和设备并行<br>    · 传送单位是字，每传一个字需要CPU干涉<br>    3. 直接内存读取DMA方式<br>    特点：<br>    · 数据传输的基本单位是数据块<br>    · 传输的数据直接从内存到外设，或相反<br>    · 只在传输开始、结束时需要CPU干涉<br>    DMA控制器组成：主机与DMA的接口、DMA与设备的接口、I/O逻辑<br>    设置四个寄存器，实现CPU与控制器之间的块传输：<br>        1. 命令/状态寄存器（CR）<br>        接收CPU发出的I/O指令，或相关控制信息，或设备状态<br>        2. 内存地址寄存器（MAR）<br>        输入时，存放把数据从设备传到内存的起始目标地址；<br>        输出时，存放即将传输到设备的数据在内存源地址<br>        3. 数据计数器（DC）<br>        存放本次CPU要读写的字节数<br>        4. 数据寄存器（DR）<br>        暂存从设备到内存，或相反的数据</p>
+<pre><code>4. 通道方式
+通道又称“输入输出处理器”，独立于CPU的特殊处理器。
+· 指令单一，只涉及输入输出
+· 没有独立内存，与主机（CPU）共享内存
+
+按信息交换方式分：
+    1. 字节多路通道
+    多连接低、中速外设
+    2. 数组选择通道
+    多连接高速外设
+    3. 数组多路通道
+    多连接中、高速外设</code></pre><p>6.3 缓冲技术<br>基本思想：输出数据时，在内存中开辟一个输出缓冲区，将要输入到外设中的数据输入到该区中，等到装满系统再写到I/O设备上。输入类似。<br> 四种机制：<br>    1. 单缓冲<br>    未采用缓冲：<br>    数据进入工作区T；数据进入计算C<br>    总时间: T+C<br>    采用缓冲：输入、计算并行<br>    数据从设备进入缓冲区 T；数据缓存区到工作区M<br>    总时间：Max(T,C)+M  （M远小于T，C）<br>    <img src="https://img-blog.csdnimg.cn/20200821132512739.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>    2. 双缓冲<br>    在单缓冲基础上进一步提高并行程度<br>    3. 循环缓冲<br>    组成：<br>    ①多个缓存区。每个大小相同。<br>    空缓冲区R；已装满缓存区G；计算进程正在使用的缓存区C<br>    ②多个指针。<br>    Nextg：指向计算进程下一个可用的G；<br>    Nexti：指向输入进程下次可用的R；<br>    Current：指向计算进程正在使用的缓存区C<br>    过程：<br>    ①GetBuffer。<br>    对于计算进程，调用GetBuffer过程：<br>        1. 通过<code>Nextg</code>获得要进行计算的缓存区，相应地将该缓冲区改成C，将Current指向该缓冲区<br>        2. <code>Nextg</code>指向下一个G缓存区<br>    <img src="https://img-blog.csdnimg.cn/20200821132713788.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<pre><code>对于输入进程，调用GetBuffer过程：
+1. 通过`Nexti`获得可用的缓存区，相应地将该缓冲区改成C，将Current指向该缓冲区</code></pre><p><code>Nexti</code>指向下一个R缓存区<br>    <img src="https://img-blog.csdnimg.cn/20200821132858712.png#pic_center" alt="在这里插入图片描述"><br>    ②ReleaseBuffer。<br>    当计算进程提取完毕后，当前缓存区空出。调用ReleaseBuffer过程，将C改为R。<br>    类似输入进程输入完毕，调用ReleaseBuffer过程，将该缓存区改为G。<br>    <img src="https://img-blog.csdnimg.cn/20200821132933364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>    4. 缓冲池<br>    缓冲池是一个临界资源，进程同步<br>    组成：<br>    <img src="https://img-blog.csdnimg.cn/20200821133113177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>    两个基本操作：<br>    ①Getbuf（type）：从type指定的队列的队首摘下一个缓存区<br>    ②Putbuf（type，number）：将number所指示的缓存区挂在type队列上<br>    过程：<br>    收容输入：设备上的数据进入缓存区<br>    提取输入：缓存区的数据进入工作区<br>    <img src="https://img-blog.csdnimg.cn/20200821133138496.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>6.4 驱动调度技术<br>6.4.1磁盘的物理结构<br>1。物理结构<br>顺序存取存储设备：严格依赖信息的物理位置进行定位和读写，容量大，稳定，便于保存（磁带）<br>直接 (随机) 存取存储设备：读取任何物理块所需时间几乎不依赖信息的位置（磁盘）<br><img src="https://img-blog.csdnimg.cn/20200821133201782.png#pic_center" alt="在这里插入图片描述"><br>盘片：每个盘片有两个盘面<br>盘面：每个盘面有若干磁道(同心圆)、一个磁头（磁头号与盘面号一一     对应）<br>磁头：所有读写磁头固定在唯一的移动臂上同时移动<br>磁道：每个磁道分成若干物理块<br>扇区（物理块）：若干个扇区组成一个块<br>块（簇）：块是磁盘读写的基本单位<br>柱面：不同磁盘上的相同磁道号（磁头位置下的所有磁道）组成一个柱面<br>注：<br>· 文件的信息通常记录在同一个柱面的不同磁道上。（多磁头并发访问）<br>· 访问磁盘上的一个物理记录，需要三个参数：柱面号、磁头号、块号。<br>柱面号决定在哪个磁道上，磁头号决定在哪个盘面上，块号决定读写哪个块。<br>2.磁盘访问时间<br>（1）寻道时间 Ts<br>把磁臂（磁头）移到指定磁道上的时间。是启动磁臂的时间<code>s</code>和磁头移动<code>n</code>条磁道所花费的时间和：<br><code>Ts = m*n + s</code><br>· m是常数，与磁盘驱动器有关，对一般磁盘，m=0.2；对高速磁盘，m&lt;=0.1。<br>· 磁臂启动时间约为2 ms<br>· 一般温盘，Ts=5~30ms<br>（2）旋转延迟时间<br>指定扇区移动到磁头下面所经历的时间。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/09/11-Map%EF%BC%8CDebug/" rel="next" title="11-Map，Debug">
+                <i class="fa fa-chevron-left"></i> 11-Map，Debug
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/02/Android-Studioo%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8no-devices%E7%81%B0%E8%89%B2/" rel="prev" title="Android Studio初次使用no devices灰色">
+                Android Studio初次使用no devices灰色 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

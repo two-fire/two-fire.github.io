@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="读写分离," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、 读写分离介绍MySQL读写分离基本原理是proxy自动进行一个请求的分发。让master数据库处理写操作，slave数据库处理读操作。Mysql读写分离能提高系统性能的原因在于：  物理服务器增加，机器处理能力提升，拿硬件换性能 主从只负责各自的读和写，极大缓解了排他锁和共享锁争用  二、读写分离相关配置mysql proxy方式硬件配置  master 192.168.12.111   n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql读写分离">
+<meta property="og:url" content="http://yoursite.com/2021/03/04/Mysql%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="一、 读写分离介绍MySQL读写分离基本原理是proxy自动进行一个请求的分发。让master数据库处理写操作，slave数据库处理读操作。Mysql读写分离能提高系统性能的原因在于：  物理服务器增加，机器处理能力提升，拿硬件换性能 主从只负责各自的读和写，极大缓解了排他锁和共享锁争用  二、读写分离相关配置mysql proxy方式硬件配置  master 192.168.12.111   n">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210305151145583.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210306161733940.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-03-04T05:32:30.811Z">
+<meta property="article:modified_time" content="2021-03-06T14:56:21.159Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="读写分离">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210305151145583.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/03/04/Mysql读写分离/"/>
+
+
+
+
+
+  <title>Mysql读写分离 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/04/Mysql%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mysql读写分离</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-04T13:32:30+08:00">
+                2021-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="一、-读写分离介绍"><a href="#一、-读写分离介绍" class="headerlink" title="一、 读写分离介绍"></a>一、 读写分离介绍</h3><p><img src="https://img-blog.csdnimg.cn/20210305151145583.png" alt="在这里插入图片描述"><br>MySQL读写分离基本原理是proxy自动进行一个请求的分发。让master数据库处理写操作，slave数据库处理读操作。<br><strong>Mysql读写分离能提高系统性能的原因在于</strong>：</p>
+<ol>
+<li>物理服务器增加，机器处理能力提升，拿硬件换性能</li>
+<li>主从只负责各自的读和写，极大缓解了排他锁和共享锁争用</li>
+</ol>
+<h3 id="二、读写分离相关配置"><a href="#二、读写分离相关配置" class="headerlink" title="二、读写分离相关配置"></a>二、读写分离相关配置</h3><pre><code>mysql proxy方式</code></pre><p><strong>硬件配置</strong></p>
+<blockquote>
+<p>master 192.168.12.111   node01<br>slave  192.168.12.112    node02<br>proxy  192，168.12.113   node03</p>
+</blockquote>
+<p><strong>在master和slave上配置主从复制</strong></p>
+<p><strong>进行proxy的相关配置</strong></p>
+<ol>
+<li>解压安装包并修改目录<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf mysql-proxy-0.8.5-linux-glibc2.3-x86-64bit.tar.gz</span><br><span class="line">mv mysql-proxy-0.8.5-linux-glibc2.3-x86-64bit mysql-proxy</span><br></pre></td></tr></table></figure></li>
+<li>进入mysql-proxy的目录，创建目录<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd mysql-proxy</span><br><span class="line">#6、创建目录</span><br><span class="line">mkdir conf</span><br><span class="line">mkdir logs</span><br></pre></td></tr></table></figure></li>
+<li>添加环境变量<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#打开&#x2F;etc&#x2F;profile文件</span><br><span class="line">vi &#x2F;etc&#x2F;profile</span><br><span class="line">#在文件的最后面添加一下命令</span><br><span class="line">export PATH&#x3D;$PATH:&#x2F;root&#x2F;mysql-proxy&#x2F;bin</span><br><span class="line">#退出后执行命令让环境变量生效</span><br><span class="line">source &#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure></li>
+<li>进入conf目录，创建文件并添加一下内容<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cd conf&#x2F;</span><br><span class="line">vi mysql-proxy.conf</span><br><span class="line">添加内容</span><br><span class="line">[mysql-proxy]</span><br><span class="line">user&#x3D;root</span><br><span class="line">proxy-address&#x3D;192.168.12.113:4040</span><br><span class="line">proxy-backend-addresses&#x3D;192.168.12.111:3306</span><br><span class="line">proxy-read-only-backend-addresses&#x3D;192.168.12.112:3306</span><br><span class="line">proxy-lua-script&#x3D;&#x2F;root&#x2F;mysql-proxy&#x2F;share&#x2F;doc&#x2F;mysql-proxy&#x2F;rw-splitting.lua</span><br><span class="line">log-file&#x3D;&#x2F;root&#x2F;mysql-proxy&#x2F;logs&#x2F;mysql-proxy.log</span><br><span class="line">log-level&#x3D;debug</span><br><span class="line">daemon&#x3D;true</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>上面配置项只指定了node01既承担读也承担写，112只承担读。所以：<br>msb数据库node01和node02中，node03中没有。node01中psn表里面有数据1，node02中有数据1和2。<br>如果在navicat中，连接node03，会显示有msb。在msb中查询psn表，会查询到1。也就是说读数据的时候读进来了node01。<br>在node01中<code>service mysqld stop</code>停掉服务，再次在navicat中查询会卡死失败。这时候再次开启node01中mysqld服务，然后查询，会查询到1和2，也就是查的是从库node02。<br>如果插入数据再查询，会发现写的时候是往mode01写的，而读是读的node02。如果现在要读node01，需要把node02关闭服务，再重启重读。<br><strong>麻烦，很少用。</strong></p>
+<h3 id="使用amoeba实现mysql读写分离"><a href="#使用amoeba实现mysql读写分离" class="headerlink" title="使用amoeba实现mysql读写分离"></a>使用amoeba实现mysql读写分离</h3><p>amoeba（变形虫）项目，专注分布式数据库proxy开发。<br>主要解决：</p>
+<ol>
+<li>降低数据切分带来的复杂多数据库结构</li>
+<li>提供切分规则并降低切分数据库带来的影响</li>
+<li>读写分离</li>
+</ol>
+<h4 id="为什么要用amoeba"><a href="#为什么要用amoeba" class="headerlink" title="为什么要用amoeba"></a>为什么要用amoeba</h4><p>目前实现mysql的主从读写分离，主要有以下几个方案：</p>
+<ol>
+<li>通过mysql-proxy来实现，由于mysql-proxy的主从读写分离是通过lua脚本来实现，目前lua的脚步开发跟不上节奏，因此导致用于生产环境风险较大。</li>
+<li>通过程序实现，复杂</li>
+<li>自己开发接口实现，开发成本高</li>
+<li>利用阿里巴巴开源项目Amoeba实现，负载均衡、读写分离、配置简单</li>
+</ol>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>在node04中执行下面步骤：<br>一、安装jdk<br>1、<a href="https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html找到`jdk-8u181-linux-x64.rpm`，复杂到node04中" target="_blank" rel="noopener">https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html找到`jdk-8u181-linux-x64.rpm`，复杂到node04中</a></p>
+<p>2、<code>rpm -ivh jdk-8u181-linux-x64.rpm</code>进行安装</p>
+<blockquote>
+<p>如果想删除<code>rpm -Uvh jdk-8u181-linux-x64.rpm</code></p>
+</blockquote>
+<p>3、配置环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;profile</span><br></pre></td></tr></table></figure>
+<p>按G跳到最后一行，再按o添加内容：<br>export JAVA_HOME=/usr/java/jdk1.8.0_181-amd64<br>export PATH=$PATH:$JAVA_HOME/bin</p>
+<p>退出source /etc/profile</p>
+<p>4、查看<br>java -version</p>
+<p>二、使用amoeba<br>1、<a href="https://sourceforge.net/projects/amoeba/下载复制amoeba-mysql-3.0.5-RC-distribution.zip" target="_blank" rel="noopener">https://sourceforge.net/projects/amoeba/下载复制amoeba-mysql-3.0.5-RC-distribution.zip</a><br>2、下载解压包<code>yum install zip unzip</code>，使用unzip解压上面的安装包<br>3、跳进目录amoeba-mysql-3.0.5-RC里面的conf中<br>4、修改里面的amoeba.xml和dbServers.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><span class="line">vi dbServers.xml</span><br><span class="line">修改：</span><br><span class="line">输入dG，把里面东西全部删除，然后按a，把下面东西复制过来</span><br><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;gbk&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE amoeba:dbServers SYSTEM &quot;dbserver.dtd&quot;&gt;</span><br><span class="line">&lt;amoeba:dbServers xmlns:amoeba&#x3D;&quot;http:&#x2F;&#x2F;amoeba.meidusa.com&#x2F;&quot;&gt;</span><br><span class="line"></span><br><span class="line">		&lt;!-- </span><br><span class="line">			Each dbServer needs to be configured into a Pool,</span><br><span class="line">			If you need to configure multiple dbServer with load balancing that can be simplified by the following configu</span><br><span class="line">ration:			 add attribute with name virtual &#x3D; &quot;true&quot; in dbServer, but the configuration does not allow the element with n</span><br><span class="line">ame factoryConfig			 such as &#39;multiPool&#39; dbServer   </span><br><span class="line">		--&gt;</span><br><span class="line">		</span><br><span class="line">	&lt;dbServer name&#x3D;&quot;abstractServer&quot; abstractive&#x3D;&quot;true&quot;&gt;</span><br><span class="line">		&lt;factoryConfig class&#x3D;&quot;com.meidusa.amoeba.mysql.net.MysqlServerConnectionFactory&quot;&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;connectionManager&quot;&gt;$&#123;defaultManager&#125;&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;sendBufferSize&quot;&gt;64&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;receiveBufferSize&quot;&gt;128&lt;&#x2F;property&gt;</span><br><span class="line">				</span><br><span class="line">			&lt;!-- mysql port --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;port&quot;&gt;3306&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;!-- mysql schema --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;schema&quot;&gt;msb&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;!-- mysql user --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;user&quot;&gt;root&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;property name&#x3D;&quot;password&quot;&gt;140140&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;&#x2F;factoryConfig&gt;</span><br><span class="line"></span><br><span class="line">		&lt;poolConfig class&#x3D;&quot;com.meidusa.toolkit.common.poolable.PoolableObjectPool&quot;&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;maxActive&quot;&gt;500&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;maxIdle&quot;&gt;500&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;minIdle&quot;&gt;1&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;minEvictableIdleTimeMillis&quot;&gt;600000&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;timeBetweenEvictionRunsMillis&quot;&gt;600000&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;testOnBorrow&quot;&gt;true&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;testOnReturn&quot;&gt;true&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;testWhileIdle&quot;&gt;true&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;&#x2F;poolConfig&gt;</span><br><span class="line">	&lt;&#x2F;dbServer&gt;</span><br><span class="line"></span><br><span class="line">	&lt;dbServer name&#x3D;&quot;writedb&quot;  parent&#x3D;&quot;abstractServer&quot;&gt;</span><br><span class="line">		&lt;factoryConfig&gt;</span><br><span class="line">			&lt;!-- mysql ip --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;ipAddress&quot;&gt;192.168.12.111&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;&#x2F;factoryConfig&gt;</span><br><span class="line">	&lt;&#x2F;dbServer&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;dbServer name&#x3D;&quot;slave&quot;  parent&#x3D;&quot;abstractServer&quot;&gt;</span><br><span class="line">		&lt;factoryConfig&gt;</span><br><span class="line">			&lt;!-- mysql ip --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;ipAddress&quot;&gt;192.168.12.112&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;&#x2F;factoryConfig&gt;</span><br><span class="line">	&lt;&#x2F;dbServer&gt;</span><br><span class="line">	&lt;dbServer name&#x3D;&quot;myslave&quot; virtual&#x3D;&quot;true&quot;&gt;</span><br><span class="line">		&lt;poolConfig class&#x3D;&quot;com.meidusa.amoeba.server.MultipleServerPool&quot;&gt;</span><br><span class="line">			&lt;!-- Load balancing strategy: 1&#x3D;ROUNDROBIN , 2&#x3D;WEIGHTBASED , 3&#x3D;HA--&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;loadbalance&quot;&gt;1&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;!-- Separated by commas,such as: server1,server2,server1 --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;poolNames&quot;&gt;slave&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;&#x2F;poolConfig&gt;</span><br><span class="line">	&lt;&#x2F;dbServer&gt;</span><br><span class="line">&lt;&#x2F;amoeba:dbServers&gt;</span><br><span class="line"></span><br><span class="line">amoeba.xml同样删除后粘贴下面内容：</span><br><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;gbk&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE amoeba:configuration SYSTEM &quot;amoeba.dtd&quot;&gt;</span><br><span class="line">&lt;amoeba:configuration xmlns:amoeba&#x3D;&quot;http:&#x2F;&#x2F;amoeba.meidusa.com&#x2F;&quot;&gt;</span><br><span class="line"></span><br><span class="line">	&lt;proxy&gt;</span><br><span class="line">	</span><br><span class="line">		&lt;!-- service class must implements com.meidusa.amoeba.service.Service --&gt;</span><br><span class="line">		&lt;service name&#x3D;&quot;Amoeba for Mysql&quot; class&#x3D;&quot;com.meidusa.amoeba.mysql.server.MySQLService&quot;&gt;</span><br><span class="line">			&lt;!-- port --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;port&quot;&gt;8066&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;!-- bind ipAddress --&gt;</span><br><span class="line">			&lt;!-- </span><br><span class="line">			&lt;property name&#x3D;&quot;ipAddress&quot;&gt;127.0.0.1&lt;&#x2F;property&gt;</span><br><span class="line">			 --&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;property name&#x3D;&quot;connectionFactory&quot;&gt;</span><br><span class="line">				&lt;bean class&#x3D;&quot;com.meidusa.amoeba.mysql.net.MysqlClientConnectionFactory&quot;&gt;</span><br><span class="line">					&lt;property name&#x3D;&quot;sendBufferSize&quot;&gt;128&lt;&#x2F;property&gt;</span><br><span class="line">					&lt;property name&#x3D;&quot;receiveBufferSize&quot;&gt;64&lt;&#x2F;property&gt;</span><br><span class="line">				&lt;&#x2F;bean&gt;</span><br><span class="line">			&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;property name&#x3D;&quot;authenticateProvider&quot;&gt;</span><br><span class="line">				&lt;bean class&#x3D;&quot;com.meidusa.amoeba.mysql.server.MysqlClientAuthenticator&quot;&gt;</span><br><span class="line">					</span><br><span class="line">					&lt;property name&#x3D;&quot;user&quot;&gt;root&lt;&#x2F;property&gt;</span><br><span class="line">					</span><br><span class="line">					&lt;property name&#x3D;&quot;password&quot;&gt;140140&lt;&#x2F;property&gt;</span><br><span class="line">					</span><br><span class="line">					&lt;property name&#x3D;&quot;filter&quot;&gt;</span><br><span class="line">						&lt;bean class&#x3D;&quot;com.meidusa.toolkit.net.authenticate.server.IPAccessController&quot;&gt;</span><br><span class="line">							&lt;property name&#x3D;&quot;ipFile&quot;&gt;$&#123;amoeba.home&#125;&#x2F;conf&#x2F;access_list.conf&lt;&#x2F;property&gt;</span><br><span class="line">						&lt;&#x2F;bean&gt;</span><br><span class="line">					&lt;&#x2F;property&gt;</span><br><span class="line">				&lt;&#x2F;bean&gt;</span><br><span class="line">			&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">		&lt;&#x2F;service&gt;</span><br><span class="line">		</span><br><span class="line">		&lt;runtime class&#x3D;&quot;com.meidusa.amoeba.mysql.context.MysqlRuntimeContext&quot;&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;!-- proxy server client process thread size --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;executeThreadSize&quot;&gt;128&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;!-- per connection cache prepared statement size  --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;statementCacheSize&quot;&gt;500&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;!-- default charset --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;serverCharset&quot;&gt;utf8&lt;&#x2F;property&gt;</span><br><span class="line">			</span><br><span class="line">			&lt;!-- query timeout( default: 60 second , TimeUnit:second) --&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;queryTimeout&quot;&gt;60&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;&#x2F;runtime&gt;</span><br><span class="line">		</span><br><span class="line">	&lt;&#x2F;proxy&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;!-- </span><br><span class="line">		Each ConnectionManager will start as thread</span><br><span class="line">		manager responsible for the Connection IO read , Death Detection</span><br><span class="line">	--&gt;</span><br><span class="line">	&lt;connectionManagerList&gt;</span><br><span class="line">		&lt;connectionManager name&#x3D;&quot;defaultManager&quot; class&#x3D;&quot;com.meidusa.toolkit.net.MultiConnectionManagerWrapper&quot;&gt;</span><br><span class="line">			&lt;property name&#x3D;&quot;subManagerClassName&quot;&gt;com.meidusa.toolkit.net.AuthingableConnectionManager&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;&#x2F;connectionManager&gt;</span><br><span class="line">	&lt;&#x2F;connectionManagerList&gt;</span><br><span class="line">	</span><br><span class="line">		&lt;!-- default using file loader --&gt;</span><br><span class="line">	&lt;dbServerLoader class&#x3D;&quot;com.meidusa.amoeba.context.DBServerConfigFileLoader&quot;&gt;</span><br><span class="line">		&lt;property name&#x3D;&quot;configFile&quot;&gt;$&#123;amoeba.home&#125;&#x2F;conf&#x2F;dbServers.xml&lt;&#x2F;property&gt;</span><br><span class="line">	&lt;&#x2F;dbServerLoader&gt;</span><br><span class="line">	</span><br><span class="line">	&lt;queryRouter class&#x3D;&quot;com.meidusa.amoeba.mysql.parser.MysqlQueryRouter&quot;&gt;</span><br><span class="line">		&lt;property name&#x3D;&quot;ruleLoader&quot;&gt;</span><br><span class="line">			&lt;bean class&#x3D;&quot;com.meidusa.amoeba.route.TableRuleFileLoader&quot;&gt;</span><br><span class="line">				&lt;property name&#x3D;&quot;ruleFile&quot;&gt;$&#123;amoeba.home&#125;&#x2F;conf&#x2F;rule.xml&lt;&#x2F;property&gt;</span><br><span class="line">				&lt;property name&#x3D;&quot;functionFile&quot;&gt;$&#123;amoeba.home&#125;&#x2F;conf&#x2F;ruleFunctionMap.xml&lt;&#x2F;property&gt;</span><br><span class="line">			&lt;&#x2F;bean&gt;</span><br><span class="line">		&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;property name&#x3D;&quot;sqlFunctionFile&quot;&gt;$&#123;amoeba.home&#125;&#x2F;conf&#x2F;functionMap.xml&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;property name&#x3D;&quot;LRUMapSize&quot;&gt;1500&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;property name&#x3D;&quot;defaultPool&quot;&gt;writedb&lt;&#x2F;property&gt;</span><br><span class="line">		</span><br><span class="line">		&lt;property name&#x3D;&quot;writePool&quot;&gt;writedb&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;property name&#x3D;&quot;readPool&quot;&gt;myslave&lt;&#x2F;property&gt;</span><br><span class="line">		&lt;property name&#x3D;&quot;needParse&quot;&gt;true&lt;&#x2F;property&gt;</span><br><span class="line">	&lt;&#x2F;queryRouter&gt;</span><br><span class="line">&lt;&#x2F;amoeba:configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<p>5、<code>cd ../bin</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;launcher</span><br></pre></td></tr></table></figure>
+
+<p>可能会报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The stack size specified is too small, Specify at least 228k</span><br><span class="line">Error: Could not create the Java Virtual Machine.</span><br><span class="line">Error: A fatal exception has occurred. Program will exit.</span><br></pre></td></tr></table></figure>
+
+<p>因为栈空间太小。解决：<br>跳回amoeba-mysql-3.0.5-RC中，修改jvm.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ..</span><br><span class="line">vi jvm.properties</span><br><span class="line">里面-Xss改为-Xss256k</span><br></pre></td></tr></table></figure>
+<p>再到bin目录下执行<code>./launcher</code>，成功。</p>
+<p>6、配置好后，可以进行连接。转到node03中：<br><code>mysql -uroot -p140140 -h192.168.12.114 -P8066</code></p>
+<p><strong>读数据</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use msb</span><br><span class="line">select * from psn;</span><br></pre></td></tr></table></figure>
+<p>打印结果为1，2，4。即查看的是node02<br><strong>插数据</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">insert into psn values(5,&#39;5&#39;);</span><br><span class="line">select * from psn;</span><br></pre></td></tr></table></figure>
+<p>打印结果为1，2，4，5。即查看的是node02</p>
+<p>现在停掉node01服务（service mysqld stop），再到node03中插入6.报错：<br><font color='red'>ERROR 1044 (42000): Amoeba could not connect to MySQL server[192.168.12.111:3306],Connection refused</font><br>重启node01服务，再插入就会成功。</p>
+<p>停掉node02，node03查询，失败。再重启才可以查询到1，2，4，5，6</p>
+<p><font color='purple'><strong>说明：node01是写库，node02是读库。</strong></font></p>
+<h3 id="Mycat"><a href="#Mycat" class="headerlink" title="Mycat"></a>Mycat</h3><p><img src="https://img-blog.csdnimg.cn/20210306161733940.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>对于DBA来说，</strong>Mycat就是Mysql Server，而Mycat后面连接的Mysql Server，就好像是Mysql的存储引擎。因此Mycat本身不存储数据，数据是在后端的Mysql上存储的。简单来说，Mycat在一定程度上让mysql拥有了跟Oracle pk的能力。</p>
+<p><strong>对于软件工程师来说，</strong>Mycat<strong>近似等于</strong>Mysql的数据库服务器，可用连接mysql的方式去连接mycat（默认端口号是8066而不是mysql的3306）</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/" rel="tag"># 读写分离</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/02/Mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/" rel="next" title="Mysql主从复制原理">
+                <i class="fa fa-chevron-left"></i> Mysql主从复制原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/06/%E5%88%9B%E5%BB%BANetty%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="prev" title="创建Netty服务器">
+                创建Netty服务器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、-读写分离介绍"><span class="nav-text">一、 读写分离介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、读写分离相关配置"><span class="nav-text">二、读写分离相关配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用amoeba实现mysql读写分离"><span class="nav-text">使用amoeba实现mysql读写分离</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么要用amoeba"><span class="nav-text">为什么要用amoeba</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-text">安装</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mycat"><span class="nav-text">Mycat</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

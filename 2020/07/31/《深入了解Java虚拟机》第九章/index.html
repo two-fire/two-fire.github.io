@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="类加载器,字节码生成技术," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="第九章 类加载及执行子系统的案例与实战Class文件何种形式存储，类型何时加载、如何连接，虚拟机如何执行指令都是由虚拟机直接控制的行为。能通过程序操作的 ，主要是字节码生成和类加载器两部分功能。 9.2 案例分析9.2.1 Tomcat：正统的类加载器架构· 主流的Java Web服务器，都实现了自定义的类加载器，且一般不止一个。· 一个功能健全的Web服务器，都要解决这些问题：  部署在同一服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《深入了解Java虚拟机》第九章">
+<meta property="og:url" content="http://yoursite.com/2020/07/31/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B9%9D%E7%AB%A0/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="第九章 类加载及执行子系统的案例与实战Class文件何种形式存储，类型何时加载、如何连接，虚拟机如何执行指令都是由虚拟机直接控制的行为。能通过程序操作的 ，主要是字节码生成和类加载器两部分功能。 9.2 案例分析9.2.1 Tomcat：正统的类加载器架构· 主流的Java Web服务器，都实现了自定义的类加载器，且一般不止一个。· 一个功能健全的Web服务器，都要解决这些问题：  部署在同一服务">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200801211211623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-07-31T09:13:27.000Z">
+<meta property="article:modified_time" content="2020-08-01T13:26:23.209Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="类加载器">
+<meta property="article:tag" content="字节码生成技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200801211211623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/31/《深入了解Java虚拟机》第九章/"/>
+
+
+
+
+
+  <title>《深入了解Java虚拟机》第九章 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/31/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B9%9D%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《深入了解Java虚拟机》第九章</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-31T17:13:27+08:00">
+                2020-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index">
+                    <span itemprop="name">阅读记录</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="第九章-类加载及执行子系统的案例与实战"><a href="#第九章-类加载及执行子系统的案例与实战" class="headerlink" title="第九章 类加载及执行子系统的案例与实战"></a>第九章 类加载及执行子系统的案例与实战</h1><p>Class文件何种形式存储，类型何时加载、如何连接，虚拟机如何执行指令都是由虚拟机直接控制的行为。能通过程序操作的 ，主要是<font color = #F9000>字节码生成</font>和<font color = #F9000>类加载器</font>两部分功能。</p>
+<h2 id="9-2-案例分析"><a href="#9-2-案例分析" class="headerlink" title="9.2 案例分析"></a>9.2 案例分析</h2><h3 id="9-2-1-Tomcat：正统的类加载器架构"><a href="#9-2-1-Tomcat：正统的类加载器架构" class="headerlink" title="9.2.1 Tomcat：正统的类加载器架构"></a>9.2.1 Tomcat：正统的类加载器架构</h3><p>· 主流的Java Web服务器，都实现了自定义的类加载器，且一般不止一个。<br>· 一个功能健全的Web服务器，都要解决这些问题：</p>
+<ol>
+<li>部署在同一服务器上的<font color = #F9000>两个web应用程序</font>所使用的<font color = #F9000>Java类库</font>可以实现<font color = #F9000>相互隔离</font>。<br> 两个不同的应用程序可能会依赖同一个第三方类库的不同版本，不能要求每个类库在一个服务器只能有一份，服务器应当能保证两个独立应用程序的类库可以<font color = #F9000>互相独立使用</font>。</li>
+<li>部署在同一个服务器上的两个web应用程序所使用的类库可以<font color = #F9000>共享</font>。</li>
+<li><font color = #F9000>服务器</font>需要尽可能<font color = #F9000>保证自身安全</font>不受部署的web应用程序的影响。因为目前很多服务器也是使用java实现的，有自身的类库依赖，需要与应用程序的类库相互独立。</li>
+<li>支持JSP应用的Web服务器，基本都需要<strong>支持HotSwap功能</strong>。<br> JSP文件最终要编译成Java的Class文件才能被虚拟机执行，但JSP文件由于其<font color = #F9000>纯文本存储</font>的特性，运行期被修改的概率远远大于第三方类库或程序自己的class文件。PHP、JSP等网页应用也把修改后不需要重启作为很大的优势。<br> 因此，主流的web服务器都会支持JSP生成类的热替换。</li>
+</ol>
+<p>· 由于存在上述问题，在部署web应用时，单独一个ClassPath不够。各种服务器都提供了许多类路径（多以lib，classes命名），来<strong>存放不同访问范围和服务对象</strong>的第三方类库。<br>· <strong>通常每个目录下有一个对应的自定义类加载器</strong>，去加载放置在里面的java类库。</p>
+<p><strong>以Tomcat为例</strong>：<br>Tomcat目录结构中，可以设置三组目录（/common/<em>、/server/</em>和/shared/<em>，但默认不一定是开放的，可能只有/lib/</em>目录存在）用于放java类库，还有一个存放web应用程序自身的“/WEB-INF/*”目录，一共4组。把Java类库放置在这四组目录中：</p>
+<ul>
+<li>放置在<strong>/common目录</strong>中。类库可被Tomcat和所有的web应用程序共同使用。</li>
+<li>放置在<strong>/server目录</strong>中。类库可被Tomcat使用，对所有的Web应用程序都不可见。</li>
+<li>放置在<strong>/shared目录</strong>中。类库可被所有的Web应用程序共同使用，但对Tomcat自己不可见。</li>
+<li>放置在<strong>/WebApp/WEB-INF目录</strong>中。类库仅可被该web应用程序使用，对Tomcat和其他web程序不可见。</li>
+</ul>
+<p>为了支持这套目录结构，并对目录里面的类库进行加载和隔离，Tomcat自定义了多个类加载器，按照双亲委派模型来实现。<br>下图是Tomcat 6以前默认的类加载器结构：<br><img src="https://img-blog.csdnimg.cn/20200801211211623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li><p>最上面三个是JDK默认提供的类加载器。下面是Tomcat自己定义的类加载器：</p>
+<table>
+<thead>
+<tr>
+<th align="center">类加载器</th>
+<th align="center">加载的Java类库的目录</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Common类加载器</td>
+<td align="center">/common/*</td>
+</tr>
+<tr>
+<td align="center">Catalina类加载器（也称为Server类加载器）</td>
+<td align="center">/server/*</td>
+</tr>
+<tr>
+<td align="center">Shared类加载器</td>
+<td align="center">/shared/*</td>
+</tr>
+<tr>
+<td align="center">Webapp类加载器</td>
+<td align="center">/WebApp/WEB-INF/</td>
+</tr>
+</tbody></table>
+<p>  · 其中<strong>WebApp类加载器</strong>和<strong>JSP类加载器</strong>通常还会存在多个实例，每个Web应用程序/JSP文件对应一个WebApp类加载器/JasperLoader类加载器。<br><font color = #F9000>（一对多关系）</font></p>
+</li>
+<li><p>Common类加载器能加载的类都可以被Catalina和Shared类加载器使用。</p>
+</li>
+<li><p>Catalina和Shared类加载器自己加载的类是相互隔离的。</p>
+</li>
+<li><p>WebApp类加载器可以使用Shared类加载器加载到的类，但各个WebApp类加载器实例之间相互隔离。</p>
+</li>
+<li><p>JasperLoader的加载范围只是这个JSP文件所编译出来的那一个Class文件。<br>存在目的就是为了被丢弃：当服务器检测到JSP文件被修改，会替换掉目前的JasperLoader实例，并再建立一个新的JSP类加载器来实现<strong>JSP文件的热交换功能</strong>。</p>
+</li>
+</ul>
+<p>· Tomcat 6及之后，<strong>简化</strong>了默认的目录结构。</p>
+<ul>
+<li>只有指定了tomcat/conf/catalina.properties配置文件的<code>server.loader</code>和<code>share.loader</code>项后，才会真正建立起Catalina类加载器和Shared类加载器的实例。</li>
+<li>否则需要用到这两个类加载器的地方都用Common类加载器的实例代替。</li>
+<li>默认配置文件中没有设置这两项，所以Tomcat 6及之后把/common、/server和/shared这3个目录默认合并到一起变成1个<strong>/lib目录</strong>。它相对于以前/common目录中类库的作用。</li>
+</ul>
+<h3 id="9-2-2-OSGi：灵活的类加载器架构"><a href="#9-2-2-OSGi：灵活的类加载器架构" class="headerlink" title="9.2.2 OSGi：灵活的类加载器架构"></a>9.2.2 OSGi：灵活的类加载器架构</h3><p>· OSGi是一个基于Java语言的<strong>动态模块化规范</strong>。现多用于智慧城市、智慧农业等地方。Eclipse IDE也是基于OSGi规范实现的。<br>· OSGi的每个模块（Bundle）与普通的Java类库区别不大，都以JAR格式进行封装。内部存储的都是Java的Package和Class。但一个Bundle可以声明它所依赖的包（通过Import-Package描述），也可以声明它允许导出的包（Export-Package）。<br>· 一个模块只有被被Export过的Package才可能被外界访问，其他的Package和Class将会被隐藏起来。<br>· 在OSGi里面，Bundle间的依赖关系，从<font color = #F9000>上层模块依赖底层模块</font>转变为<font color = #F9000>平级模块间</font>的依赖。</p>
+<p>· 以上<strong>静态的模块化特性</strong>原本也是OSGi核心追求之一，但由于与后来出现的java的模块化系统（<strong>JPMS</strong>）重叠了，所以现在主要发展方向是<strong>动态模块化系统</strong>。今天引入OSGi主要是为了实现模块级的<strong>热插拔功能</strong>。譬如Eclipse中的安装、卸载、更新插件不需要重写启动。</p>
+<p>· OSGi有以上诱人特点，必须归功于它<strong>灵活的类加载器架构</strong>。OSGi的Bundle之间，只有规则，<strong>没有固定的委派关系</strong>。<br>· 在不涉及到某具体的Package时，所有Bundle都是平级关系。<br>· 只有具体到使用某个Package时和Class时，才会根据Package导入导出定义来构造Bundle间的委派与依赖。<br>· 另外，当一个Bundle提供服务时，要根据<code>Export-Package列表</code>严格<strong>控制访问范围</strong>。如果一个类存在于类库中，但没有被Export，那这个Bundle类加载器可以找到这个类，但是不会提供给别的类使用，OSGi也不会把其他Bundle的类加载请求委派给它。</p>
+<p>· 在OSGi里，类加载时可能进行的<strong>查找规则</strong>如下：</p>
+<ol>
+<li>以<strong>java.*</strong>开头的类，委派给父类加载器加载。</li>
+<li>否则，<font color = green><strong>委派列表名单</strong></font>内的类，委派给父类加载器加载。</li>
+<li>否则，<strong>Import列表</strong>中的类，委派给Export这个类的Bundle的类加载器加载。</li>
+<li>否则，查找<strong>当前Bundle的Classpath</strong>，使用自己的类加载器加载。</li>
+<li>否则，查找是否在自己的<strong>Fragment Bundle</strong>中，如果是则委派给Fragment Bundle的类加载器加载。</li>
+<li>否则，查找<strong>Dynamic Import列表</strong>的Bundle，委派给对应Bundle的类加载器加载。</li>
+<li>否则，类查找<strong>失败</strong>。</li>
+</ol>
+<p>· OSGi中，加载器之间的关系为网状结构。虽然灵活性更高，但也有新的隐患。如经常<strong>产生死锁</strong>。<br>· 例如：Bundle A依赖Bundle B的Package B，而Bundle B又依赖了Bundle A的Package A<br>· Bundle A加载Package B里的类时，首先需要锁定当前类加载器的实例对象（<code>ClassLoader.loadClass()</code>是一个同步方法），然后<strong>把请求委派给Bundle B的加载器处理</strong>。这时候如果Bundle B也想加载Package A的类，那就会<strong>锁定自己的加载器再去请求Bundle A的加载器处理</strong>。就会产生死锁。<br>· Equinox提供了一个以牺牲性能为代价的解决方案：用户可以启用<code>osgi.classloader.singleThreadLoads参数</code>，按照<strong>单线程串行化</strong>的方式<strong>强制</strong>进行类加载操作。<br>· JDK7时出现<strong>JDK层面</strong>的解决方案，升级了类加载器架构，在<br>ClassLoader中增加了<code>registerAsParallelCapable方法</code>，对<strong>可并行的类加载</strong>进行注册声明，把<font color = #F9000>锁的级别</font>从ClassLoader对象本身，降低为<font color = #F9000>要加载的类名</font>这个级别。从底层避免以上这类死锁问题的出现。<br>· 换句话说，只要多线程加载的不是同一个类的话，loadClass方法都不会锁住。<br><font color = green>注：依旧以上面的死锁为例。Bundle A中类C中想要加载Package B的类G，Bundle B中类D想要加载Package A的类F。</font></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" rel="tag"># 类加载器</a>
+          
+            <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E7%94%9F%E6%88%90%E6%8A%80%E6%9C%AF/" rel="tag"># 字节码生成技术</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/29/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E5%85%AB%E7%AB%A0/" rel="next" title="《深入了解Java虚拟机》第八章">
+                <i class="fa fa-chevron-left"></i> 《深入了解Java虚拟机》第八章
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/02/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E5%8D%81%E7%AB%A0/" rel="prev" title="《深入了解Java虚拟机》第十章">
+                《深入了解Java虚拟机》第十章 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第九章-类加载及执行子系统的案例与实战"><span class="nav-text">第九章 类加载及执行子系统的案例与实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-案例分析"><span class="nav-text">9.2 案例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-1-Tomcat：正统的类加载器架构"><span class="nav-text">9.2.1 Tomcat：正统的类加载器架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-2-OSGi：灵活的类加载器架构"><span class="nav-text">9.2.2 OSGi：灵活的类加载器架构</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

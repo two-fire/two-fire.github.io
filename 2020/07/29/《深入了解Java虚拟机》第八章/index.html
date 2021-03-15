@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="虚拟机字节码执行引擎," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="第八章  虚拟机字节码执行引擎8.1 概述· 执行引擎是JVM核心的组成部分之一。“虚拟机”是一个相对于“物理机”而言的，“物理机”的执行引擎是直接建立在处理器、缓存、指令集、操作系统层面上的，“虚拟机”的执行引擎是由软件自行实现的。·《Java虚拟机规范》中制定了概念模型，成为各大发行商的JVM执行引擎的统一外观。· 在不同的虚拟机实现中，执行引擎在执行字节码时，通常会有解释执行（通过解释器执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《深入了解Java虚拟机》第八章">
+<meta property="og:url" content="http://yoursite.com/2020/07/29/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E5%85%AB%E7%AB%A0/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="第八章  虚拟机字节码执行引擎8.1 概述· 执行引擎是JVM核心的组成部分之一。“虚拟机”是一个相对于“物理机”而言的，“物理机”的执行引擎是直接建立在处理器、缓存、指令集、操作系统层面上的，“虚拟机”的执行引擎是由软件自行实现的。·《Java虚拟机规范》中制定了概念模型，成为各大发行商的JVM执行引擎的统一外观。· 在不同的虚拟机实现中，执行引擎在执行字节码时，通常会有解释执行（通过解释器执行">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731153510105.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020073115371060.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731154558404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731154617397.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731154646430.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731155250877.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731155345835.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731155551787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731155829622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020073115585759.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731155927493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731160101988.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-07-29T13:48:19.000Z">
+<meta property="article:modified_time" content="2020-07-31T08:23:27.453Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="虚拟机字节码执行引擎">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200731153510105.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/29/《深入了解Java虚拟机》第八章/"/>
+
+
+
+
+
+  <title>《深入了解Java虚拟机》第八章 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/29/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E5%85%AB%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《深入了解Java虚拟机》第八章</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-29T21:48:19+08:00">
+                2020-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index">
+                    <span itemprop="name">阅读记录</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%98%85%E8%AF%BB%E8%AE%B0%E5%BD%95/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="第八章-虚拟机字节码执行引擎"><a href="#第八章-虚拟机字节码执行引擎" class="headerlink" title="第八章  虚拟机字节码执行引擎"></a>第八章  虚拟机字节码执行引擎</h1><h2 id="8-1-概述"><a href="#8-1-概述" class="headerlink" title="8.1 概述"></a>8.1 概述</h2><p>· 执行引擎是JVM核心的组成部分之一。“虚拟机”是一个相对于“物理机”而言的，“物理机”的执行引擎是直接建立在处理器、缓存、指令集、操作系统层面上的，“虚拟机”的执行引擎是由软件自行实现的。<br>·《Java虚拟机规范》中制定了概念模型，成为各大发行商的JVM执行引擎的统一外观。<br>· 在不同的虚拟机实现中，执行引擎在执行字节码时，通常会有<font color = #F9000>解释执行</font>（通过解释器执行）和<font color = #F9000>编译执行</font>（通过即时编译器产生本地代码执行）两种选择，也可能两者兼备，也可能几个不同级别的即时编译器一起工作。<br>· 外观上看，执行引擎的输入是<font color = #F9000>字节码二进制流</font>，处理过程是<font color = #F9000>字节码解析执行的等效过程</font>，输出的是<font color = #F9000>执行结果</font></p>
+<h2 id="8-2-运行时栈帧结构"><a href="#8-2-运行时栈帧结构" class="headerlink" title="8.2 运行时栈帧结构"></a>8.2 运行时栈帧结构</h2><p>· JVM以<font color = #F9000>方法</font>作为最基本的执行单元。<br>· <strong>栈帧</strong>：<br>    ①是用于<font color = #F9000>支持虚拟机</font>进行<font color = #F9000>方法调用</font>和<font color = #F9000>方法执行</font>背后的<strong>数据结构</strong>。<br>    ②是虚拟机<font color = #F9000>运行时数据区</font>中的虚拟机栈的<strong>栈元素</strong>。<br>    ③<strong>存储了</strong>方法的局部变量表、操作数栈、动态连接、方法返回地址和一些额外附加信息。<br>注： 每一个方法从调用开始至执行结束的过程，都对应着一个栈帧在虚拟机栈里面从入栈到出栈的过程。<br>· 在编译java程序源码时候，栈帧中需要多大的局部变量表，操作数栈需要多深就已经被分析出来，并写入方法表的Code属性中。<br>· 一个栈帧需要分配多少内存，并不会受到运行时数据影响。只取决于<font color = #F9000>源码</font>和具体虚拟机实现的<font color = #F9000>栈内存布局形式</font>。<br>· 一个线程中的<font color = #F9000>方法调用链</font>可能会很长，<strong>以Java程序的角度看</strong>，同一时刻、同一条线程里，在<font color = #F9000>调用堆栈的所有方法</font>都同时处于<font color = #F9000>执行状态</font>。<strong>而对于执行引擎来讲</strong>，在活动线程中，只有位于栈顶的方法才是在运行的，只有位于栈顶的栈帧才是生效的，其被称为“当前栈帧”，与这个栈帧所关联的方法称为“当前方法”。<br>· 执行引擎所运行的所有的字节码指令都只针对<font color = #F9000>当前栈帧操作</font><br><img src="https://img-blog.csdnimg.cn/20200731153510105.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="8-2-1-局部变量表"><a href="#8-2-1-局部变量表" class="headerlink" title="8.2.1 局部变量表"></a>8.2.1 局部变量表</h3><p>· 一组变量值的存储空间，用于存放方法参数和方法内部定义的局部变量。<br>· 在编译成class文件时，就在方法的code属性的max_locals项中确定了该方法所需分配的内存大小。<br>· <strong>变量槽</strong>为最小单位，但一个变量槽应占多少内存并未明确指出。只是说都应能存放boolean、byte、char、short、int、float、reference、returnAddress 8种32位以内的数据类型。<br>注：<br>· java语言和JVM中基本数据类型的概念有本质区别。<br>· <strong>reference</strong>：对一个对象实例的引用。虚拟机至少都应通过引用做到：</p>
+<ol>
+<li>直接或间接地找到对象在<font color = #F9000>java堆中</font>的数据存放的起始地址或索引。</li>
+<li>直接或间接地找到对象所属数据类型在<font color = #F9000>方法区中</font>的存储的类型信息。<br>· <strong>returnAddress</strong>：基本不用。是为jsr等字节码指令服务的，古老虚拟机使用这几条指令实现异常处理的跳转，现已经被异常表替代。</li>
+</ol>
+<p>· 对于64位数据类型，JVM采用高位对其方式为其分配2个变量槽。Java语言中规定只有long和double。这里把它们分割存储的方法与“long和double的非原子协定”中允许把一次long和double读写分割为2次32位读写做法类似。<br>· 局部变量表建立在<font color = #F9000>线程堆栈</font>中，属于线程私有数据，所以无论两个连续变量槽是否为原子操作都不会引起数据竞争和线程安全问题。<br>· 局部变量表采取索引定位的方式访问。索引值从0开始。如果是64位数据类型，一次性访问第N和N+1个变量槽，如果单独访问某一个，在类加载的校验阶段抛出异常。</p>
+<p>· 当一个方法调用时，JVM根据局部变量表完成实参到形参的传递。<br>· 如果是<font color = #F9000>实例方法</font>（没有被static修饰），第0位变量槽固定存放用于传递该方法所属对象实例的引用，在方法中可以通过this访问这个默认隐含参数，其余参数根据参数列表顺序从1开始排列。<br>· 参数表分配完毕后，再根据方法体内部定义的变量顺序和作用域分配其余变量槽。<br>· 变量槽可以重用，不过某些情况下会直接影响到系统的垃圾收集行为。<br>· 比如一个方法，前面定义了一个占用内存极大但实际已经不会再使用的变量，后面的代码有一些耗时很长的动作，<font color = #F9000>手动赋值null的操作</font>来优化内存回收。<br>（这个操作极端情况有奇用：在对象占用内存大、此方法的栈帧长时间不能回收、方法调用次数达不到即时编译器的编译条件）<br>· 虽然确实有用，但不该产生特别依赖。</p>
+<ul>
+<li>其一，从编码角度讲，以恰当变量作用域控制回收时间才是最好解决办法。</li>
+<li>其二，从执行角度讲，这个操作是建立在执行引擎概念基础上的，但由于”公有设计私有实现”，虚拟机使用解释器执行的时候，通常与概念模型还比较很接近，但是经历即时编译器优化后，差异更大。<br>而实际中，即时编译才是虚拟机执行代码的主要方式，赋null值在经过即时编译优化后几乎是一定会被当作无效操作清除的。</li>
+</ul>
+<p>· 局部变量不像类变量那样存在“准备阶段”。如果一个局部变量定义了但没有赋值，它是完全不能使用的。</p>
+<h3 id="8-2-2-操作数栈"><a href="#8-2-2-操作数栈" class="headerlink" title="8.2.2 操作数栈"></a>8.2.2 操作数栈</h3><p>· 也叫操作栈，操作数后入先出。<br>· 与局部变量表类似，在编译时往code属性的max_stacks属性中写入了操作数栈的最大深度。<br>· 操作数栈每个元素可以为任意Java数据类型。32位所占的栈容量为1，64位的栈容量为2。<br>· Javac编译器的数据流分析工作保证方法执行的任何时候，操作数栈的深度都不会超过max_stacks里面设置的最大值。</p>
+<p>· 当一个方法开始执行的时候，栈为空。方法执行过程中，会有各种入栈出栈的操作（指令往栈中写入或者提取内容）。譬如，调用其他方法的时候是通过操作数栈来进行方法参数的传递。<br>· 操作数栈元素数据类型必须与字节码指令的序列匹配。在编译代码时，编译器必须严格保证，在类校验阶段，数据流分析还会进行验证。比如，对于iadd指令，操作数栈顶两个元素必须都为int。<br>· 模型概念中两个不同的栈帧是完全独立的。实际中，虚拟机会进行优化处理，让<font color = #F9000>两个栈帧有重叠部分</font>。一方面节约内存，一方面在方法调用时直接共享部分数据，不需要再参数复制传递。<br><img src="https://img-blog.csdnimg.cn/2020073115371060.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>· java虚拟机的<font color = #F9000>解释执行引擎</font>被称为“<font color = #F9000>基于栈的执行引擎</font>”。</p>
+<h3 id="8-2-3-动态连接"><a href="#8-2-3-动态连接" class="headerlink" title="8.2.3 动态连接"></a>8.2.3 动态连接</h3><p>· 每个栈帧都包含一个引用，指向<font color = #F9000>运行时常量池</font>中该栈帧所属方法。<br>· 持有这个引用的目的：支持方法调用过程中的动态连接。<br>· Class文件中的常量池有大量符号引用，字节码中的方法调用指令就是以常量池中<font color = #F9000>指向方法的符号引用</font>作为参数。一部分在类加载阶段或者第一次使用时候就转化为直接引用，称为“静态解析”。另一部分在每次运行期间都转换为直接引用，称为“动态连接”。</p>
+<h3 id="8-2-4-方法返回地址"><a href="#8-2-4-方法返回地址" class="headerlink" title="8.2.4 方法返回地址"></a>8.2.4 方法返回地址</h3><p>方法开始执行后，只有两种退出方法。</p>
+<ol>
+<li>“<strong>正常调用完成</strong>”：执行引擎遇到了任意一个方法返回的字节码指令，这时候可能会有返回值返回给上一层的<font color = #F9000>方法调用者（或者称为主调方法）</font>。是否有返回值、返回值类型都由何种指令决定。</li>
+<li>“<strong>异常调用完成</strong>”：方法体内有异常，或者是使用athrow指令产生异常，并且在本方法的font color = #F9000&gt;异常表</font>中没有搜索到匹配的&lt;异常处理器，就会导致方退出。不会给上层调用者提供返回值。<br>注：方法退出都必须返回到方法被调用的位置。方法正常退出，主调方法的PC计数器的值可以作为返回地址，栈帧中很可能会保存这个值。方法异常退出，返回地址要通过异常处理器表来确定，栈帧中通常不会保存这个值。<br>· 方法退出时可能的执行操作有：</li>
+<li>恢复上层方法的局部变量表和操作数栈</li>
+<li>如果有返回值，将值压入调用者的操作数栈中</li>
+<li>调整PC计数器的值以指向下一条指令<br>注：说可能是因为这是基于概念模型的讨论，具体实现要看虚拟机</li>
+</ol>
+<h3 id="8-2-5-附加信息"><a href="#8-2-5-附加信息" class="headerlink" title="8.2.5 附加信息"></a>8.2.5 附加信息</h3><p>《Java虚拟机规范》允许虚拟机实现中增加一些规范中没有描述的信息到栈帧中，比如有关调试的信息。<br>· 通常讨论概念时，把附加信息、返回地址、动态连接归为一类，称“<strong>栈帧信息</strong>”</p>
+<h2 id="8-3-方法调用"><a href="#8-3-方法调用" class="headerlink" title="8.3 方法调用"></a>8.3 方法调用</h2><p>· 方法调用阶段唯一任务是确定调用哪一个方法。进行方法调用是程序运行时最频繁的操作之一。<br>· Class文件的编译过程不包含连接步骤，一切方法调用在Class文件里存储的都只是符号引用。<br>该特性给Java带来更强大的动态扩展能力，但过程也变得相对复杂，某些调用需要在类加载期间，甚至到运行期间才能确定目标方法的直接引用。</p>
+<h3 id="8-3-1-解析"><a href="#8-3-1-解析" class="headerlink" title="8.3.1 解析"></a>8.3.1 解析</h3><p>类加载的解析阶段，会将一部分的符号引用转化为直接引用，这种解析成立前提：方法在程序真正运行之前，就有一个可确定的调用版本，在运行期间该版本也不可改变。这类方法的调用称为“<strong>解析</strong>”。<br>· 符合“<font color = #F9000>编译期可知，运行期不变</font>”特性的主要是<font color = #F9000>静态方法和私有方法</font>。前者与类型有关，后者在外部不能访问，这种特性决定了它们不可能通过继承等方式重写出其他版本，因此都适合在类加载的解析阶段解析。<br>· 调用不同类型的方法，字节码指令不同。</p>
+<ol>
+<li>invokestatic：静态方法</li>
+<li>invokespecial：实例构造器<init>()方法、私有方法、父类中的方法</li>
+<li>invokevirtual：所有虚方法</li>
+<li>invokeinterface：接口方法，运行时再确定一个实现该接口的对象</li>
+<li><font color = green>invokedynamic</font>：先在运行时动态解析出<font color = #F9000>调用点限定符</font>所引用的方法，然后再执行该方法。<br>注：前四条指令的分派逻辑固定在JVM内部，而最后一条由用户设定的引导方法决定。<br>· 只要能被invokestatic和invokespecial指令调用的方法，都可以在解析阶段确定唯一调用版本。符合这样条件的方法有：静态方法、实例构造器方法、私有方法、父类方法四种，再加上final修饰的方法（被invokevirtual调用），这五种方法调用在类加载时候就可以进行解析。这些方法称为“<font color = #F9000>非虚方法</font>”，其他的就称为“<font color = #F9000>虚方法</font>”。<br>· 被final修饰的方法，历史设计原因，是使用invokevirtual调用的，但是因为它也无法被覆盖，没有其他版本的可能，所以调用版本肯定也是唯一的，因此<strong>final方法也属于非虚方法</strong>。<br>· 解析调用一定是个<strong>静态</strong>的过程。在编译期间完全确定，在类加载的解析阶段就把涉及到的符号引用转化为直接引用。而另一种主要的方法调用形式：分派，既有静态又有动态，根据<strong>宗量数</strong>可以分为单分派和多分派。两类分派形式两两组合，就用4种情况。<br>注：方法的接收者与方法的参数统称为<font color = #F9000>方法的宗量</font></li>
+</ol>
+<h3 id="8-3-2-分派"><a href="#8-3-2-分派" class="headerlink" title="8.3.2 分派"></a>8.3.2 分派</h3><ol>
+<li><p><strong>静态分派</strong><br> “Method Overload Resolution”。分派一词本身具有动态性，只是许多资料称为“静态分派”.</p>
+<p> <code>Human human = new Man();</code><br> · Human称为变量的“<font color = #F9000>静态类型</font>”或者“外观类型”，Man称为变量的“<font color = #F9000>实际类型</font>”或“运行时类型”。<br> · 静态类型和实际类型在程序中都可能发生变化。<br> · 静态类型在编译器是可知的，并且静态类型的变化仅在使用时发生（如强制转型），但这个改变在编译期也是可知的<br> · 实际类型是不确定的，只有到运行到这行代码才可确定，编译器在编译程序的时候并不知道一个对象的实际类型是什么。</p>
+<p> <strong>静态分派和重载</strong></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class StaticDispatch() &#123;</span><br><span class="line">    static abstract class Human &#123;&#125;</span><br><span class="line">    static class Man extends Human &#123;&#125;</span><br><span class="line">    static class Woman extends Human &#123;&#125;</span><br><span class="line"></span><br><span class="line">    public void sayHello(Human guy) &#123;</span><br><span class="line">        system.out.println(&quot;hi,human&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public void sayHello(Man guy) &#123;</span><br><span class="line">        system.out.println(&quot;hi,man&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public void sayHello(Woman guy) &#123;</span><br><span class="line">        system.out.println(&quot;hi,woman&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Human man &#x3D; new Man();</span><br><span class="line">        Human woman &#x3D; new Woman();</span><br><span class="line">        StaticDispatch sr &#x3D; new StaticDispatch();</span><br><span class="line">        sr.sayHello(man);</span><br><span class="line">        sr.sayHello(woman);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 运行结果：<br> hi,human<br> hi,human</p>
+<p> · main方法两次调用重载方法，在<font color = #F9000>方法接收者</font>已经确定是对象“sr”的前提下，使用哪个重载版本，就完全取决于传入参数的数量和数据类型。<br> · 代码故意定义了两个静态类型相同，实际类型不同的变量作为调用方法的参数，但是编译器在重载时是通过参数的静态类型作为判断依据的。因此选择了sayHello(Human)作为调用目标。<br> · 由于静态类型在编译期可知，所以编译阶段，<font color = #F9000>Javac编译器</font>就根据<font color = #F9000>参数的静态类型</font>决定使用的重载版本，并把这个方法的符号引用写到main方法里的两条invokevirtual指令的参数中。</p>
+<p> · 所有依赖静态类型来决定方法执行版本的分派动作，就是“<strong>静态分派</strong>”。<br> · 静态分派最典型表现就是方法重载。<br> · 静态分派发生在编译阶段，因此确定静态分派的动作实际上并不是由虚拟机执行的，所以有的资料把它归为“解析”而非“分派”。<br> 注：javac编译器往往只能确定一个“相对更合适的”版本。原因是<strong>字面量的模糊性</strong>。</p>
+<p> · <strong>选择静态分派目标的过程</strong>（<font color = #F9000>Java语言实现【<strong>方法重载</strong>】的本质</font>）：<br> 1）如果传入参数是‘a’，最佳会选择参数类型为<code>char</code>的重载方法<br> 2）如果没有，也可能会选择参数为<code>int</code>类型的重载方法。因为‘a’除了能代表一个字符串，也可以代表数字97（发生一次自动类型转换）<br> 3）如果没有，可能选择long类型的重载方法97-&gt;97L（二次自动类型转换）<br> …<br> 【<strong>按照<code>char&gt;int&gt;long&gt;float&gt;double</code>的顺序转型进行匹配</strong>】<br> 4）如果都没有，可能会匹配到参数为<code>Character</code>类型的重载方法（发生一次<strong>自动装箱</strong>）<br> 5）如果没有，可能会匹配到参数为<code>Serializable</code>（序列化）的重载方法。<br> 原因：自动装箱后还是找不到装箱类，但找到了装箱类所实现的接口类型，所以发生又一次自动转型。但Character绝不能转型为Integer，它只能安全转型为它的实现的<strong>接口或者父类</strong>。Serializable和Comparable<Character>是它实现的两个接口。<br> 参数为Serializable和Comparable<Character>的重载方法优先级相同。如果这两个同时存在会提示<font color = #F9000>类型模糊</font>，拒绝编译。<br> 必须调用时显示指定字面量的静态类型，如<code>(Comparable&lt;Character&gt;)&#39;a&#39;</code>才能编译通过<br> 6）如果没有，可能会匹配到参数为<code>Object</code>的重载方法。<br> 这时是char装箱后转型为父类了，如果有多个父类，将在继承关系中从下往上搜索<br> 7）如果没有，可能会匹配到参数为<code>char…</code>的重载方法。<br> 可见，<strong>变长参数</strong>的重载优先级是最低的。此时‘a’被当成是char[]的元素。<br> 注：有些在单个参数中能成立的自动转型（char-&gt;int）,在变长参数中是不成立的。<br> 解析和分派不是二选一关系，而是在不同层次上去筛选、确定目标方法的过程。例如静态方法是在编译期确定、类加载期间解析，而选择重载版本的过程是通过静态分派完成的。</p>
+</li>
+<li><p><strong>动态分派</strong></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public class DynamicDispatch() &#123;</span><br><span class="line">	static abstract class Human &#123;</span><br><span class="line">		protected abstract void sayHello();</span><br><span class="line">	&#125;</span><br><span class="line">	static class Man extends Human &#123;</span><br><span class="line">		@Override</span><br><span class="line">		protected void sayHello() &#123;</span><br><span class="line">			system.out.println(&quot;man say hello&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	static class  Woman extends Human &#123;</span><br><span class="line">		@Override</span><br><span class="line">		protected void sayHello() &#123;</span><br><span class="line">			system.out.println(&quot;woman say hello&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		Human man &#x3D; new Man();</span><br><span class="line">		Human woman &#x3D; new Woman();</span><br><span class="line">		man.sayHello();</span><br><span class="line">		woman.sayHello();</span><br><span class="line">		man &#x3D; new Woman();</span><br><span class="line">		man.sayHello();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 运行结果：<br> man say hello<br> woman say hello<br> woman say hello</p>
+<p> javap命令输出代码的字节码，分析：</p>
+<pre><code>Human man = new Man();
+Human woman = new Woman();</code></pre></li>
+</ol>
+<ul>
+<li><p>0~15行对应这两步，建立man、woman的内存空间，调用man、woman类型的实例构造器，将这两个实例的引用存放在第1、2个局部变量表的变量槽中。</p>
+</li>
+<li><p>之后，16、20行aload指令分别把刚刚创建的两个对象的引用压到栈顶，这个对象是将要执行sayHello()的接收者。</p>
+</li>
+<li><p>17、21行都是利用方法调用指令invokevirtual，参数为Human.sayHello()的符号引用，<font color = #F9000>但是这两条指令最终执行的目标方法不同。因此，关键在于指令本身。</font></p>
+<p>  指令invokevirtual的运行时解析过程大概分为以下几步：<br>  1）找到操作数栈顶的第一个元素所指向的对象的实际类型，记为C（<font color = green>man的<strong>实际类型</strong>为Man</font>）<br>  2）如果在类型C中找到与常量描述符和简单名称都相符的方法，则进行访问权限校验，如果通过返回这个方法的直接引用，查找过程结束；不通过返回java.lang.IllegalAccessError异常（<font color = green>在Man类中寻找与sayHello()匹配的方法，找到</font>）<br>  3）否则，按照继承关系从下往上对C的各个父类进行第二步<br>  4）如果始终没有找到，抛出java.lang.AbstractMethodError异常</p>
+<p>  <font color = green>所以<code>man.sayHello();</code>和<code>woman.sayHello();</code>分别输出<code>man say hello</code>和<code>woman say hello</code>。</font></p>
+<p>  · 我们把这种在<strong>运行期</strong>根据<strong>方法接收者的实际类型</strong>确定方法执行版本的分派过程称为<strong>动态分派</strong>。这个过程是Java语言【<strong>方法重写</strong>】的本质。<br>  <font color = green>注：方法的接收者这里理解为<code>Human man = new Man();</code>中的man</font><br>  · 静态类型相同的对象调用重写方法，结果不同。这种多态性的根源在于虚方法调用指令invokvirtual的执行逻辑，因此我们得出的结论<font color = #F9000>只对方法有效，对字段无效</font>。因为字段不使用该指令。<br>  · 事实上，在java中只有虚方法存在，没有虚字段。即字段永远不参与多态。当子类声明了与父类相同名称的字段时，子类字段会掩蔽父类同名字段。<br>  · 哪个类的方法访问某个名字的字段时，该名字指的就是这个类能看到的那个字段<br>  <img src="https://img-blog.csdnimg.cn/20200731154558404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>  <img src="https://img-blog.csdnimg.cn/20200731154617397.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>  · Son类创建时，先隐式调用Father的构造函数。Father构造函数中对showMeTheMoney()的调用是一次<font color = #F9000>虚方法调用</font>，执行的是子类版本，而此时子类的money为0.要到子类构造函数执行时才会初始化。<br>  · Son的构造函数往后执行，对money赋值为4，调用自己的函数。<br>  · 最后一句通过静态类型访问到了父类的money，为2。</p>
+</li>
+</ul>
+<ol start="3">
+<li><p><strong>单分派与多分派</strong></p>
+<blockquote>
+<p>根据分派基于多少种宗量（方法的接收者和方法的参数）<br> 划分。单分派是根据一个宗量<font color = #F9000>对目标方法进行选择</font>，多分派则是根据多于一个宗量对目标方法进行选择。</p>
+</blockquote>
+<p> · 如今的java语言是一门<strong>静态多分派、动态单分派</strong>的语言。<br> <img src="https://img-blog.csdnimg.cn/20200731154646430.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p> main方法中调用两次hardChoice()方法。</p>
+</li>
+</ol>
+<ul>
+<li><p>首先关注编译阶段中编译器的选择过程，也就是<font color = #F9000>静态分派</font>过程。<br>  · 这时候选择目标方法的依据有两点：一是静态类型是Father还是Son，二是方法参数是QQ还是360。<br>  · 选择的最终产物：产生两条invokvirtual指令，参数分别是常量池中指向<code>Father::hardChoice(360)</code>及<code>Father::hardChoice(QQ)</code>方法的符号引用。<br>  · 这是<font color = #F9000>根据两个宗量</font>进行选择，所以Java静态分派属于多分派类型。</p>
+</li>
+<li><p>再看运行阶段中虚拟机的选择，也就是<font color = #F9000>动态分派</font>的过程。<br>  · 在执行<code>son.hardChoice(new QQ())</code>时，准确说执行这行代码所对应的invokvirtual指令时，由于编译期已经决定目标方法的签名必须为hardChoice(QQ)，这时候参数的静态类型、实际类型都对方法的选择不会产生影响。<br>  · 唯一可以影响虚拟机选择的因素只有该方法接收者的实际类型是Father还是Son。<br>  · <font color = #F9000>只有一个宗量</font>作为选择依据，所以Java动态分派属于单分派类型。</p>
+<p>  · JDK10时Java出现了var关键字，与dynamic有本质区别：<strong>var</strong>是在编译时根据声明语句中<strong>等号右侧的表达式类型</strong>来静态推断类型，本质是种<font color = green>语法糖</font>；而<strong>dynamic</strong>在编译时完全不关心类型是什么，等运行的时候再进行类型判断。<br>  · Java语言通过内置动态语言（如JavaScript）执行引擎、加强与其他JVM上动态语言交互能力的方式，来间接满足动态性的需求。<br>  · Java虚拟机层面，早在JDK7就开始提供对动态语言的方法调用的支持了，如JDK7引入了invokedynamic指令。</p>
+</li>
+</ul>
+<ol start="4">
+<li>虚拟机动态分派的实现<br> · 虚拟机不同，实现也会有区别。<br> · 动态分派的方法版本选择需要运行时，在接收者类型的方法元数据中搜索合适的目标方法。JVM基于执行性能考虑，真正运行时不会频繁反复搜索类型元数据。<br> · 一种基础而常见的优化手段：为类型在方法区中建立一个<strong>虚方法表</strong>（vtable，与之对应的，在invokeinterface执行时也会用到<strong>接口方法表</strong>——itable），使用虚方法表索引来代替元数据查找以提高性能（与直接搜索元数据相比。实际算最慢的一种分派，只在解释执行状态时使用）<br> · 虚方法表中存放着各个方法的实际入口地址。<br> · 如果某个方法在子类中没有被重写，那子类虚方法表中的入口地址和父类中该方法的入口地址相同，都指向父类的实现入口。<br> · 如果子类重写了这个方法，那子类虚方法表中的入口地址会替换成子类实现版本的入口地址。<br> · 具有相同签名的方法，在父子类的虚方法表中具有一样的索引号。<br> · 虚方法表一般在<strong>类加载的连接阶段</strong>进行初始化，准备了类的变量初始值后，虚拟机会把该类的虚拟机表一同初始化完毕。<br> <img src="https://img-blog.csdnimg.cn/20200731155250877.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ol>
+<ul>
+<li><p>如图，Son重写了父类所有方法，所以没有指向父类的箭头。但它们都没有重写Object的方法，所以都指向Object的数据类型。</p>
+<p>  · 由于java对象里面的方法默认（即不使用final修饰）为虚方法， 除了查虚方法表外，还有类型继承关系分析（Class Hierarchy Analysis，CHA）、守护内联（Guarded Inlining）、内联缓存（InlineCache）等多种非稳定的激进优化来争取更大性能空间。</p>
+</li>
+</ul>
+<h2 id="8-4-动态类型语言支持"><a href="#8-4-动态类型语言支持" class="headerlink" title="8.4 动态类型语言支持"></a>8.4 动态类型语言支持</h2><p>· JDK7增加了invokedynamic指令。<br>· 这条指令是实现动态类型语言支持而进行的改进之一，也是为JDK8顺利进行Lambda表达式做的技术储备。</p>
+<h3 id="8-4-1-动态类型语言"><a href="#8-4-1-动态类型语言" class="headerlink" title="8.4.1 动态类型语言"></a>8.4.1 动态类型语言</h3><p>· 与动态语言不同。<br>· <strong>动态类型语言</strong>的关键特征是它的类型检查的主体过程是在运行期而不是编译期进行的。例如JavaScript、Python、PHP、Ruby等语言。<br>· 相对的，在编译期就进行类型检查过程的语言，譬如c++和java等就是最常用的<strong>静态类型语言</strong>。<br>· 动态类型语言的一个核心特征：<font color = #F9000>变量无类型而变量值才有类型</font><br>· 编译与运行示例<br><img src="https://img-blog.csdnimg.cn/20200731155345835.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>上面这段java代码能正常编译，但在运行过程中会抛出<code>NegativeArraySizeException异常</code>（属于运行时异常）。</li>
+<li>运行时异常指只要代码不执行到这一行就不会出现问题</li>
+<li>· 连接时异常，例如<code>NoClassDefFoundError</code>，即使无法执行到这一句，<strong>类加载时</strong>（java的连接过程不在编译阶段，在类加载阶段）也会抛出异常。<br>  · 然而同样语义的代码在c语言的编译期就直接报错。<br>  · 因此，哪门语言哪种检查行为要在运行期进行或者在编译期进行没有必然逻辑关系。在于语言规范中的人为设立的约定。<br>· <strong>类型检查</strong>：<br><code>obj.println(&quot;hello&quot;);</code></li>
+<li>Java语言中如果obj的静态类型是一个接口（PrintStream类），那么obj的实际类型必须是实现这个接口的类，否则即使obj属于一个确实包含了这个方法相同签名方法的类型，代码依旧无法运行。类型检查不合法。</li>
+<li>JavaScript语言中，无论obj具体是何种类型，无论继承关系如何，只要这个变量所属的类确实包含有println(String)方法，能找到相同签名的方法，调用就可以成功。</li>
+<li><strong>原因</strong>：<br>  · <strong>Java语言</strong>在编译期已经将println(String)方法完整的<strong>符号引用</strong>（本例中为一项CONSTANT_InterfaceMethodref_info常量）生成出来，并作为方法调用指令的参数存储到Class文件中。<br>  · <strong>动态类型语言</strong>，变量obj本身没有类型，变量obj的值才有类型。所以编译器在编译时只能确定方法名、参数、返回值信息，而不会确定方法所在的具体类型（<strong>方法接收者不固定</strong>）<br>  注：符号引用包含该方法定义在哪个类型中，方法名，参数顺序，参数类型，方法返回值等信息。</li>
+</ul>
+<h3 id="8-4-2-Java与动态类型"><a href="#8-4-2-Java与动态类型" class="headerlink" title="8.4.2 Java与动态类型"></a>8.4.2 Java与动态类型</h3><p>java语言运行在Java虚拟机上，而许多动态类型语言现在也运行于Java虚拟机上，不过还有所欠缺。主要表现值方法调用方面：</p>
+<ul>
+<li>JDK7前的4条方法调用指令（invokevirtual、invokespecial、invokestatic、invokeinterface）的第一个参数都是被调用的方法的符号引用（CONSTANT_Methodref_info或者CONSTANT_InterfaceMethodref_info常量）。</li>
+<li>方法的符号引用在编译时产生，而动态类型语言只有在运行期才能确定方法的接收者。</li>
+<li>所以在JVM上实现动态类型语言只能“曲线救国”（如编译时留一个占位符，运行时动态生成字节码，实现具体类型到占位符类型的适配），但这样会带来额外内存开销。其中最严重的性能瓶颈是：动态类型方法调用时，由于无法确定调用对象的静态类型，而导致<strong>方法内联无法有效进行</strong>。<br>  注：方法内联是其他优化措施的基础，是十分重要的一项优化<br><img src="https://img-blog.csdnimg.cn/20200731155551787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+<li>动态类型语言下这样的代码没有问题，但即使每个元素的类型中都有sayHello()，也无法在编译优化的时候就确定具体的sayHello()代码在哪里。编译器只能不停编译每一个方法，缓存起来供运行期选择、调用、内联。如果元素过多，内联缓存压力很大，导致缓存内容不断失效和更新。</li>
+<li>这类问题应当在JVM层次上去解决。</li>
+<li>因此，JVM层面上提供动态类型的直接支持亟待解决。这就是JDK7时JSR-292提案中invokedynamic指令以及java.lang.invoke包出现的技术背景。</li>
+</ul>
+<h3 id="8-4-3-java-lang-invoke包"><a href="#8-4-3-java-lang-invoke包" class="headerlink" title="8.4.3 java.lang.invoke包"></a>8.4.3 java.lang.invoke包</h3><p>· 目的：在之前单纯依靠符号引用来确定调用目标方法以外，提供一种新的<strong>动态确定目标方法</strong>的机制，称为“<strong>方法句柄</strong>”（类比c/c++中的函数指针）<br>· 在c/c++中，可以把函数当作参数，用函数指针进行传递。java语言中无法做到，普遍做法是设计一个带有这个函数方法的接口，把接口的实现对象作为参数传递。<br>· 但拥有“方法句柄”后，Java语言也可以拥有类似函数指针这样的工具了。<br>· <strong>方法句柄和反射的区别</strong>：</p>
+<ol>
+<li>Reflection和MethodHandle机制本质上都是在模拟方法调用，但前者在模拟Java<strong>代码层次</strong>的方法调用，而后者在模拟<strong>字节码层次</strong>的方法调用。<br>在<code>MethodHandles.Lookup</code>上的3个方法findStatic()、findVirtual()、findSpecial()正是为了对应于invokestatic、invokevirtual（以及invokeinterface）和invokespecial这几条指令的执行权限校验行为，而这些底层细节使用<code>Reflection API</code>时是不需要关心的。<br>方法的作用：在指定类中查找符合给定的方法名称、方法类型，并且符合调用权限的方法句柄。</li>
+<li>Reflection中的<code>java.lang.reflect.Method对象</code>远比MethodHandle机制中的<code>java.lang.invoke.MethodHandle对象</code>所包含的信息多。<br>· 前者是方法在<font color = #F9000>java端的全面映像</font>，包含了方法的签名、描述符、方法属性表中各种属性的Java端表示方式，还有执行权限等运行期信息。（重量级）<br>· 后者仅包含执行该方法的相关信息。（轻量级）</li>
+<li>MethodHandle是对方法指令调用的模拟，所以理论上虚拟机在这方面的各种优化在其上都可以采取相同思路去支持。而反射几乎不可能。</li>
+<li>仅站在Java语言的角度，两者的效果相似。而Reflection API的设计目标是只为Java语言服务的，而MethodHandle则设计为可服务于所有Java虚拟机之上的语言。</li>
+</ol>
+<h3 id="8-4-4-invokedynamic指令"><a href="#8-4-4-invokedynamic指令" class="headerlink" title="8.4.4 invokedynamic指令"></a>8.4.4 invokedynamic指令</h3><p>· 某种意义上说，invokedynamic指令与MethodHandle机制的作用是一样的，都是为了解决原有4条“invoke<em>”指令方法分派规则完全固化在虚拟机之中的问题。把如何查找目标方法的决定权转交到程序员手上。只是后者是用上层代码和API实现，前者是用字节码和class中其他属性、常量来完成 。<br>· 每一处含有invokedynamic指令的位置都被称为“*</em>动态调用点**”。这条指令的第一个参数不再是代表方法符号引用的<code>CONSTANT_Methodref_info常量</code>，而是JDK7新加入的<code>CONSTANT_InvokeDynamic_info常量</code>。<br>· 从这个新常量中能够获得：</p>
+<ol>
+<li>引导方法<br> · 存放在新增的BootstrapMethods属性中<br> · 是固有参数<br> · 返回值是<code>java.lang.invoke.CallSite</code>对象，代表了真正要执行的目标方法调用</li>
+<li>方法类型</li>
+<li>方法名称<br>· 根据上述信息，虚拟机能找到并执行引导方法，从而获得一个CallSite对象，最终调用到要执行的目标方法上（把对象返回给invokedynamic指令，实现对目标方法的调用）<br>· 由于invokedynamic指令面向的主要服务对象是JVM上动态类型语言，因此只靠Javac，在JDK7时甚至没办法生成带有这个指令的字节码。直到JDK8引入Lambda表达式和接口默认方法后，java语言才开始享受到这个指令的好处。<br><img src="https://img-blog.csdnimg.cn/20200731155829622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ol>
+<p>Java语言中，如果要访问祖父类：输出 I am grandfather</p>
+<ol>
+<li>在JDK7 Update 9之前，可以使用方法句柄来解决问题。<br><img src="https://img-blog.csdnimg.cn/2020073115585759.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>在JDK7 Update 10开始，修正了这个逻辑，必须保证findSpecial()查找方法版本时受到访问约束（对访问控制的限制、参数类型的限制）应与使用invokespecial指令一样。因为invokespecial指令的分派逻辑是固定的，只能按照接收者的实际类型进行分派，所以修正后，输出也变为了<code>I am father</code>。</li>
+<li>在新版本的JDK中，可以通过MethodHandles.Lookup类中<code>allowedModes参数</code>来控制访问保护。虽然这个参数只是在Java类库本身使用，没开放给外部设置，不过我们可以通过反射打破限制。<br> <img src="https://img-blog.csdnimg.cn/20200731155927493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ol>
+<h2 id="8-5-基于栈的字节码解释执行引擎"><a href="#8-5-基于栈的字节码解释执行引擎" class="headerlink" title="8.5  基于栈的字节码解释执行引擎"></a>8.5  基于栈的字节码解释执行引擎</h2><p>许多JVM的执行引擎在执行Java代码时有解释执行（解释器执行）和编译执行（即时编译器产生本地代码执行）两种选择。本节中分析了<strong>概念模型</strong>下JVM<strong>解释执行</strong>字节码时，执行引擎是如何工作的。</p>
+<h3 id="8-5-1-解释执行"><a href="#8-5-1-解释执行" class="headerlink" title="8.5.1 解释执行"></a>8.5.1 解释执行</h3><p>· 大部分程序代码转换成物理机的目标代码或者是虚拟机的执行指令集之前，都需要经过以下各步骤。<br><img src="https://img-blog.csdnimg.cn/20200731160101988.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ul>
+<li>下面的那条分支，就是传统编译原理中，程序代码 -&gt; 目标机器代码的生成过程；中间那条分支，就是解释执行的过程。</li>
+<li>在执行前先进行词法分析、语法分析，把源码转化成<font color = #F9000>抽象语法树</font>（AbstractSyntax Tree，<font color = #F9000>AST</font>）。</li>
+<li>对任何一门语言实现来说，词法、语法分析以至后面的优化器，目标代码生成器，都可以选择独立于执行引擎，形成一个完整意义的编译器去实现。代表：c/c++</li>
+<li>也可以选择把其中一部分步骤（如生成AST前的步骤）实现为一个半独立的编译器。代表：Java</li>
+<li>还可以把这些步骤和执行引擎全部集中封装起来，如大多数的JavaScript执行引擎。</li>
+</ul>
+<p>· Java语言中，javac编译器完成了程序代码经过词法分析、语法分析到抽象语法树，再遍历树生成<strong>线性字节码指令流</strong>的过程。这一部分动作部分在JVM外部进行的，而解释器在虚拟机内部，所以Java程序的编译是<strong>半独立实现</strong>的。</p>
+<h3 id="8-5-2-基于栈的指令集与基于寄存器的指令集"><a href="#8-5-2-基于栈的指令集与基于寄存器的指令集" class="headerlink" title="8.5.2 基于栈的指令集与基于寄存器的指令集"></a>8.5.2 基于栈的指令集与基于寄存器的指令集</h3><p>· javac编译器输出的字节码指令流，基本上是<strong>基于栈的指令集架构</strong>（Instruction Set Architecture，<strong>ISA</strong>）。<br>注：“基本上”是因为有部分指令带有参数，而纯粹<font color = #F9000>基于栈的指令集架构</font>应该不存在显示参数（零地址指令）<br>· 基于栈的指令集架构依赖操作数栈进行工作。<br>· 基于寄存器的指令集，典型的有x86的二地址指令集，通俗讲就是目前主流PC机中物理硬件直接支持的指令集架构，依赖寄存器工作。<br>· <strong>两者区别</strong>：<br>e.g 计算“1+1”<br>基于栈的指令集：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">iconst_1</span><br><span class="line">iconst_1</span><br><span class="line">iadd</span><br><span class="line">istore_0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>两条指令连续把两个常量1压入栈后，iadd指令把栈顶的两个值出栈、相加，然后把结果放回栈顶，最后istore_0把栈顶的值放到局部变量表的第0个变量槽中。</li>
+<li>这种指令流通常不带参数，使用操作数栈中数据作为指令的运算输入，运算结果也存放到栈中。</li>
+</ul>
+<p>基于寄存器的指令集：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOV EAX, 1</span><br><span class="line">ADD  EAX, 1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>先把EAX寄存器值设为1，然后再用ADD指令把这个值加1。</li>
+<li>这种二地址指令是x86指令集中的主流，每个指令包含两个输入参数，依赖于寄存器来访问、存储数据。</li>
+</ul>
+<p>· <strong>两者比较</strong>：<br>基于栈的指令集的优点：</p>
+<ol>
+<li>基于栈的指令集主要优点是可移植。因为物理机上的寄存器是由硬件直接提供。即使是虚拟机上，也会希望把寄存器尽可能映射到物理寄存器上，获得更高性能。</li>
+<li>依赖寄存器不可避免会受到硬件的约束。如果使用栈架构的指令集，用户程序不会直接使用到这些寄存器，就可以由虚拟机实现把访问最频繁的数据（程序计数器、栈顶内存）放到寄存器中，以获得更好性能。</li>
+<li>栈架构的指令集代码更紧凑。字节码中每一个字节就代表一条指令，多地址指令集还需要存放参数。</li>
+<li>编译器实现更简单。不需要考虑空间分派问题，所需空间都在栈上操作。<br>基于栈的指令集的缺点：<br>理论上解释执行状态下的执行速度慢一些。原因：<br>1) 栈实现在内存中，频繁的栈访问，意味着频繁的内存访问。而对于处理器来说，内存始终是执行速度的瓶颈。<br>&emsp;尽管虚拟机可以采用栈顶缓存的优化方法，把最常用的操作映射到寄存器中避免直接内存访问，但解决不了本质问题。<br>2) 虽然代码紧凑，但是完成相同功能的指令数量会更多。<br>如果采用即时编译器，输出成物理机上的汇编指令流，就与虚拟机采用哪种架构无关了。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AD%97%E8%8A%82%E7%A0%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" rel="tag"># 虚拟机字节码执行引擎</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/25/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B8%83%E7%AB%A0/" rel="next" title="《深入了解Java虚拟机》第七章">
+                <i class="fa fa-chevron-left"></i> 《深入了解Java虚拟机》第七章
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/31/%E3%80%8A%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E3%80%8B%E7%AC%AC%E4%B9%9D%E7%AB%A0/" rel="prev" title="《深入了解Java虚拟机》第九章">
+                《深入了解Java虚拟机》第九章 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第八章-虚拟机字节码执行引擎"><span class="nav-text">第八章  虚拟机字节码执行引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-概述"><span class="nav-text">8.1 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-运行时栈帧结构"><span class="nav-text">8.2 运行时栈帧结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-1-局部变量表"><span class="nav-text">8.2.1 局部变量表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-2-操作数栈"><span class="nav-text">8.2.2 操作数栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-3-动态连接"><span class="nav-text">8.2.3 动态连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-4-方法返回地址"><span class="nav-text">8.2.4 方法返回地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-5-附加信息"><span class="nav-text">8.2.5 附加信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3-方法调用"><span class="nav-text">8.3 方法调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-1-解析"><span class="nav-text">8.3.1 解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-2-分派"><span class="nav-text">8.3.2 分派</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-4-动态类型语言支持"><span class="nav-text">8.4 动态类型语言支持</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-4-1-动态类型语言"><span class="nav-text">8.4.1 动态类型语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-4-2-Java与动态类型"><span class="nav-text">8.4.2 Java与动态类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-4-3-java-lang-invoke包"><span class="nav-text">8.4.3 java.lang.invoke包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-4-4-invokedynamic指令"><span class="nav-text">8.4.4 invokedynamic指令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-5-基于栈的字节码解释执行引擎"><span class="nav-text">8.5  基于栈的字节码解释执行引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-5-1-解释执行"><span class="nav-text">8.5.1 解释执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-5-2-基于栈的指令集与基于寄存器的指令集"><span class="nav-text">8.5.2 基于栈的指令集与基于寄存器的指令集</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

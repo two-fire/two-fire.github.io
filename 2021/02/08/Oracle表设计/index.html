@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Oracle表设计,事务特性," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="VIEW视图▪ 视图(view)，也称虚表,, 不占用物理空间，只有逻辑定义。▪ 视图本身的定义语句还是要存储在数据字典里的。每次使用的时候, 只是重新执行SQL。【给定一个sql语句，当每次用到的这个视图的时候，相当于把sql里面我们规定好的语句语句重新创建一下。】▪ 视图是从一个或多个实际表中获得的，这些表的数据存放在数据库中。那些用于产生视图的表叫做该视图的基表。一个视图也可以从另一个视图中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle表设计">
+<meta property="og:url" content="http://yoursite.com/2021/02/08/Oracle%E8%A1%A8%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="VIEW视图▪ 视图(view)，也称虚表,, 不占用物理空间，只有逻辑定义。▪ 视图本身的定义语句还是要存储在数据字典里的。每次使用的时候, 只是重新执行SQL。【给定一个sql语句，当每次用到的这个视图的时候，相当于把sql里面我们规定好的语句语句重新创建一下。】▪ 视图是从一个或多个实际表中获得的，这些表的数据存放在数据库中。那些用于产生视图的表叫做该视图的基表。一个视图也可以从另一个视图中">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210208163535683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-02-08T08:06:26.798Z">
+<meta property="article:modified_time" content="2021-02-28T10:43:54.557Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="Oracle表设计">
+<meta property="article:tag" content="事务特性">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210208163535683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/02/08/Oracle表设计/"/>
+
+
+
+
+
+  <title>Oracle表设计 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/08/Oracle%E8%A1%A8%E8%AE%BE%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Oracle表设计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-08T16:06:26+08:00">
+                2021-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="VIEW视图"><a href="#VIEW视图" class="headerlink" title="VIEW视图"></a>VIEW视图</h2><p>▪ 视图(view)，也称<font color='red'>虚表,</font>, 不占用物理空间，只有逻辑定义。<br>▪ 视图本身的<strong>定义语句</strong>还是要存储在<strong>数据字典</strong>里的。每次使用的时候, 只是重新执行SQL。<br><font color='red'>【给定一个sql语句，当每次用到的这个视图的时候，相当于把sql里面我们规定好的语句语句重新创建一下。】</font><br>▪ 视图是从一个或多个实际表中获得的，这些表的数据存放在数据库中。那些用于产生视图的表叫做该视图的<strong>基表</strong>。一个视图也可以从另一个视图中产生。<br><font color='red'>【比如，如果我们要查询雇员的名称和其所在部门的名称，意味着从emp表和dept表分别取出一个字段。这两个字段位于两张表，如果想组合进行使用的时候，可以把它定义成一个视图，下一次要查询的时候优先从这两张表里面做一个查询，查完后再进行一个实际操作】</font><br>▪ 视图的定义存在数据库中，与此相关的数据并不存在数据库中。通过视图看到的数据存放在基表中。<br>▪ 当通过视图修改数据时，实际上是在改变基表中的数据；相反地，基表数据的改变也会自动反映在由基表产生的视图中。由于逻辑上的原因，有些Oracle视图可以修改对应的基表，有些则不能（仅仅能查<br>询）。<br><font color='red'>【如果是只读视图，就不会修改基表的数据】</font></p>
+<blockquote>
+<p><font color='purple'><strong>物化视图</strong></font>：&lt;fontcolor=’red’&gt;只在Oracle中有。</font>会占用物理空间。如果基表中的数据更改了，视图中的数据也会更改，但是，它的更改是分两种方式的：<br>1.On DEMAND 仅在物化视图“需要”被刷新了，才进行刷新<br>2.ON COMMIT 一旦基表提交了数据，立刻刷新物化视图</p>
+</blockquote>
+<h3 id="创建视图"><a href="#创建视图" class="headerlink" title="创建视图"></a>创建视图</h3><p>复杂的时候创建才有意义。<br><strong>语法</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">OR</span> <span class="keyword">REPLACE</span>] <span class="keyword">VIEW</span> <span class="keyword">view</span></span><br><span class="line">[(<span class="keyword">alias</span>[, <span class="keyword">alias</span>]...)]</span><br><span class="line"><span class="keyword">AS</span> subquery</span><br><span class="line">[<span class="keyword">WITH</span> <span class="keyword">READ</span> <span class="keyword">ONLY</span>];</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--创建视图</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">view</span> v_emp <span class="keyword">as</span> <span class="keyword">select</span> * <span class="keyword">from</span> emp <span class="keyword">where</span> deptno=<span class="number">30</span>;</span><br></pre></td></tr></table></figure>
+<p><font color='orange'>注：普通用户第一次使用，提示没有权限，要使用管理员去修改权限。只有在授权视图后才能创建成功。</font></p>
+<h4 id="授权视图"><a href="#授权视图" class="headerlink" title="授权视图"></a>授权视图</h4><p>在cmd中登录管理员权限进行授权。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Users</span>\<span class="title">Lenovo</span>&gt; <span class="title">sqlplus</span> /<span class="title">nolog</span></span></span><br><span class="line"><span class="function"><span class="title">SQL</span>&gt; <span class="title">conn</span> <span class="title">sys</span>/<span class="title">bjmsb</span>@<span class="title">orcl</span> <span class="title">as</span> <span class="title">sysdba</span>;</span></span><br><span class="line"><span class="function">已连接。</span></span><br><span class="line"><span class="function"><span class="title">SQL</span>&gt; <span class="title">grant</span> <span class="title">create</span> <span class="title">view</span> <span class="title">to</span> <span class="title">scott</span>;</span></span><br><span class="line"><span class="function">授权成功。</span></span><br></pre></td></tr></table></figure>
+<p>撤销权限<code>SQL&gt; revoke create view from scott;</code></p>
+<h3 id="使用视图"><a href="#使用视图" class="headerlink" title="使用视图"></a>使用视图</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> v_emp;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> v_emp(empno,ename) <span class="keyword">values</span>(<span class="number">1111</span>,<span class="string">'zhangsan'</span>);</span><br><span class="line"><span class="comment">--当前查询的时候，只在当前会话里有效，如果用另外一个会话查询的话，你根本查不到</span></span><br><span class="line"><span class="comment">--下面查得到，在cmd中登录sql命令行查询查不到</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> emp;</span><br></pre></td></tr></table></figure>
+<p>向视图中添加数据,执行成功后，需要提交事务，绿色表示<strong>提交事务</strong>，红色表示<strong>回滚事务</strong>，让数据恢复原状态。<br><img src="https://img-blog.csdnimg.cn/20210208163535683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" width=60% height=60% align=center></p>
+<h3 id="只读视图"><a href="#只读视图" class="headerlink" title="只读视图"></a>只读视图</h3><p>如果定义的视图是非只读视图的话，可以通过视图向表中插入数据；如果是只读视图，则不可以插入数据。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">view</span> v_emp2 <span class="keyword">as</span> <span class="keyword">select</span> * <span class="keyword">from</span> emp <span class="keyword">with</span> <span class="keyword">read</span> <span class="keyword">only</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> v_emp2;</span><br><span class="line"><span class="comment">--只读视图只提供查询的需求，无法进行增删改操作</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> v_emp2(EMPNO,ename) <span class="keyword">values</span>(<span class="number">1234</span>,<span class="string">'lisi'</span>);<span class="comment">--失败</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>视图</strong><br>▪ 在查询时，不需要再写完全的Select查询语句，只需要简单的写<br>上从视图中查询的语句就可以了.<br>▪ 当视图不再需要的时候，用“drop view” 撤销。删掉视图<font color='orange'>不会导致数据的丢失</font>，因为视图是基于数据库的表之上的一个查询定义。<br>&emsp;如果是<strong>物化视图</strong>，删除的也是对应物化视图的那份数据，不是我们原来基表里面的数据，没有影响。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> <span class="keyword">view</span> v_emp2;</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改视图对应基表数据"><a href="#修改视图对应基表数据" class="headerlink" title="修改视图对应基表数据"></a>修改视图对应基表数据</h3><p><strong>修改数据</strong>：<br>UPDATE view_name SET …<br>▪ 若一个视图依赖于多个基本表, 则<strong>一次修改</strong>该视图只能修改<strong>一个基本表</strong>的数据</p>
+<p><strong>删除数据</strong>:<br>delete from view_name where …<br>▪ 同样, 当视图依赖多个基表时, 不能使用此语句来删除基表中的数据，只能删除依赖一个基表的数据。<br>注：只是提供了这种操作而已，<strong>平时不要通过视图来修改和删除数据！</strong>没有意义。</p>
+<p><strong>例子</strong>：<br>我们要求平均薪水的等级最低的部门，它的部门名称是什么，我<br>们完全使用子查询。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">--1.求平均薪水</span><br><span class="line">select e.deptno,avg(sal) from emp e group by e.deptno;</span><br><span class="line">--2.求平均薪水的等级</span><br><span class="line">select t.deptno, sg.grade gd</span><br><span class="line">  from salgrade sg</span><br><span class="line">  join (select e.deptno, avg(sal) vsal from emp e group by e.deptno) t</span><br><span class="line">    on t.vsal between sg.losal and sg.hisal;</span><br><span class="line">--3.求平均薪水的等级最低的部门</span><br><span class="line">select min(t.gd) </span><br><span class="line">  from (select t.deptno, sg.grade gd</span><br><span class="line">          from salgrade sg</span><br><span class="line">          join (select e.deptno, avg(sal) vsal from emp e group by e.deptno) t</span><br><span class="line">            on t.vsal between sg.losal and sg.hisal) t</span><br><span class="line">    </span><br><span class="line">--4.求平均薪水的等级最低的部门的部门名称</span><br><span class="line">select d.dname, d.deptno</span><br><span class="line">  from dept d</span><br><span class="line">  join (select t.deptno, sg.grade gd</span><br><span class="line">          from salgrade sg</span><br><span class="line">          join (select e.deptno, avg(sal) vsal from emp e group by e.deptno) t</span><br><span class="line">            on t.vsal between sg.losal and sg.hisal) t</span><br><span class="line">    on t.deptno &#x3D; d.deptno</span><br><span class="line"> where t.gd &#x3D;</span><br><span class="line">       (select min(t.gd)</span><br><span class="line">          from (select t.deptno, sg.grade gd</span><br><span class="line">                  from salgrade sg</span><br><span class="line">                  join (select e.deptno, avg(sal) vsal</span><br><span class="line">                         from emp e</span><br><span class="line">                        group by e.deptno) t</span><br><span class="line">                    on t.vsal between sg.losal and sg.hisal) t)</span><br></pre></td></tr></table></figure>
+<p>查看sql能够发现，sql中有很多重复的sql子查询，可以通过视图将重复的语句抽象出来。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--创建视图</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">view</span> v_deptno_grade <span class="keyword">as</span> <span class="keyword">select</span> t.deptno, sg.grade gd</span><br><span class="line">          <span class="keyword">from</span> salgrade sg</span><br><span class="line">          <span class="keyword">join</span> (<span class="keyword">select</span> e.deptno, <span class="keyword">avg</span>(sal) vsal <span class="keyword">from</span> emp e <span class="keyword">group</span> <span class="keyword">by</span> e.deptno) t</span><br><span class="line">            <span class="keyword">on</span> t.vsal <span class="keyword">between</span> sg.losal <span class="keyword">and</span> sg.hisal;</span><br><span class="line"><span class="comment">--使用视图替换</span></span><br><span class="line"><span class="keyword">select</span> d.dname, d.deptno</span><br><span class="line">  <span class="keyword">from</span> dept d</span><br><span class="line">  <span class="keyword">join</span> v_deptno_grade t</span><br><span class="line">    <span class="keyword">on</span> t.deptno = d.deptno</span><br><span class="line"> <span class="keyword">where</span> t.gd = (<span class="keyword">select</span> <span class="keyword">min</span>(t.gd) <span class="keyword">from</span> v_deptno_grade t)</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：公司中如果只使用一次就不需要使用视图，而多次使用的才会创建视图，不需要用完就删。</p>
+<h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><ol>
+<li>创建用户<br>语法：create user username identified by password<br>红色字体为用户名密码。<br>create user bjmsb identified by bjmsb;</li>
+<li>查看用户是否创建<br>SQL&gt;select username from dba_users;</li>
+</ol>
+<p><strong>创建</strong>好后不能直接登录会话。因为还没有<strong>授权</strong>。</p>
+<h3 id="用户授权"><a href="#用户授权" class="headerlink" title="用户授权"></a>用户授权</h3><p><strong>账户授权语法</strong>：<br>grant privileges [ON object_name] to username<br>将权限privileges授予用户username<br><code>SQL&gt;grant create session to John;</code><br>【授权：连接权限】</p>
+<p><strong>登录</strong>：<br><code>SQL&gt;conn John/johnpsw@test;</code></p>
+<p>将scott用户的emp表所有权限授予John，则使用下列命令：<br><code>SQL&gt;grant all on scott.emp to John;</code><br><code>select * from scott.emp</code><br>如果要<strong>收回</strong>授予用户John的scott用户表emp的所有权限，使用下列SQL语句：<br><code>SQL&gt;revoke all on scott.emp from John;</code></p>
+<h3 id="修改用户密码"><a href="#修改用户密码" class="headerlink" title="修改用户密码"></a>修改用户密码</h3><p>将John用户的口令修改为 newpsw。<br><code>SQL&gt; alter user John identified by newpsw;</code></p>
+<p><strong>删除用户</strong><br>使用drop user删除用户，关键字cascade删除用户模式中包含的数据对象</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">删除用户John，并同时删除John拥有的所有表、索引等对象。</span><br><span class="line">切换为system账户登录：</span><br><span class="line">SQL&gt; conn system/test123@test</span><br><span class="line">删除John操作：</span><br><span class="line">SQL&gt; drop user John cascade;</span><br><span class="line">测试John是否存在</span><br><span class="line">SQL&gt; conn John/newpsw@test;</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看自己的权限"><a href="#查看自己的权限" class="headerlink" title="查看自己的权限"></a>查看自己的权限</h3><p>select * from user_sys_privs;</p>
+<h3 id="序列sequence"><a href="#序列sequence" class="headerlink" title="序列sequence"></a>序列sequence</h3><p>序列是oracle专有的对象，用来产生一个自动递增的序列<br>create sequence seq_name<br>increment by n 每次增长n<br>start with n 从哪个值开始增长<br>maxvalue n|nomaxvalue 10^27 or -1 最大值<br>minvalue n|no minvalue 最小值<br>cycle|nocycle 是否有循环<br>cache n|nocache 是否有缓存<br>如果有缓存，就可以把一些序列值先存到缓存里面，下次用的时候直接用就行了，不至于做一个操作每次再递增一次。</p>
+<p><strong>序列的使用：</strong><br>序列.nextval –&gt;下个值</p>
+<p><strong>查看序列状态</strong>：<br>序列.currval –&gt; 当前值</p>
+<p><strong>注意</strong>：如果创建好序列之后没有经过任何的使用，那么不能获取当前的值。<font color='orange'>必须先执行nextval才能获取当前的值</font></p>
+<p><strong>删除序列</strong>:<br>drop sequence 序列名;</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--创建</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">sequence</span> my_sequence</span><br><span class="line"><span class="keyword">increment</span> <span class="keyword">by</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">start</span> <span class="keyword">with</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--如何使用？</span></span><br><span class="line"><span class="comment">--查看当前序列的值</span></span><br><span class="line"><span class="keyword">select</span> my_sequence.currval <span class="keyword">from</span> dual;</span><br><span class="line"><span class="comment">--获取序列的下一个值</span></span><br><span class="line"><span class="keyword">select</span> my_sequence.nextval <span class="keyword">from</span> dual;</span><br><span class="line"></span><br><span class="line"><span class="comment">--emp表中插入一条记录，empno为自增序列</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> emp(empno,ename) <span class="keyword">values</span>(my_sequence.nextval,<span class="string">'hehe'</span>);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> emp;</span><br><span class="line"></span><br><span class="line"><span class="comment">--删除序列</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">sequence</span> my_sequence;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SQL数据更新"><a href="#SQL数据更新" class="headerlink" title="SQL数据更新"></a>SQL数据更新</h3><p>DML:数据操作语言<br>▪ Sql的数据更新包括数据<strong>插入</strong>、<strong>删除</strong>和<strong>修改</strong>3个操作<br>▪ 在实际项目中，使用最多的是读取操作，但是插入数据和删除数据同等重要，而修改操作相对较少</p>
+<h4 id="Insert语句"><a href="#Insert语句" class="headerlink" title="Insert语句"></a>Insert语句</h4><p>插入操作有两种方式：<br>1、元组值的插入，最基本的插入方式<br>2、查询结果的插入</p>
+<p>▪ 如果有一个集合的数据，把集合中的所有数据都挨条插入的话，效率很低。</p>
+<p><strong>一、元组值的插入语法</strong>如下：<br>1、如果表名后没有列，那么只能将所有的列都插入<br>&emsp;insert into tablename values(val1,val2,…);<br>2、可以指定向哪些列中插入数据<br>&emsp;insert into tablename(col1,col2,…) values(val1,val2,…);</p>
+<p>▪ 向部分列插入数据的时候，不是想向哪个列插入就插入的，要遵循创建表的时候定义的规范。要求省略的列必须满足下面的条件：<br>&emsp;① 该列定义为允许Null值。<br>&emsp;② 在表定义中给出默认值，这表示如果不给出值，将使用默认值。<br>如果不符合上面两个条件，将会报错。不能成功插入。</p>
+<p><strong>二、</strong>可以用insert语句把一个select语句的<strong>查询结果插入</strong>到一个基本表中，<strong>语法</strong>如下：<br>insert into tablename(col,..) select * from tablename2</p>
+<p><strong>例子</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> emp <span class="keyword">values</span>(<span class="number">2222</span>,<span class="string">'haha'</span>,<span class="string">'clerk'</span>,<span class="number">7902</span>,<span class="keyword">to_date</span>(<span class="string">'2019-11-2'</span>,<span class="string">'yyyy-mm-dd'</span>),<span class="number">1000</span>,<span class="number">500</span>,<span class="number">10</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> emp(empno,ename) <span class="keyword">values</span>(<span class="number">3333</span>,<span class="string">'wangwu'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">--创建表的其他方式</span></span><br><span class="line"><span class="comment">--复制表同时复制表数据，不会复制约束</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> emp2 <span class="keyword">as</span> <span class="keyword">select</span> * <span class="keyword">from</span> emp; <span class="comment">--有数据</span></span><br><span class="line"><span class="comment">--复制表结构但是不复制表数据，不会复制约束</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> emp3 <span class="keyword">as</span> <span class="keyword">select</span> * <span class="keyword">from</span> emp <span class="keyword">where</span> <span class="number">1</span>=<span class="number">2</span>;<span class="comment">--无数据</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="DELETE语句"><a href="#DELETE语句" class="headerlink" title="DELETE语句"></a>DELETE语句</h4><p>从基本表中删除满足条件表达式的元组。</p>
+<blockquote>
+<p>元组，一组里面多个值</p>
+</blockquote>
+<p><strong>语法</strong>：<br>delete from tablename [where condition]</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--删除满足条件的数据</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> emp2 <span class="keyword">where</span> deptno=<span class="number">10</span>;</span><br><span class="line"><span class="comment">--把整张表的数据全部清空</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> emp2;</span><br><span class="line"><span class="comment">--truncate</span></span><br><span class="line"><span class="keyword">truncate</span> <span class="keyword">table</span> emp2;</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：<br>truncate跟delete不同，delete在进行删除的时候经过事务，而truncate不经过事务，一旦删除就是永久删除，不会回滚。效率高，但易发生误操作，不建议使用。</p>
+<h4 id="UPDATE语句"><a href="#UPDATE语句" class="headerlink" title="UPDATE语句"></a>UPDATE语句</h4><p>可以修改满足条件的一个列或者是多个列。<br><strong>语法</strong>：<br>update tablename set co1 = val1, col2 = val2 where condition;</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--可以更新单列</span></span><br><span class="line"><span class="keyword">update</span> emp <span class="keyword">set</span> ename ename=<span class="string">'heihei'</span> <span class="keyword">where</span> ename=<span class="string">'hehe'</span>;</span><br><span class="line"><span class="comment">--可以更新多列的值</span></span><br><span class="line"><span class="keyword">update</span> emp <span class="keyword">set</span> job=<span class="string">'teacher'</span>,mgr=<span class="number">7902</span> <span class="keyword">where</span> empo=<span class="number">15</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="事务处理"><a href="#事务处理" class="headerlink" title="事务处理"></a>事务处理</h3><p><strong>一、事务</strong><br>▪ 增删改是数据库常用操作，在进行操作的时候都需要（事务）的保证，也就是说每次在plsql中执行sql语句之后都需要完成<strong>commit操作</strong>，所以事务变得非常关键。<br>▪ 最主要的<strong>目的</strong>是：最终为了保证数据一致性。<br>▪ 如果同一份数据，在同一时刻只能有一个人访问，就不会出现数据错乱的问题，但是在现在的项目中，更多的是并发访问，并发访问的同时带来的就是数据不安全，也就是不一致。<br>▪ 如果要保证数据的安全，最主要的方式就是加锁的方式，MVCC<br>▪ 事务的延伸：<br>&emsp;最基本的数据库事务<br>&emsp;声明式事务<br>&emsp;分布式事务<br>▪ 为了提高效率，有可能多个操作会在同一个事务中执行，那么就有可能部分成功，部分失败，基于这样的情况就需要<strong>事务的控制</strong>。<br>select * from emp where id=7902 for update<br>select * from emp where id=7902 lock in share mode<br>▪ 如果不保证事务的话，会造成脏读，不可重复读，幻读。</p>
+<p><strong>事务</strong>（Transaction）是一个操作序列。这些操作要么都做要么都不做。是数据库环境中的<strong>逻辑工作单位</strong>。<br>▪ 事务是为了保证数据库的完整性。<br>▪ 事务<font color='red'>不能嵌套。</font><br>比如转账操作，先从A卡里扣1000块，B卡中再增加1000块。所以等于一个操作里面有两个sql语句。其实实际过程中，可能包含n条语句。如果某一条语句失败，那么前面的语句必须进行一个回滚，回到原来的状态。所以必须要保证n条语句的绑定。这几条操作，合起来就被称为一个<strong>事务</strong>。<br>▪ 在oracle中，<font color='purple'>没有事务开始的语句</font>。一个Transaction起始于一条<br>DML(Insert、Update和Delete )语句，<font color='red'><strong>结束于</strong></font>：<br>&emsp;1、正常commit（使数据修改生效）或者rollback（将数据恢复到上一个状态）<br>&emsp;2、自动提交，但是一般情况下要将自动提交自动关闭，效率太低<br>&emsp;3、用户关闭，会话后会自动提交事务。例如退出scott时候，会将执行的语句提交<br>&emsp;4、系统崩溃或断电时事务自动回滚事务，将数据恢复到上一个状态</p>
+<p><strong>二、commit&amp;&amp;rollback</strong><br><strong>commit</strong>：表示事务成功地结束，此把数据永久写到文件。<br>&emsp;▪ 数据以前的状态永久性丢失<br>&emsp;▪ 所有的用户都能看到操作后的结果<br>&emsp;▪ 记录锁被释放，其他用户可以操作这些记录<br><strong>rollback</strong>：表示事务不成功的结束，把<strong>缓存区</strong>的数据进行清除，恢复到数据以前的状态。<br>&emsp;▪ 行级锁被释放</p>
+<blockquote>
+<p><strong>锁的机制</strong>：<br>为了解决并发访问的时候，数据不一致的问题，需要给数据加锁<br>加锁的同时需要考虑《粒度》的问题：<br>&emsp;<strong>操作的对象</strong><br>&emsp;&emsp;数据库<br>&emsp;&emsp;表<br>&emsp;&emsp;行<br>一般情况下，锁的粒度越细，效率越高；粒度越粗，效率越低<br>在实际工作环境中，大部分操作都是行级锁</p>
+</blockquote>
+<p>▪ 它们都是另一个事务的开始。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--可以sql命令提交/回滚，也可以按键提交/回滚</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> emp(empno,ename) <span class="keyword">values</span>(<span class="number">1111</span>,<span class="string">'zhangsan'</span>);</span><br><span class="line"><span class="comment">--commit;</span></span><br><span class="line"><span class="comment">--rollback;</span></span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>当前结果会提交到当前会话的一个缓冲区里面，commit之后，才会提交到某一个文件数据中。所以运行后当前会话可以查看到，但是别的会话不可以。</p>
+<p><strong>三、savepoint 保存点</strong><br>当一个操作集合中包含多条sql语句，但是只想让其中某部分成功，某部分失败，此时可以使用保存点。<br>此时如果需要回滚到某一个状态的话，使用<code>rollback to 保存点名称;</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--前两条sql语句成功执行提交，回退到删除1234这一条语句前，也就是这一条语句执行失败。</span></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> emp <span class="keyword">where</span> empno=<span class="number">1111</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> emp <span class="keyword">where</span> empno=<span class="number">2222</span>;</span><br><span class="line"><span class="keyword">savepoint</span> sp1;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> emp <span class="keyword">where</span> empno=<span class="number">1234</span>;</span><br><span class="line"><span class="keyword">rollback</span> <span class="keyword">to</span> sp1;</span><br><span class="line"><span class="keyword">commit</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>四、事务的四个特性：ACID</strong><br>1、<strong>原子性</strong>（Atomicity）：不可分割，一个操作集合要么全部成功，要么全部失败，不可拆分。<br>2、<font color='red'><strong>一致性</strong></font>（Consistency）：为了保证数据的一致性，当经过n多个操作之后，数据的状态不会改变。从一个一致性状态到另一个一致性状态，也就是数据不可以发生错乱。<br>例如，转账业务最终金额总数不会变化<br>3、<font color='purple'><strong>隔离性</strong>（Isolation）</font>：各个事务之间相关不会产生影响。（隔离级别）<br>严格的隔离性会导致效率降低，在某些情况下，为了提高程序的执行效率，需要降低隔离级别。<br>&emsp;<strong>隔离级别</strong>：<br>&emsp;&emsp;读未提交<br>&emsp;&emsp;读已提交<br>&emsp;&emsp;可重复读<br>&emsp;&emsp;序列化<br>&emsp;<strong>数据不一致的问题</strong>：<br>&emsp;&emsp;脏读<br>&emsp;&emsp;不可重复读<br>&emsp;&emsp;幻读<br>4、<strong>持久性</strong>（Durability）：所有数据的修改都必须要持久化到达存储介质中，不会因为应用程序的关闭而导致数据丢失。</p>
+<p>四个特性中，哪个是<strong>最关键</strong>的？<br>▪ 四个特性都是为了保证数据的一致性，所以<font color='red'><strong>一致性</strong></font>是最终的追求。<br>▪ 事务中的一致性是通过原子性、隔离性、持久性来保证的。</p>
+<h4 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h4><p>在同一个事务里面，不管你读了多少次数据，你的数据应该是一致的。<br>具体看《Mysql事务测试》</p>
+<h4 id="常用数据类型"><a href="#常用数据类型" class="headerlink" title="常用数据类型"></a>常用数据类型</h4><ol>
+<li><strong>number</strong>(x,y) ：数字类型 ，最长x位，y位小数<br>&emsp;▪ Java中byte，short，long，int，float，double，boolean -&gt; number</li>
+<li><strong>varchar2</strong>（maxlength）：变长字符串,这个参数的上限是32767字节<br>&emsp;▪ 声明方式如下VARCHAR2（L），L为字符串长度，没有缺省值，作为变量最大32767个字节</li>
+<li><strong>char</strong>(max_length) 定长字符串 最大2000字节</li>
+<li><strong>DATE</strong>:日期类型 (只能精确到秒。)</li>
+<li><strong>TIMESTAMP</strong>:时间戳 (精确到微秒)</li>
+<li><strong>long</strong>：长字符串，最长2GB<br>但没有人会往数据库里面放入2GB的数据，IO和性能是最大瓶颈。更多情况下会单独建一个图片服务器，而数据库里面只存放对应的路径即可。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Oracle%E8%A1%A8%E8%AE%BE%E8%AE%A1/" rel="tag"># Oracle表设计</a>
+          
+            <a href="/tags/%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7/" rel="tag"># 事务特性</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/06/%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2/" rel="next" title="关联查询">
+                <i class="fa fa-chevron-left"></i> 关联查询
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/02/09/Mysql%E4%BA%8B%E5%8A%A1%E6%B5%8B%E8%AF%95/" rel="prev" title="Mysql事务测试">
+                Mysql事务测试 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">120</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#VIEW视图"><span class="nav-text">VIEW视图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建视图"><span class="nav-text">创建视图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#授权视图"><span class="nav-text">授权视图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用视图"><span class="nav-text">使用视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#只读视图"><span class="nav-text">只读视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改视图对应基表数据"><span class="nav-text">修改视图对应基表数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户管理"><span class="nav-text">用户管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户授权"><span class="nav-text">用户授权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改用户密码"><span class="nav-text">修改用户密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看自己的权限"><span class="nav-text">查看自己的权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序列sequence"><span class="nav-text">序列sequence</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL数据更新"><span class="nav-text">SQL数据更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Insert语句"><span class="nav-text">Insert语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DELETE语句"><span class="nav-text">DELETE语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UPDATE语句"><span class="nav-text">UPDATE语句</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务处理"><span class="nav-text">事务处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#隔离级别"><span class="nav-text">隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用数据类型"><span class="nav-text">常用数据类型</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
