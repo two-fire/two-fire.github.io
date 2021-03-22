@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="hexo," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="案例http协议的方法：get、put协议：网络中数据交换而建立的规则。字符串怎么封装等一些规定 123# exec 9&lt;&gt; &#x2F;dev&#x2F;tcp&#x2F;www.baidu.com&#x2F;80# echo -e &quot;GET &#x2F; HTTP&#x2F;1.0\n&quot; 1&gt;&amp; 9# cat 0&lt;&amp; 9 exec 文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="互联网通信原理">
+<meta property="og:url" content="http://yoursite.com/2021/03/15/%E4%BA%92%E8%81%94%E7%BD%91%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="案例http协议的方法：get、put协议：网络中数据交换而建立的规则。字符串怎么封装等一些规定 123# exec 9&lt;&gt; &#x2F;dev&#x2F;tcp&#x2F;www.baidu.com&#x2F;80# echo -e &quot;GET &#x2F; HTTP&#x2F;1.0\n&quot; 1&gt;&amp; 9# cat 0&lt;&amp; 9 exec 文">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021031519183481.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210315195252975.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210315200151419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210315215348950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210315220805924.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210315222051637.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210315224530581.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-03-15T13:22:12.563Z">
+<meta property="article:modified_time" content="2021-03-16T14:29:07.194Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2021031519183481.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/03/15/互联网通信原理/"/>
+
+
+
+
+
+  <title>互联网通信原理 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/15/%E4%BA%92%E8%81%94%E7%BD%91%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">互联网通信原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-15T21:22:12+08:00">
+                2021-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index">
+                    <span itemprop="name">硬件基础知识</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A1%AC%E4%BB%B6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E9%80%9A%E4%BF%A1%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index">
+                    <span itemprop="name">通信网络</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>http协议的方法：get、put<br>协议：网络中数据交换而建立的规则。字符串怎么封装等一些规定</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># exec 9&lt;&gt; &#x2F;dev&#x2F;tcp&#x2F;www.baidu.com&#x2F;80</span><br><span class="line"># echo -e &quot;GET &#x2F; HTTP&#x2F;1.0\n&quot; 1&gt;&amp; 9</span><br><span class="line"># cat 0&lt;&amp; 9</span><br></pre></td></tr></table></figure>
+<p><code>exec</code> 文件重定向  把9绑定socket<br><code>9</code>：文件描述符<br><code>&lt;&gt;</code> 输入输出<br>/dev/tcp/<a href="http://www.baidu.com/80：linux中一切皆文件" target="_blank" rel="noopener">www.baidu.com/80：linux中一切皆文件</a></p>
+<p>1）首先将9（client）和百度（server）建立连接<br>2）应用某种协议，比如上面用到http协议<br>【连接建立到真正传输数据，如果时间间隔太长，会报错】</p>
+<blockquote>
+<p>常识：连接不会断开，一般互联网服务器会有超时【已经建立连接，但是你不说话就断开了】</p>
+</blockquote>
+<h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h3><p>应用程序如果想要和别人建立连接传输数据的话，自己要准备一些协议，http、ftp、ssh…按下回车键的那刻，都属于应用层范围。你只要遵循协议就可以了。比如http超文本传输协议，就是允许html文本从服务器传递到客户端。</p>
+<h4 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h4><p>真正的连接不是应用层建立的，是应用层调用内核（也就是下面的层次）。真正建立传输是要从传输控制层往下调。</p>
+<h3 id="传输控制层"><a href="#传输控制层" class="headerlink" title="传输控制层"></a>传输控制层</h3><p>为啥叫<strong>传输控制</strong>？上层软件想和百度建立连接，你先别动，传输控制层帮你去控制传输这个过程。<br>也就是说：客户端这边的传输控制层会产生一个数据包，这个数据包（syn）会发给服务器，<br>这时候服务器会给客户端返回一个数据包（syn + ack），<br>然后客户端再返回一个数据包（ack）</p>
+<h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><p><font color='red'><strong>通信传输是双向的</strong></font>，有输出有输入。发出去了，对方给了一个回复确认，代表了面向我的输出、输入到服务端是通的；<br>但是站在服务端，服务端为了确保自己的输出是通的，需要得到一个回复数据包。</p>
+<p>当双方完成握手之后，双方的操作系统才会开辟资源，且这个资源主要是为对方提供服务的。这时候的连接是虚无的，主要是双方服务器里面的事情。连接更应该是双方资源开辟的过程，守候对方到来。<br><font color='red'><strong>有资源的开辟才是连接</strong>。</font></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># netsta -natp</span><br></pre></td></tr></table></figure>
+<p>会显示一张表，显示和别人通信的情况。<br><img src="https://img-blog.csdnimg.cn/2021031519183481.png" alt="在这里插入图片描述"><br>端口号：65535个</p>
+<h5 id="端口号问题"><a href="#端口号问题" class="headerlink" title="端口号问题"></a>端口号问题</h5><p><strong>有Id了为什么还要有端口号？</strong><br>寻址主机通过IP<br>通信：程序的通信。<br>不同的传输协议可以使用相同的端口号，只要端口一致，都将分配给同一种程序处理。但处理不会相互影响。</p>
+<p>一个进程可以启动多个，进程id号是不固定的。所以操作系统中维护了一套端口号，来区分不同的进程。比如一个主机启动了两个Tomcat，一台抢到了端口号8080，另一台只能抢别的，假设8081。</p>
+<p><strong>问题二、</strong><br><img src="https://img-blog.csdnimg.cn/20210315195252975.png" alt="在这里插入图片描述"><br>如果有一个主机A，启动了tomcat，然后它申请了8080的端口。</p>
+<ol>
+<li>如果有3个进程在不同的主机里，每个客户端都连接了这台服务器，那么这个主机A上要消耗多少个端口号？<br>服务端A只会消耗1个8080。每个客户端一般会随机生成一个端口号。</li>
+<li>如果这三个进程在一个主机里【也就是说，起了3个客户端程序】，然后访问A中那一个服务8080（打开3个窗口百度查不同的东西）。<br>因为这三个进程不能申请到相同的端口号，所以端口号消耗数为3。</li>
+</ol>
+<p>如何保证每次页面刷新的时候，三个页面返回不同的所请求的东西，不会乱？隔离这件事怎么完成的？<br><font color='red'><strong>Socket完成</strong></font><br>        socket： ip+port ip+port<br>每一个套接字是独立的，是隔离的。这样就可以区分开了。</p>
+<p>sshd进程无论有多少个，只消耗了一个端口号22。也就是说，服务端只会消耗一个端口号。这一个其实就是描述的是当前的标签页和服务端这个连接。<br>如果我们在虚拟机中再开一个node，想当于打开两个页面寻求一个服务。<code>netstate -natp</code>显示通信情况：<br>150.1：windows系统 客户端<br>150.11：Linux 服务端<br><img src="https://img-blog.csdnimg.cn/20210315200151419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>当端口号分配完了，再来一个程序就申请不了了。所以从资源重复利用角度，如果不想通信的时候，一定要断开连接，释放资源。</p>
+<h4 id="四次分手"><a href="#四次分手" class="headerlink" title="四次分手"></a>四次分手</h4><ol>
+<li>A–&gt;B：fin       想断开</li>
+<li>B–&gt;A：fin + ack 确认，回复我听见了</li>
+<li>B–&gt;A：fin       我也想断开</li>
+<li>A–&gt;B：ack       确认</li>
+</ol>
+<p>过一个随机时间，两者把资源释放，结束。<br>如果三次分手，可能造成一端已经释放了资源，另一端没有。</p>
+<h5 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h5><p><strong>面向连接的</strong>、<strong>可靠的</strong>传输协议。</p>
+<p><strong>面向连接</strong>的意思就是：三次握手之后，到开辟资源，这个连接就有了。</p>
+<blockquote>
+<p><strong>扩展</strong>：如果在开发中，和别人通信建立完了连接，但你们双方十年之内没有给双方发送数据包，这时候突然要发，连接还是有效的吗？<br>认为连接是有效的，但是有可能在这期间，有可能网络已经断掉了。所以这时候一旦通信，是不通的（未知通信状态）！所以这也证明连接是虚无的，没有物理连接。<br>心跳机制：隔一段时间互发数据包</p>
+</blockquote>
+<h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h3><p>传输控制层的三次握手，就马上发出去了数据包吗？不是，还要往下调网络层。<br>也就是发给谁，怎么把包从什么地方发出去，就是网络层管理的。传输控制层只考虑我是该发syn包，还是断开包等。但是包怎么走，还是由<strong>网络层</strong>规划。</p>
+<p>网络层：本机ip和对端ip的书写。</p>
+<blockquote>
+<p>互联网:由很多局域网相互连接后，组成了互联网</p>
+</blockquote>
+<h4 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h4><p><strong>域名解析</strong>：一个主机如果拿出来了一个字符串表锁示它的域名，但是那是字符串，通信的时候肯定是使用ip的，那么一般会找这个地址所在的服务器（<strong>Domain Name System，域名系统</strong>），把字符串交给它，它可以给你返回对应注册的IP地址，你就能通信了。这就叫做域名解析。</p>
+<p>打开ifcfg-eth0（以太网接口配置）<br><img src="https://img-blog.csdnimg.cn/20210315215348950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>两个<code>.</code>之间是一个字节（8位2进制，0~255）<br>掩码与ip地址做按位与，最后得到192.168.150.0，就是这台主机所在的局域网的名字【<font color='red'><strong>网络号</strong></font>】。11是在这个局域网中的【<font color='red'><strong>主机号</strong></font>】。<br><strong>掩码</strong>就是为了卡出归属的网络。</p>
+<blockquote>
+<p>IO设备是毫秒级，内存是纳秒级。 CPU比内存还要快一些。</p>
+</blockquote>
+<p><strong>网关</strong>就是条目可以去的位置。<br>可以查看路由表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># route -n</span><br></pre></td></tr></table></figure>
+<p>比如给百度（地址是61.135.169.121）发数据，不知道百度在哪，但是下一跳是192.168.150.2。因为对于第二条，把百度ip和掩码与后，发现和Destination 0.0.0.0匹配。<br><img src="https://img-blog.csdnimg.cn/20210315220805924.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>无论目标IP地址是什么，都要走192.168.150.2出去，它就是默认网关。<br>如果给自己局域网发数据，是不需要下一跳的。<br><img src="https://img-blog.csdnimg.cn/20210315222051637.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>路由器</strong>就是转发的过程，里面有路由表。解决网络之间连通的事情。<br><strong>总结</strong>：<br><font color='purple'><strong>网络层就是寻找下一跳。</strong></font></p>
+<h3 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h3><p>两层信封，里面那个信封写要到哪去（百度的IP地址），外面再套一个下一跳的地址。套的是<code>ARP映射的地址</code>【MAC地址，物理网卡地址】</p>
+<p>从网络层决定好<strong>下一跳</strong>之后，其实要拿着下一跳，然后找到下一跳的MAC网卡地址。然后数据包其实有两层，外层套网卡地址，内层放的是端点的ip地址。 </p>
+<h4 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h4><p> ：知道别人的ip地址，请求它的mac地址</p>
+<p>局域网先进行广播，只有地址是自己的，才收下，否则丢弃。<br>比如pc1的MAC地址是1.1.1，它想知道目标ip<code>192.168.1.2</code>的mac地址，就先<strong>广播</strong>，pc2收到发现里面是自己的地址，就把自己的mac地址3.3.3直接<strong>单播</strong>发送回pc1。<br>回来到了交换机位置时，不需要广播了。原因是每次有确定mac地址的数据包过来的时候，交换机会记录下来<strong>网卡</strong>（NIC网络接口卡）的对应mac地址。也就是知道了pc1的<strong>接口</strong>对应的mac地址是1.1.1。<strong>也就是交换机的学习能力。</strong><br><img src="https://img-blog.csdnimg.cn/20210315224530581.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>交换机和路由器<br>交换机没有路由表，他只是局域网内部一个转发数据包的。<br>路由器中才有路由表，连接不同的局域网，进行数据包转发<br>路由器是三层的，物理层、链路层、路由表层<br>交换机因为是一个局域网中的设备，不牵扯到其他网段，所以交换机是二层的，只有物理层、链路层。【网卡接口和Mac地址跳转】<br>附：主机是七层的，或者叫四层的。</p>
+</blockquote>
+<p>IP在数据包中是不变的，代表了端点。但是在通信过程中，数据包的mac地址一直被替换。mac地址代表的是下一跳（或者叫节点）</p>
+<pre><code>ip是完成端点间通信的；mac地址是完成节点间跳跃的</code></pre><p>所以链路层需要用arp，抓到跳点的mac地址，然后才能把握手的包发出去。<br>握手的包交换完之后才能把数据发出去。<br>也就是层与层之间是有依赖的。</p>
+<h3 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h3><p><strong>前导码</strong>：编码时故意搞个特别的码在前面,通过长度告知解码器后面有货送来,注意接收。<br>通过前导码就可判断信号是有用信号还是干扰信号,否则忽略不解码</p>
+<p>路由器可以有多个网卡接到很多局域网。 </p>
+<p>单臂路由<br>一个网卡上可以配两个IP地址，所以8的网段和1的网段谁都可以接，只要有路由表就可以扔出去了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/15/%E3%80%90hexo%E3%80%91spawnfailed%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3/" rel="next" title="【hexo】spawn failed错误解决">
+                <i class="fa fa-chevron-left"></i> 【hexo】spawn failed错误解决
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" rel="prev" title="计算机网络体系结构">
+                计算机网络体系结构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">126</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">129</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#案例"><span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用层"><span class="nav-text">应用层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连接"><span class="nav-text">连接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传输控制层"><span class="nav-text">传输控制层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#三次握手"><span class="nav-text">三次握手</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#端口号问题"><span class="nav-text">端口号问题</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四次分手"><span class="nav-text">四次分手</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络层"><span class="nav-text">网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS"><span class="nav-text">DNS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链路层"><span class="nav-text">链路层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ARP"><span class="nav-text">ARP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#物理层"><span class="nav-text">物理层</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

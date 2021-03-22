@@ -89,7 +89,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210203213205288.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210203223001716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2021-02-03T08:05:33.812Z">
-<meta property="article:modified_time" content="2021-02-03T15:29:48.584Z">
+<meta property="article:modified_time" content="2021-03-17T12:57:19.526Z">
 <meta property="article:author" content="two-fire">
 <meta property="article:tag" content="String">
 <meta name="twitter:card" content="summary">
@@ -429,7 +429,7 @@
 <blockquote>
 <p>true<br>false<br>false<br>false<br>----------<br>true</p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s=<span class="keyword">new</span> String(<span class="string">"a"</span>)+<span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line">s = s.intern();</span><br><span class="line">String s1=<span class="string">"ab"</span>;</span><br><span class="line">System.out.println(s==s1);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s=<span class="keyword">new</span> String(<span class="string">"a"</span>)+<span class="keyword">new</span> String(<span class="string">"b"</span>);</span><br><span class="line">s = s.intern();</span><br><span class="line">String s1=<span class="string">"ab"</span>;</span><br><span class="line">System.out.println(s==s1); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 <p>我们知道对象s调用intern()方法时，字符串常量池中并没有对象”ab”，所以我们就需要执行将”ab”添加到字符串常量池的的操作。而这时在不同的jdk版本可能就有不同的操作。<br>①jdk6及之前在常量池中创建一个String对象并返回该对象的引用。<br>②jdk7及之后在常量池中保存常量池外String对象的引用，并返回该引用。<br><img src="https://img-blog.csdnimg.cn/20210203223001716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p>总结：<br>① “?”+”?”<br>底层<strong>直接优化</strong>为“??”</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s0=<span class="string">"java No.1"</span>;</span><br><span class="line">String s1=<span class="string">"java "</span>;</span><br><span class="line">String s2=<span class="string">"No.1"</span>;</span><br><span class="line">String s3=<span class="string">"java "</span>+<span class="string">"No.1"</span>;</span><br></pre></td></tr></table></figure>
@@ -560,7 +560,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">121</span>
+                  <span class="site-state-item-count">126</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -571,7 +571,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -582,7 +582,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">128</span>
+                  <span class="site-state-item-count">129</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

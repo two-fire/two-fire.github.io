@@ -85,17 +85,18 @@
 <meta property="og:url" content="http://yoursite.com/2021/03/02/Mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="two-fire的博客">
 <meta property="og:description" content="为什么要主从复制？  有一句sql语句当锁表的时候不能读，这会影响运行中的业务。使用主从复制，让主库负责写，从库负责读，这样即使出现锁表，也可以通过从库读。 做数据的热备。 架构的扩展。可以降低磁盘IO访问的频率，提高单个机器的IO性能。  什么是mysql的主从复制？指数据可以从一个mysql数据库服务器主节点复制到一个或多个从节点。mysql默认采用异步复制方式，这样从节点不用一直访问主服务器">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210302090631645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/2021030209180463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210302091909458.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210302092050656.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210302091821779.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210302091839854.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2021-03-02T01:21:33.740Z">
-<meta property="article:modified_time" content="2021-03-04T05:31:26.798Z">
+<meta property="article:modified_time" content="2021-03-17T07:41:37.788Z">
 <meta property="article:author" content="two-fire">
 <meta property="article:tag" content="主从复制">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2021030209180463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210302090631645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 
 
 
@@ -409,7 +410,7 @@
 <li>架构的扩展。可以降低磁盘IO访问的频率，提高单个机器的IO性能。</li>
 </ol>
 <p><strong>什么是mysql的主从复制？</strong><br>指数据可以从一个mysql数据库服务器主节点复制到一个或多个从节点。mysql默认采用异步复制方式，这样从节点不用一直访问主服务器来更新自己的数据，数据的更新可以在远程连接上进行，从节点可以复制主数据库中的所有或者特定的数据库，或者特定的表。</p>
-<p><strong>mysql复制原理</strong><br>![在这里插入图片描述](<a href="https://img-blog.csdnimg.cn/20210302090631645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV" target="_blank" rel="noopener">https://img-blog.csdnimg.cn/20210302090631645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV</a><br>0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70)ui、</p>
+<p><strong>mysql复制原理</strong><br><img src="https://img-blog.csdnimg.cn/20210302090631645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <ol>
 <li>master服务器将数据的改变记录到二进制binlog日志中</li>
 <li>slave服务器会定期对binlog进行检测是否发生改变。如果发生改变，则开启一个IO Thread拉取master的<strong>binlog</strong>中的内容到<strong>relay log</strong>中，sql线程负责从relay log中读出内容，并更新到slave的数据库中。保证slave和mater数据一致。</li>
@@ -549,7 +550,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">121</span>
+                  <span class="site-state-item-count">126</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -560,7 +561,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -571,7 +572,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">128</span>
+                  <span class="site-state-item-count">129</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
