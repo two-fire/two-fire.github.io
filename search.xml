@@ -8317,6 +8317,7 @@ Thread-0正在出售第2张票</code></pre></details>
 <li>如果出现其他线程来竞争锁资源，就会触发同步，这把锁就会升级为<strong>轻量级锁</strong>，通过自旋来获得。</li>
 <li>然后转十次，就升级为<strong>重量级锁</strong>。</li>
 </ol>
+<h4 id="什么时候用重量级锁？自旋锁？"><a href="#什么时候用重量级锁？自旋锁？" class="headerlink" title="什么时候用重量级锁？自旋锁？"></a>什么时候用重量级锁？自旋锁？</h4><p>执行时间长，线程数比较多的用<strong>系统锁</strong>；加锁代码执行时间比较短，而且线程不是太多，可以用<strong>自旋锁</strong>。</p>
 <h3 id="synchronized执行过程"><a href="#synchronized执行过程" class="headerlink" title="synchronized执行过程"></a>synchronized执行过程</h3><pre><code>属于JVM内部实现</code></pre><ol>
 <li>查看对象头的markword，如果里面是当前线程的id，表示当前线程处于<strong>偏向锁</strong>；</li>
 <li>如果里面不是当前id，利用CAS尝试将当前线程id替换markword，如果成功，该线程就拥有了<strong>偏向锁</strong>；失败说明有其他线程正在竞争资源，撤销<strong>偏向锁</strong>，升级为<strong>轻量锁</strong>；</li>
@@ -8324,7 +8325,6 @@ Thread-0正在出售第2张票</code></pre></details>
 <li>如果失败，启用自旋锁，不断自旋试图获得<strong>轻量锁</strong>；</li>
 <li>自旋10次后没有获得，就升级为<strong>重量锁</strong>。</li>
 </ol>
-<p>执行时间长，线程数比较多的用<strong>系统锁</strong>；加锁代码执行时间比较短，而且线程不是太多，可以用<strong>自旋锁</strong>。</p>
 ]]></content>
       <categories>
         <category>Java</category>
