@@ -89,7 +89,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210324102745427.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210324105158370.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2021-03-24T02:52:43.912Z">
-<meta property="article:modified_time" content="2021-03-24T02:52:53.397Z">
+<meta property="article:modified_time" content="2021-03-27T10:43:57.224Z">
 <meta property="article:author" content="two-fire">
 <meta property="article:tag" content="TCP">
 <meta property="article:tag" content="UDP">
@@ -406,7 +406,7 @@
 <h3 id="TCP攻击分类"><a href="#TCP攻击分类" class="headerlink" title="TCP攻击分类"></a>TCP攻击分类</h3><ol>
 <li>flood类攻击：发送海量syn，ack等报文，从而将server的半连接队列占满，占用服务器资源，使服务器无法接受合法客户的连接请求。【拒绝服务攻击DOS】</li>
 </ol>
-<p>防御：带宽资源要充足；服务器的硬件配置（cpu和内存）；规范自身操作；在骨干节点配置防火墙<br>2. 连接耗尽类攻击：完成三次握手后，不再发送报文，一直维持连接，或者发送FIN报文、断开后立即迅速再次连接，消耗连接资源。<br>3. 利用协议特性攻击。比如，连接成功后，将窗口大小设置为0，则服务器就会一直等待窗口开放，造成资源不可用。或者发送异常报文，可能造成被攻击目标崩溃。</p>
+<p><strong>防御</strong>：带宽资源要充足；服务器的硬件配置（cpu和内存）；规范自身操作；在骨干节点配置防火墙<br>2. 连接耗尽类攻击：完成三次握手后，不再发送报文，一直维持连接，或者发送FIN报文、断开后立即迅速再次连接，消耗连接资源。<br>3. 利用协议特性攻击。比如，连接成功后，将窗口大小设置为0，则服务器就会一直等待窗口开放，造成资源不可用。或者发送异常报文，可能造成被攻击目标崩溃。</p>
 <h3 id="tcp和udp可以一起使用吗？使用场景区别？"><a href="#tcp和udp可以一起使用吗？使用场景区别？" class="headerlink" title="tcp和udp可以一起使用吗？使用场景区别？"></a>tcp和udp可以一起使用吗？使用场景区别？</h3><p><strong>Tcp</strong> 当对网络通信质量有要求时使用<br>邮件：POP，SMTP<br>浏览器使用的：HTTP<br>QQ文件传输</p>
 <p><strong>Udp</strong> 对当前网络通讯质量要求不高的时候，要求网络通讯速度尽量的快，这时就使用UDP<br> QQ语音、QQ视频</p>
 <h3 id="三次握手和四次挥手"><a href="#三次握手和四次挥手" class="headerlink" title="三次握手和四次挥手"></a>三次握手和四次挥手</h3><p>SYN：标志位用来建立连接<br>ACK：确认标志位<br>FIN：表示发送端已经没有数据要求传输了，希望释放连接</p>
@@ -549,7 +549,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">130</span>
+                  <span class="site-state-item-count">133</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -560,7 +560,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -571,7 +571,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-count">136</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210310165350893.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210310184727370.png">
 <meta property="article:published_time" content="2021-03-10T08:46:55.799Z">
-<meta property="article:modified_time" content="2021-03-10T15:19:56.725Z">
+<meta property="article:modified_time" content="2021-04-11T10:02:35.831Z">
 <meta property="article:author" content="two-fire">
 <meta property="article:tag" content="DOM">
 <meta name="twitter:card" content="summary">
@@ -460,6 +460,20 @@
 <li>style：称为内部样式</li>
 <li>放在标签上的称为行内样式</li>
 </ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"width:100px;height:100px;color: blueviolet;border: 1px solid black;"</span> <span class="attr">id</span>=<span class="string">"cur"</span>&gt;</span>12306<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">//获取div标签</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> div = <span class="built_in">document</span>.getElementById(<span class="string">"cur"</span>);</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 获取已有样式</span></span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(div.style.width);</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(div.style.height);</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(div.style.color);</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(div.style.border);</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 设置元素样式</span></span></span><br><span class="line"><span class="actionscript">    div.style.width = <span class="string">"250 px"</span>;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 如果样式中中间带有横杠，变为驼峰写法</span></span></span><br><span class="line"><span class="actionscript">    div.style.fontSize = <span class="string">"30px"</span>;</span></span><br><span class="line"><span class="actionscript">    div.style.textAlign = <span class="string">"center"</span>;</span></span><br><span class="line"><span class="actionscript">    div.style.background = <span class="string">"cyan"</span>;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>dom只能操作标签的行内样式（外部、内部暂时操作不了）</li>
+<li>如果样式中中间带有横杠，变为驼峰写法</li>
+</ul>
+<h2 id="2-5-事件"><a href="#2-5-事件" class="headerlink" title="2.5 事件"></a>2.5 事件</h2><p>概述：event 由用户触发，触发时，标签可以做出相应的响应。</p>
+<p>语法格式：<br>element.onxxx = function(){}</p>
+<ul>
+<li>function(){}称为事件处理函数（用户触发时候才会触发一次）</li>
+</ul>
+<h3 id="2-4-1-单击事件——onclick"><a href="#2-4-1-单击事件——onclick" class="headerlink" title="2.4.1 单击事件——onclick"></a>2.4.1 单击事件——onclick</h3><p>概述：可以给任何标签绑定单击事件（用户触发单击时），事件处理函数才会执行一次。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">        * &#123;</span><br><span class="line">            margin: 0;</span><br><span class="line">            padding: 0;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="css">        <span class="selector-id">#box</span> &#123;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">background</span><span class="selector-pseudo">:red</span>;</span></span><br><span class="line">            width: 600px;</span><br><span class="line">            height: 100px;</span><br><span class="line">            margin: 100px, auto;</span><br><span class="line">            color: white;</span><br><span class="line">            text-align: center;</span><br><span class="line">            line-height: 100px;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"box"</span>&gt;</span>文字<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 给第一个div绑定单击事件</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> div = <span class="built_in">document</span>.getElementById(<span class="string">"box"</span>);</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 全局变量 存储一下起始字号大小</span></span></span><br><span class="line"><span class="actionscript">    <span class="keyword">var</span> f = <span class="number">16</span>;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 绑定单击事件</span></span></span><br><span class="line"><span class="actionscript">    div.onclick = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">        <span class="comment">// 字号+1</span></span></span><br><span class="line">        f++;</span><br><span class="line"><span class="actionscript">        div.style.fontSize = f + <span class="string">"px"</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><mark> JS属于脚本语言，脚本语言需要嵌套在静态页面中，给静态页面增加动态效果。</mark></p>
 
       
     </div>
@@ -583,7 +597,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">130</span>
+                  <span class="site-state-item-count">133</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -594,7 +608,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -605,7 +619,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-count">136</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -648,7 +662,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、节点树"><span class="nav-text">一、节点树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-认识DOM"><span class="nav-text">1.1 认识DOM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2-DOM四个小属性"><span class="nav-text">1.1.2 DOM四个小属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-3-DOM方法"><span class="nav-text">1.1.3 DOM方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-操作标签文本"><span class="nav-text">1.2 操作标签文本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-操作标签属性"><span class="nav-text">1.3 操作标签属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-操作标签的样式"><span class="nav-text">2.4 操作标签的样式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、节点树"><span class="nav-text">一、节点树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-认识DOM"><span class="nav-text">1.1 认识DOM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2-DOM四个小属性"><span class="nav-text">1.1.2 DOM四个小属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-3-DOM方法"><span class="nav-text">1.1.3 DOM方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-操作标签文本"><span class="nav-text">1.2 操作标签文本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-操作标签属性"><span class="nav-text">1.3 操作标签属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-操作标签的样式"><span class="nav-text">2.4 操作标签的样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-事件"><span class="nav-text">2.5 事件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1-单击事件——onclick"><span class="nav-text">2.4.1 单击事件——onclick</span></a></li></ol></li></ol></div>
             
 
           </div>

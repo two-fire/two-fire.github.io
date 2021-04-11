@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SSM," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、SSM环境搭建 创建父工程Maven – heima_ssm空项目 创建子工程空模块：heima_ssm_dao、heima_ssm_domain、heima_ssm_service、heima_ssm_utilsweb框架：heima_ssm_web 父工程中导入pom文件  二、编写实体类下面以商品查询为例：在domain中编写实体类。注意： 1234567&#x2F;&#x2F;package com.it">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基本搭建和操作流程">
+<meta property="og:url" content="http://yoursite.com/2021/03/25/%E5%9F%BA%E6%9C%AC%E6%90%AD%E5%BB%BA%E5%92%8C%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="two-fire的博客">
+<meta property="og:description" content="一、SSM环境搭建 创建父工程Maven – heima_ssm空项目 创建子工程空模块：heima_ssm_dao、heima_ssm_domain、heima_ssm_service、heima_ssm_utilsweb框架：heima_ssm_web 父工程中导入pom文件  二、编写实体类下面以商品查询为例：在domain中编写实体类。注意： 1234567&#x2F;&#x2F;package com.it">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210325141546297.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210325145124282.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210325161657320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-03-25T11:14:31.696Z">
+<meta property="article:modified_time" content="2021-03-25T11:15:04.955Z">
+<meta property="article:author" content="two-fire">
+<meta property="article:tag" content="SSM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210325141546297.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/03/25/基本搭建和操作流程/"/>
+
+
+
+
+
+  <title>基本搭建和操作流程 | two-fire的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">two-fire的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">积跬步，至千里</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/25/%E5%9F%BA%E6%9C%AC%E6%90%AD%E5%BB%BA%E5%92%8C%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="two-fire">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/img.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="two-fire的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基本搭建和操作流程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-25T19:14:31+08:00">
+                2021-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BA%8C%E6%89%8B%E4%BA%A4%E6%98%93%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
+                    <span itemprop="name">大学生二手交易系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、SSM环境搭建"><a href="#一、SSM环境搭建" class="headerlink" title="一、SSM环境搭建"></a>一、SSM环境搭建</h2><ol>
+<li>创建父工程<br>Maven – heima_ssm空项目</li>
+<li>创建子工程<br>空模块：heima_ssm_dao、heima_ssm_domain、heima_ssm_service、heima_ssm_utils<br>web框架：heima_ssm_web</li>
+<li>父工程中导入pom文件</li>
+</ol>
+<h2 id="二、编写实体类"><a href="#二、编写实体类" class="headerlink" title="二、编写实体类"></a>二、编写实体类</h2><pre><code>下面以商品查询为例：</code></pre><p><img src="https://img-blog.csdnimg.cn/20210325141546297.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>在domain中编写实体类。<br>注意：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//package com.itheima.ssm.domain;</span></span><br><span class="line"><span class="comment">//Product.java</span></span><br><span class="line"><span class="meta">@DateTimeFormat</span>(pattern=<span class="string">"yyyy-MM-dd HH:mm"</span>)</span><br><span class="line"><span class="keyword">private</span> Date tradeTime; <span class="comment">// 发布时间</span></span><br><span class="line"><span class="keyword">private</span> String tradeTimeStr;</span><br><span class="line"><span class="keyword">private</span> Integer productStatus; <span class="comment">// 状态 0 关闭 1 开启</span></span><br><span class="line"><span class="keyword">private</span> String productStatusStr;</span><br></pre></td></tr></table></figure>
+<p>比如发布时间在前端显示不能是一个Date，而应该是String，格式化的数据。方便页面展示。</p>
+<h2 id="三、编写业务接口"><a href="#三、编写业务接口" class="headerlink" title="三、编写业务接口"></a>三、编写业务接口</h2><p>dao中编写接口。IproductDao，里面定义查询方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IProductDao</span> </span>&#123;</span><br><span class="line">    <span class="comment">//根据id查询产品</span></span><br><span class="line">    <span class="meta">@Select</span>(<span class="string">"select * from product where id=#&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Product <span class="title">findById</span><span class="params">(Integer id)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//查询所有的产品信息</span></span><br><span class="line">    <span class="meta">@Select</span>(<span class="string">"select * from product"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Product&gt; <span class="title">findAll</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Insert</span>(<span class="string">"insert into product(productNum,productName,tradeTime,productPrice,productDesc,productStatus) values(#&#123;productNum&#125;,#&#123;productName&#125;,#&#123;tradeTime&#125;,#&#123;productPrice&#125;,#&#123;productDesc&#125;,#&#123;productStatus&#125;)"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">save</span><span class="params">(Product product)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>service中编写接口。IProductService，里面定义查询方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IProductService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Product&gt; <span class="title">findAll</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">save</span><span class="params">(Product product)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> @Autowired的使用来消除 set ，get方法<br>在Impl包中编写接口实现类：productServiceImpl，对接口中的方法进行实现。<code>@Autowired</code>完成对<code>IproductDao productDao</code>属性的自动装配，通知可以通过productDao去完成。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductServiceImpl</span> <span class="keyword">implements</span> <span class="title">IProductService</span></span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> IProductDao productDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Product&gt; <span class="title">findAll</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> productDao.findAll();</span><br><span class="line">    &#125;</span><br><span class="line">……</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、文件配置"><a href="#四、文件配置" class="headerlink" title="四、文件配置"></a>四、文件配置</h2><pre><code>放在ssm_web下resources中。</code></pre><p> <code>applicationContext.xml</code>是spring的核心配置文件</p>
+<ol>
+<li>在里面配置一下扫描的包（service、dao）</li>
+<li>spring整合mybatis<br>实质就是用spring来管理sqlSeesionFactoryBean<br>首先指定扫描数据库配置文件（db.properties），配置连接池，交给IOC管理</li>
+<li>配置事务</li>
+</ol>
+<p><code>spring-mvc.xml</code></p>
+<ol>
+<li>配置扫描web<br>指定扫描的是controller包下的内容，指定下视图解析器，静态资源是否被过滤，开启注解支持</li>
+</ol>
+<p><code>web.xml</code></p>
+<ol>
+<li>配置加载类路径的配置文件（contextConfig.location）,完成核心spring加载工作，配置监听</li>
+<li>配置dispatcherServlet<br>就是当前springMVC框架所需要使用的Servlet</li>
+</ol>
+<h2 id="五、编写控制器"><a href="#五、编写控制器" class="headerlink" title="五、编写控制器"></a>五、编写控制器</h2><p>在web中，创建ProductController<br>通过controller，去调用service去查询出来。然后把查出来的所有商品信息封装到<code>ModelAndView</code>中，然后返回它，响应到浏览器端去展示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/product"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> IProductService productService;</span><br><span class="line">    <span class="comment">//查询全部产品 </span></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/findAll.do"</span>)</span><br><span class="line">    <span class="meta">@RolesAllowed</span>(<span class="string">"ROOT"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">findAll</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        ModelAndView mv = <span class="keyword">new</span> ModelAndView();</span><br><span class="line">        List&lt;Product&gt; ps = productService.findAll();</span><br><span class="line">        mv.addObject(<span class="string">"productList"</span>, ps);</span><br><span class="line">        mv.setViewName(<span class="string">"product-list1"</span>);</span><br><span class="line">        <span class="keyword">return</span> mv;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：<br>在web包的webapp下的web.xml中，所有的servlet，在拦截的时候，拦截的是<code>*.do</code>，也就是所有controller只处理<code>*.do</code>这种请求，所以在当前的ProductController中，指定的路径是<code>/findAll.do</code>，<font color='red'>这样我们通过controller去调用service，service帮助我们去调用dao，完成我们想要的操作。</font></p>
+<h2 id="六、响应展示"><a href="#六、响应展示" class="headerlink" title="六、响应展示"></a>六、响应展示</h2><p>在webapp下的pages目录中，存放的是jsp页面。 css、img、plugins放在webapp下。</p>
+<p>注意：<br>对于ProductStatus和tradeTime属性需要处理一下。在Product中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> String <span class="title">getProductStatusStr</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (productStatus != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 状态 0 关闭 1 开启</span></span><br><span class="line">        <span class="keyword">if</span>(productStatus==<span class="number">0</span>)</span><br><span class="line">            productStatusStr=<span class="string">"关闭"</span>;</span><br><span class="line">        <span class="keyword">if</span>(productStatus==<span class="number">1</span>)</span><br><span class="line">            productStatusStr=<span class="string">"开启"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> productStatusStr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">gettradeTimeStr</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(tradeTime!=<span class="keyword">null</span>)&#123;</span><br><span class="line">        tradeTimeStr= DateUtils.date2String(tradeTime,<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> tradeTimeStr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、运行"><a href="#七、运行" class="headerlink" title="七、运行"></a>七、运行</h2><ol>
+<li>运行需要在web模块的pom.xml中加入tomcat的插件。</li>
+<li>在IDEA中，配置一下Run/Debug Configuration：<br>添加一个Maven，指定要运行的工程是heima_ssm_web，命令<code>tomcat7:run</code>。</li>
+<li>运行之前，在右侧点击maven，把整个工程重写clean，再install。对应自己的webApp工程也做同样操作。</li>
+<li>运行。</li>
+</ol>
+<h2 id="分页展示——PageHelper"><a href="#分页展示——PageHelper" class="headerlink" title="分页展示——PageHelper"></a>分页展示——PageHelper</h2><p><code>PageHelper</code>是一个开源的mybatis分页插件。<br><strong>使用方式：</strong></p>
+<ol>
+<li><strong>导入依赖</strong><br>第一种：把相应的jar包都拷贝进工程中<br>第二种：使用maven工具。<br>把相关maven的依赖集成到工程的pom.xml中</li>
+<li>配置<br>如果没有使用Spring，就可以直接在mybatis配置plugins；<br>如果mybatis已经交由spring管理了，这时候需要在spring的配置文件【<code>applicationContext.xml</code>】里面的sqlSessionFactoryBean下添加配置。<br><strong>配置中的参数设置</strong><br>比如<code>reasonable</code>，规范页码【最前面只能到1页，最后面也有限定】</li>
+<li>使用<br>在真正执行sql<strong>前</strong>使用PageHelper来完成分页<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pageNum页码值，pageSize每页显示条数</span></span><br><span class="line">PageHelper.startPage(page,size);</span><br><span class="line"><span class="comment">// 中间不能有其他语句</span></span><br><span class="line"><span class="keyword">return</span> ordersDao.findAll();</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="权限控制——Spring-Security"><a href="#权限控制——Spring-Security" class="headerlink" title="权限控制——Spring Security"></a>权限控制——Spring Security</h2><p><img src="https://img-blog.csdnimg.cn/20210325145124282.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="Spring-Security框架"><a href="#Spring-Security框架" class="headerlink" title="Spring Security框架"></a>Spring Security框架</h3><p><code>Spring Security</code>是spring项目组中用来提供<strong>安全认证服务</strong>的框架。<br>安全主要包括两个操作：</p>
+<ol>
+<li><strong>认证</strong>：登录判断用户名密码是否正确的过程</li>
+<li><strong>授权</strong>：一个用户是否有权限来执行某个功能，在到达授权判断之前，权限已经给这个用户分配了</li>
+</ol>
+<p>Spring Security主要是把用户信息存在数据库，通过<strong>数据库</strong>操作去获取信息；也可以通过<strong>配置文件</strong>去读取信息。</p>
+<h3 id="项目使用"><a href="#项目使用" class="headerlink" title="项目使用"></a>项目使用</h3><h4 id="使用配置文件认证"><a href="#使用配置文件认证" class="headerlink" title="使用配置文件认证"></a>使用配置文件认证</h4><ol>
+<li><code>pom</code>中导入Spring Security依赖</li>
+<li><code>web.xml</code>文件中创建Filter<br>springSecurityFilterChain 名字不能改</li>
+<li>Spring Security核心文件配置 里面有角色和权限设置</li>
+</ol>
+<h4 id="使用数据库认证"><a href="#使用数据库认证" class="headerlink" title="使用数据库认证"></a>使用数据库认证</h4><p>从数据库获取信息，进行授权和认证。<br>使用<code>UserDetails</code>、<code>UserDetailsService</code>来完成操作。<br><strong>UserDetails</strong>是一个接口，SpringSecurity提供的，<font color='red'>封装当前进行认证的用户信息</font>。<br><strong>UserDetailsService</strong>接口，<font color='red'>规范化了在做认证时的方法</font>。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210325161657320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>springsecurity代替了controller的功能。它怎么知道要调用谁？是因为我们在配置文件<code>spring-security</code>中规定了要用userService这个bean【UserDetails实现类】。只要我们实现了UserDetailsService接口即可。但是我们userDao返回的是自己定义对象，而userService需要UserDetails对象。</p>
+<p><strong>用户登录的操作流程</strong>：<br>在heima_ssm_service中定义一个IUserService，扩展UserDetailsService。在Impl中，定义一个UserServiceImpl，实现IUserService，重写方法。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spring-security.xml</span></span><br><span class="line">&lt;!-- 切换成数据库中的用户名和密码 --&gt;</span><br><span class="line">    &lt;security:authentication-manager&gt;</span><br><span class="line">        &lt;security:authentication-provider user-service-ref=<span class="string">"userService"</span>&gt;</span><br><span class="line">            &lt;!-- 配置加密的方式 --&gt;</span><br><span class="line">            &lt;security:password-encoder ref=<span class="string">"passwordEncoder"</span>/&gt;</span><br><span class="line">        &lt;/security:authentication-provider&gt;</span><br><span class="line">    &lt;/security:authentication-manager&gt;</span><br></pre></td></tr></table></figure>
+<p>上面配置了我们当前的service是<code>userService</code>，它就会去到我们下面这里去找loadUserByUsername方法，把我们的用户名去进行验证。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UserServiceImpl.java</span></span><br><span class="line"><span class="meta">@Service</span>(<span class="string">"userService"</span>)</span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">IUserService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> UserDetails <span class="title">loadUserByUsername</span><span class="params">(String username)</span> <span class="keyword">throws</span> UsernameNotFoundException </span>&#123;</span><br><span class="line">        …</span><br><span class="line">    &#125;</span><br><span class="line">    …</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就要去找dao。所以在dao中创建IUserDao</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IUserDao</span> </span>&#123;</span><br><span class="line">    <span class="comment">//  @Result指定获取信息类型</span></span><br><span class="line">    <span class="meta">@Select</span>(<span class="string">"select * from users where username=#&#123;username&#125;"</span>)</span><br><span class="line">    <span class="meta">@Results</span>(&#123;</span><br><span class="line">            <span class="meta">@Result</span>(id=<span class="keyword">true</span>,property = <span class="string">"id"</span>,column = <span class="string">"id"</span>),</span><br><span class="line">            <span class="meta">@Result</span>(property = <span class="string">"username"</span>,column = <span class="string">"username"</span>),</span><br><span class="line">            <span class="meta">@Result</span>(property = <span class="string">"email"</span>,column = <span class="string">"email"</span>),</span><br><span class="line">            <span class="meta">@Result</span>(property = <span class="string">"password"</span>,column = <span class="string">"password"</span>),</span><br><span class="line">            <span class="meta">@Result</span>(property = <span class="string">"phoneNum"</span>,column = <span class="string">"phoneNum"</span>),</span><br><span class="line">            <span class="meta">@Result</span>(property = <span class="string">"status"</span>,column = <span class="string">"status"</span>),</span><br><span class="line">            <span class="meta">@Result</span>(property = <span class="string">"roles"</span>,column = <span class="string">"id"</span>,javaType = java.util.List<span class="class">.<span class="keyword">class</span>,<span class="title">many</span></span>=<span class="meta">@Many</span>(select=<span class="string">"com.itheima.ssm.dao.IRoleDao.findRoleByUserId"</span>))</span><br><span class="line"></span><br><span class="line">    &#125;)</span><br><span class="line"><span class="function"><span class="keyword">public</span> UserInfo <span class="title">findByUsername</span><span class="params">(String username)</span> <span class="keyword">throws</span> Exception</span>;</span><br></pre></td></tr></table></figure>
+<p>然后还需要在domain中创建userInfo（与数据库中的users对应）、Role、Permission类。</p>
+<p>再在UserServiceImpl补全函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> UserDetails <span class="title">loadUserByUsername</span><span class="params">(String username)</span> <span class="keyword">throws</span> UsernameNotFoundException </span>&#123;</span><br><span class="line">    UserInfo userInfo = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        userInfo = userDao.findByUsername(username) ;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//处理自己的用户对象封装成UserDetails</span></span><br><span class="line">    <span class="comment">//User user = new User(userInfo.getUsername(),"&#123;noop&#125;"+userInfo.getPassword(),getAuthority(userInfo.getRoles()));</span></span><br><span class="line">    User user = <span class="keyword">new</span> User(userInfo.getUsername(),userInfo.getPassword(),userInfo.getStatus()==<span class="number">0</span> ? <span class="keyword">false</span> : <span class="keyword">true</span>,<span class="keyword">true</span>,<span class="keyword">true</span>,<span class="keyword">true</span>,getAuthority(userInfo.getRoles()));</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SpringSecurity源码分析"><a href="#SpringSecurity源码分析" class="headerlink" title="SpringSecurity源码分析"></a>SpringSecurity源码分析</h3><p><a href=".\SpringSecurity源码分析">SpringSecurity源码分析</a></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>ProductServieImpl中，<code>private IProductDao productDao;</code>一直报错，说找不到productDao。<br>原因：在applicationContext.xml中，忘记配置扫描dao包了。</p>
+<p>因为有约束存在，所以不能直接删除users表，如果要删除，要先把中间表删除，再去删用户表就可以了。</p>
+<p>查询用户信息时，应该把角色也获取到，封装到list集合中。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SSM/" rel="tag"># SSM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/25/SpringSecurity%E6%BA%90%E7%A0%81--springSecurityFilterChain/" rel="next" title="SpringSecurity源码--springSecurityFilterChain">
+                <i class="fa fa-chevron-left"></i> SpringSecurity源码--springSecurityFilterChain
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/26/http%E8%AF%A6%E8%A7%A3/" rel="prev" title="http详解">
+                http详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/img.jpg"
+                alt="two-fire" />
+            
+              <p class="site-author-name" itemprop="name">two-fire</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">136</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/two-fire" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、SSM环境搭建"><span class="nav-text">一、SSM环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、编写实体类"><span class="nav-text">二、编写实体类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、编写业务接口"><span class="nav-text">三、编写业务接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、文件配置"><span class="nav-text">四、文件配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、编写控制器"><span class="nav-text">五、编写控制器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、响应展示"><span class="nav-text">六、响应展示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、运行"><span class="nav-text">七、运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分页展示——PageHelper"><span class="nav-text">分页展示——PageHelper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限控制——Spring-Security"><span class="nav-text">权限控制——Spring Security</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Security框架"><span class="nav-text">Spring Security框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目使用"><span class="nav-text">项目使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用配置文件认证"><span class="nav-text">使用配置文件认证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用数据库认证"><span class="nav-text">使用数据库认证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringSecurity源码分析"><span class="nav-text">SpringSecurity源码分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-text">问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2020-6-22 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">two-fire</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
