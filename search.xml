@@ -6033,8 +6033,7 @@ Human woman = new Woman();</code></pre></li>
 <p>参考：<a href="https://blog.csdn.net/HTL2018/article/details/106876940" target="_blank" rel="noopener">https://blog.csdn.net/HTL2018/article/details/106876940</a></p>
 ]]></content>
       <categories>
-        <category>踩坑</category>
-        <category>hexo</category>
+        <category>安装和踩坑</category>
       </categories>
       <tags>
         <tag>hexo</tag>
@@ -8609,6 +8608,342 @@ pool-1-thread-1 running
       <categories>
         <category>硬件基础知识</category>
         <category>通信网络</category>
+      </categories>
+      <tags>
+        <tag>http</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring初识</title>
+    <url>/2021/04/11/Spring%E5%88%9D%E8%AF%86/</url>
+    <content><![CDATA[<h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><p>工具类严格意义上来说，也可以称为简陋的框架。<br>框架是一些类和接口的集合，是开发中的半成品。JAVA框架可以分为三层：表示层，业务层和物理层。</p>
+<h2 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h2><p>互联网开发时候，经历的技术阶段，分别有不同的技术：<br><strong>单一应用架构</strong><br>​ 当网站流量很小时，只需一个应用，将所有功能都部署在一起，以减少部署节点和成本。此时，用于简化增删改查工作量的<strong>数据访问框架(ORM)</strong>是关键。</p>
+<p>​<strong>垂直应用架构</strong><br>​ 当访问量逐渐增大，提升效率的方法之一是把一个jar文件拆分为多个jar包处理。此时，用于加速前端页面开发的Web框架（<strong>MVC</strong>）是关键。</p>
+<p>​<strong>分布式服务架构</strong><br>​ 当垂直应用越来越多，应用之间交互不可避免，将核心业务抽取出来，使用多台服务器处理。此时，用于提高业务复用及整合的<strong>分布式服务框架(RPC)</strong>是关键。</p>
+<p>​<strong>流动计算架构</strong><br>当服务越来越多，小服务资源浪费越来越明显，此时需要增加一个调度管理中心。<strong>SOA</strong>是关键。</p>
+<h3 id="java主流框架演变之路"><a href="#java主流框架演变之路" class="headerlink" title="java主流框架演变之路"></a>java主流框架演变之路</h3><p>1、<font color='red'><strong>jsp + servlet + javaBean</strong></font><br>servlet：server applet 服务端小程序 对请求进行匹配处理。<br>jsp：java server page 可以在静态页面中内嵌java代码。已淘汰。<br>    html中不能内嵌java代码</p>
+<p>javaBean：定义的对象，反映的是现实世界某个具体事物的抽象（书、车……）<br>效率低、性能低。耦合度高。所以逐渐被淘汰。</p>
+<p>2、<font color='red'><strong>MVC架构</strong></font><br>把各个组件进行一个人为的分离。</p>
+<p><strong>Model View Control</strong><br><img src="https://img-blog.csdnimg.cn/20210411194132470.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>客户端<strong>Browser</strong>作用：提交请求，接受响应。<br>提交请求后会提交给controller。<br><strong>Controller</strong>：用来接收对应请求的处理。把请求进行转发。把对应的参数传给数据库里面进行查询。数据库里面的对象、表都可以用model进行表示。<br>当查询完对应的参数之后，会从数据库中返回对应的结果。会传到<strong>view</strong>层（html，jsp，前端框架），把数据进行一个渲染，然后再展示在页面。</p>
+<p>3、EJB开发 重量级框架，使用麻烦<br>4、SSH  （Structs1/Structs2 + Hibernate + Spring）<br>5、SpringMVC + Mybatis + Spring<br>6、SpringBoot开发</p>
+<p><strong>Spring官网</strong><br>官网地址：<a href="https://spring.io/projects/spring-framework#overview" target="_blank" rel="noopener">https://spring.io/projects/spring-framework#overview</a><br>压缩包下载地址：<a href="https://repo.spring.io/release/org/springframework/spring/" target="_blank" rel="noopener">https://repo.spring.io/release/org/springframework/spring/</a><br>源码地址：<a href="https://github.com/spring-projects/spring-framework" target="_blank" rel="noopener">https://github.com/spring-projects/spring-framework</a></p>
+<p>spring是一个<strong>开源框架</strong>。<br>spring 是<strong>IOC</strong>和<strong>AOP</strong>的容器框架。<br>    IOC：Inversion of Control控制反转<br>    AOP：面向切面编程<br>    容器：包含并管理应用对象的生命周期</p>
+<h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><p>当在某个实现类中，需要当前对象的时候，可以通过set方式往里面注入具体的一个对象，而不需要每次去人为修改我们service中的代码了。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="comment">// private UserDao userDao = new UserDaoImpl();</span></span><br><span class="line">    <span class="comment">// private UserDao userDao = new UserDaoMysqlImpl();</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUserDao</span><span class="params">(UserDao userDao)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.userDao = userDao;</span><br><span class="line">    &#125;</span><br><span class="line">    getUserDao()……</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">psvm&#123;</span><br><span class="line">    UserServiceImpl userService = <span class="keyword">new</span> UserServiceImpl();</span><br><span class="line">    UserDaoMysqlImpl userDaoMysql = <span class="keyword">new</span> UserDaoMysqlImpl();</span><br><span class="line">    userService.setUserDao(userDaoMysql);</span><br><span class="line">    userService.getUser();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>spring中也是用set进行实现的，只不过提供了一套更加完善的实现机制。设计框架的时候，要考虑<font color='red'><strong>扩展性</strong></font>。</p>
+<p>在做上面操作时，其实省略的是new的过程。new的过程是在测试类的时候来new的。但我们使用的时候，不可能每次写一个测试类，所以意味着，需要一个第三方来进行管理，来帮我们创建。【解耦】</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p><font color='purple'><strong>IOC（控制反转）</strong></font>与依赖注入（Dependency Injection，DI）同理，是一个通过依赖注入对象的过程。这个过程相对于普通创建对象是反向的。</p>
+<pre><code>IOC是一种设计思想。而DI是一个具体实现的方式。Spring只是把这两个应用到了自己的框架中，并不是首次提出的。  </code></pre><p>想象之前的例子，开始是自己new的实现类，慢慢地把new的过程解耦出来，在Test类中，通过<code>set方法</code>往<code>serviceImpl类</code>里面设置我所需要依赖的对象，而这个对象就是UserDao。<br><font color='green'>原来是自己创建自己所需要的对象，现在是由别人给你所需要的对象。</font><br>（实际生活中参考找女友和婚介公司）</p>
+<ol>
+<li>谁控制谁：IOC容器来控制对象，然后把具体对象给到你。</li>
+<li>控制什么：在实现过程中所需要的对象及需要依赖的对象。</li>
+<li>什么是反转：以前自己主动创建new，现在由IOC容器创建后注入。由主动创建变为被动接收。</li>
+<li>哪些方面被反转：依赖的对象。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h3><p>在面向对象设计的软件系统中，底层的实现都是由N个对象组成的。按道理说，是彼此耦合的。但一旦某个对象出问题，其他的对象也会受影响。因此需要尽量减少对象的耦合度。<br>为了解决上述问题，引入了IOC容器。通过中间的控制，把各个对象再进行一个组合。<br><img src="https://img-blog.csdnimg.cn/20210419101528389.png" alt="在这里插入图片描述"></p>
+<p>比如上面，开始new的时候，严格绑定。但用了set注入，就不需要了。</p>
+<h3 id="生态"><a href="#生态" class="headerlink" title="生态"></a>生态</h3><p>任何语言或框架想要立于不败之地，很重要的是生态。比如小米手机，家电……提供更完善服务。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaFrameWork</category>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring IOC基本使用</title>
+    <url>/2021/04/19/Spring%20IOC%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="使用IOC容器"><a href="#使用IOC容器" class="headerlink" title="使用IOC容器"></a>使用IOC容器</h2><h3 id="手动加载jar包"><a href="#手动加载jar包" class="headerlink" title="手动加载jar包"></a>手动加载jar包</h3><p>使用手动加载jar包的方式实现，分为三个步骤，现在几乎不用.</p>
+<ol>
+<li><p>导包<br>commons-logging-1.2.jar<br>spring-beans-5.2.3.RELEASE.jar<br>spring-context-5.2.3.RELEASE.jar<br>spring-core-5.2.3.RELEASE.jar<br>spring-expression-5.2.3.RELEASE.jar</p>
+</li>
+<li><p>写配置<br><img src="https://img-blog.csdnimg.cn/20210419124541337.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>在src下创建ioc.xml：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">   &lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;beans xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span></span><br><span class="line">       xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">       xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--    id : bean的唯一标识，和其他的bean进行区分--&gt;</span><br><span class="line">&lt;!--    <span class="class"><span class="keyword">class</span>：表示要创建的<span class="title">bean</span>的完全限定名--&gt;</span></span><br><span class="line"><span class="class">    &lt;<span class="title">bean</span> <span class="title">id</span></span>=<span class="string">"person"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"bean.Person"</span>&gt;</span><br><span class="line">&lt;!--        name：属性名称，value：属性值--&gt;</span><br><span class="line">        &lt;property name="id" value="1"&gt;&lt;/property&gt;</span><br><span class="line">        &lt;property name="name" value="zhangsan"&gt;&lt;/property&gt;</span><br><span class="line">        &lt;property name="age" value="20"&gt;&lt;/property&gt;</span><br><span class="line">        &lt;property name="gender" value="男"&gt;&lt;/property&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>测试</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">   <span class="comment">// 容器中的对象，在容器创建完成之前就已经把对象创建好了</span></span><br><span class="line"><span class="comment">// 下面注释掉最后两行，就会运行person的无参构造方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"><span class="comment">//        Person person = new Person();</span></span><br><span class="line"><span class="comment">//        person.setAge(20);...</span></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * ApplicationContext表示IOC容器的入口。想要获取对象的话必须要创建该类。</span></span><br><span class="line"><span class="comment">         *  该类有两个读取配置文件的实现类：</span></span><br><span class="line"><span class="comment">         *      ClassPathXmlApplicationContext：从classpath中读取数据；（用得多）</span></span><br><span class="line"><span class="comment">         *      FileSystemXmlApplicationContext：从当前文件系统读取数据</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"ioc.xml"</span>);</span><br><span class="line">        <span class="comment">// 获取对象要进行强转</span></span><br><span class="line"><span class="comment">//        Person person = (Person) context.getBean("person");</span></span><br><span class="line">        <span class="comment">// 不需要强转</span></span><br><span class="line">        Person person = context.getBean(<span class="string">"person"</span>, Person<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        System.out.println(person);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h4 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h4><p>Exception in thread “main” java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory<br>找不到对应jar包。<br>解决：<br>mvnrepository.com 去找到对应的jar包。【commons logging】</p>
+<h3 id="使用maven的方式来构建项目"><a href="#使用maven的方式来构建项目" class="headerlink" title="使用maven的方式来构建项目"></a>使用maven的方式来构建项目</h3><h4 id="maven简单使用"><a href="#maven简单使用" class="headerlink" title="maven简单使用"></a>maven简单使用</h4><p>帮助更方便管理和构建java项目。<br><strong>maven如何获取jar包</strong>？<br>通过坐标：公司/组织（groupId）+项目名（artifactId）+版本（version）组成，可从互联网、本地等多种仓库源获取。</p>
+<p><strong>maven仓库分类</strong></p>
+<ul>
+<li>本地仓库：本地目录中。如果A项目下载了，B项目会直接从本地加载。</li>
+<li>私有仓库：自己公司的仓库</li>
+<li>中央仓库：maven默认下载的仓库地址</li>
+</ul>
+<p><strong>maven常用命令</strong></p>
+<h4 id="构建项目"><a href="#构建项目" class="headerlink" title="构建项目"></a>构建项目</h4><ol>
+<li>创建maven项目</li>
+<li>添加对应的pom依赖</li>
+</ol>
+<p>注意：</p>
+<ol>
+<li>创建对象给属性赋值的时候是通过setter方法实现的</li>
+<li>对象在IOC容器中存储的时候都是单例的，如果需要多例需要修改属性 ioc.xml中，scope=”prototype”</li>
+</ol>
+<h3 id="spring对象的获取及属性赋值方式"><a href="#spring对象的获取及属性赋值方式" class="headerlink" title="spring对象的获取及属性赋值方式"></a>spring对象的获取及属性赋值方式</h3><ol>
+<li>通过bean的id获取</li>
+<li>通过bean的类型来获取对象</li>
+</ol>
+<p>反射</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>JavaFrameWork</category>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>web服务器——tomcat</title>
+    <url>/2021/04/19/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E2%80%94%E2%80%94tomcat/</url>
+    <content><![CDATA[<h2 id="web服务器基本概念"><a href="#web服务器基本概念" class="headerlink" title="web服务器基本概念"></a>web服务器基本概念</h2><p><img src="https://img-blog.csdnimg.cn/20210419222117787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>请求不能像自己的代码一样，控制什么时候运行。因为不知道什么时候客户端发送请求。 所以webserver处一定要开启长服务。而这个服务就是tomcat。这里面可以嵌入n个applet小程序（购物车模块、订单模块…不同模块接收不同请求进行分别处理。处理逻辑放到webserver里。所以webserver相当于是一个容器，代码来实现、当成安装程序。安装到物理服务器中，启动就能对外提供服务）</p>
+<h2 id="web服务器实现——自定义tomcat"><a href="#web服务器实现——自定义tomcat" class="headerlink" title="web服务器实现——自定义tomcat"></a>web服务器实现——自定义tomcat</h2><p><img src="https://img-blog.csdnimg.cn/2021042011265893.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<ol>
+<li>定义<strong>MyRequest</strong>类：请求对象。里面有请求方法（get/post）和请求地址url。构造函数传参inputstream，从inputstream中获得请求方法和地址。</li>
+<li>定义<strong>MyResponse</strong>类：响应对象。就只有outputstream。有一个write方法，写入响应行、响应头和响应体。</li>
+<li>定义<strong>MyMapping</strong>类：请求和处理相应请求的逻辑类（MyServlet）的映射关系。【就是看使用图中哪个applet进行处理】用hashmap存储。value是要要映射到的类，也就是包名+类名（MyServlet）。有一个getMapping方法，返回hashmap。</li>
+<li>定义<strong>MyHttpServlet</strong>类：抽象类（图中接口）对servie和applet中格式进行转换。两个抽象方法doGet和doPost。一个service方法，根据传入的请求方式来判断调用doGet还是doPost方法。</li>
+<li>定义<strong>MyServlet</strong>类：继承MyHttpServlet抽象类。实现doGet和doPost方法。分别通过参数myResponse的write方法，写入对应的内容。</li>
+<li>定义<strong>MyServer</strong>类：定义startServer方法，服务端的接收程序，接收socket请求。里面定义请求对象和响应对象。获得MyMapping的Class对象，通过newInstance创建MyServlet实例，然后调用service方法，从而调用doGet或者doPost方法。</li>
+<li>测试main方法：调用startServer方法，传入post。</li>
+<li>到浏览器中，输入localhost:10086/mytomcat，可以看到doGet方法中写入的内容。</li>
+</ol>
+<p><strong>localhost:10086/ 显示不出内容，如下：</strong><br>在MyServer中<code>String clazz = new MyMapping().getMapping().get(myRequest.getRequestUrl());</code>设置断点。然后浏览器中输入localhost:10086，会发现如下：<br><img src="https://img-blog.csdnimg.cn/2021042011095997.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>也就是getMapping()会获得<code>/mytomcat -&gt; MyServletget()</code>。然后get(“/“)获得的是null，clazz是null。</p>
+<p><strong>所以只有当输入localhost:10086/mytomcat</strong>，点进<code>get()</code>中，会发现<code>getRequestUrl()</code>中，会发现：<br><img src="https://img-blog.csdnimg.cn/20210420111350506.png" alt="在这里插入图片描述"><br>clazz为<code>&quot;MyServlet&quot;</code>。</p>
+<blockquote>
+<p>通过Class.forName方法来获取对象, 传入一个类的完全限定名即可。</p>
+</blockquote>
+<p>通过反射获取MyServlet类的Class对象myServletClass。<br><img src="https://img-blog.csdnimg.cn/20210420111820393.png" alt="在这里插入图片描述"></p>
+<p>然后根据myServletClass创建对象。<br><img src="https://img-blog.csdnimg.cn/20210420111854226.png" alt="在这里插入图片描述"><br>然后调用service方法，发现是请求方法是Get，所以调用doGet方法，输出<code>get mytomcat</code><br><img src="https://img-blog.csdnimg.cn/20210420112121431.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>具体代码：</p>
+<details><summary>MyRequest.java</summary>
+<pre><code>import java.io.InputStream;
+/**
+ * @Author : LiuYan
+ * @create 2021/4/19 22:36
+ * 请求对象
+ * 需要解析请求
+ */
+public class MyRequest {
+    // 请求方法 GET/POST
+    private String requestMethod;
+    // 请求地址 统一资源定位符
+    private String requestUrl;
+
+<pre><code>public MyRequest(InputStream inputStream) throws Exception {
+    // 缓冲区
+    byte[] buffer = new byte[1024];
+    // 读取数据长度
+    int len = 0;
+    // 定义请求变量
+    String str = null;
+    if ((len = inputStream.read(buffer)) &gt; 0) {
+        str = new String(buffer, 0, len);
+    }
+    // GET 请求地址 http/1.1
+    String data = str.split(&quot;\n&quot;)[0];
+    String[] params = data.split(&quot; &quot;);
+    this.requestMethod = params[0];
+    this.requestUrl = params[1];
+}
+
+public String getRequestMethod() {
+    return requestMethod;
+}
+
+public void setRequestMethod(String requestMethod) {
+    this.requestMethod = requestMethod;
+}
+
+public String getRequestUrl() {
+    return requestUrl;
+}
+
+public void setRequestUrl(String requestUrl) {
+    this.requestUrl = requestUrl;
+}</code></pre><p>}</p>
+<p></code></pre></details></p>
+<details><summary>MyResponse.java</summary>
+<pre><code>import java.io.IOException;
+import java.io.OutputStream;
+/**
+ * @Author : LiuYan
+ * @create 2021/4/19 22:45
+ * 响应对象
+ * 不需要解析，但是需要write方法，然后把内容返回给客户端浏览器
+ */
+public class MyResponse {
+    private OutputStream outputStream;
+
+<pre><code>public MyResponse(OutputStream outputStream) {
+    this.outputStream = outputStream;
+}
+// 响应行 响应头 响应体
+public void write(String str) throws IOException {
+    StringBuilder builder = new StringBuilder();
+    builder.append(&quot;HTTP/1.1 200 OK\n&quot;)
+            .append(&quot;Content-Type:text/html\n&quot;)
+            .append(&quot;\r\n&quot;)
+            .append(&quot;&lt;html&gt;&quot;)
+            .append(&quot;&lt;body&gt;&quot;)
+            .append(&quot;&lt;h1&gt;&quot; + str + &quot;&lt;/h1&gt;&quot;)
+            .append(&quot;&lt;/html&gt;&quot;)
+            .append(&quot;&lt;/body&gt;&quot;);
+    this.outputStream.write(builder.toString().getBytes());
+    this.outputStream.flush();
+    this.outputStream.close();
+}</code></pre><p>}</p>
+<p></code></pre></details></p>
+<details><summary>MyMapping.java</summary>
+<pre><code>import java.util.HashMap;
+/**
+ * @Author : LiuYan
+ * @create 2021/4/19 22:51
+ * 映射关系
+ * 请求和对应处理的逻辑类的映射关系
+ */
+public class MyMapping {
+    public static HashMap<String,String> mapping = new HashMap<>();
+    static {
+        mapping.put("/mytomcat","MyServlet");
+    }
+    public HashMap<String,String> getMapping() {
+        return mapping;
+    }
+}
+
+<p></code></pre></details></p>
+<details><summary>MyHttpServlet.java</summary>
+<pre><code>import java.io.IOException;
+/**
+ * @Author : LiuYan
+ * @create 2021/4/19 22:53
+ */
+public abstract class MyHttpServlet {
+    // 定义常量
+    public static final String METHOD_GET = "GET";
+    public static final String METHOD_POST = "POST";
+    // 具体实现
+    public abstract void doGet(MyRequest myRequest, MyResponse myResponse) throws IOException;
+    public abstract void doPost(MyRequest myRequest, MyResponse myResponse) throws IOException;
+
+<pre><code>//实现转换功能 根据请求方式来判断调用doGet还是doPost
+public void service(MyRequest myRequest, MyResponse myResponse) throws IOException {
+    if (METHOD_GET.equals(myRequest.getRequestMethod())) {
+        doGet(myRequest, myResponse);
+    } else if (METHOD_POST.equals(myRequest.getRequestMethod())) {
+        doPost(myRequest, myResponse);
+    }
+}</code></pre><p>}</p>
+<p></code></pre></details></p>
+<details><summary>MyServlet.java</summary>
+<pre><code>import java.io.IOException;
+/**
+ * @Author : LiuYan
+ * @create 2021/4/19 22:59
+ */
+public class MyServlet extends MyHttpServlet{
+
+<pre><code>@Override
+public void doGet(MyRequest myRequest, MyResponse myResponse) throws IOException {
+    myResponse.write(&quot;get mytomcat&quot;);
+}
+
+@Override
+public void doPost(MyRequest myRequest, MyResponse myResponse) throws IOException {
+    myResponse.write(&quot;post tomcat&quot;);
+}</code></pre><p>}</p>
+<p></code></pre></details></p>
+<details><summary>MyServer.java</summary>
+<pre><code>import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+/**
+ * @Author : LiuYan
+ * @create 2021/4/19 23:02
+ */
+public class MyServer {
+    /**
+     * 定义服务端的接收程序，接收socket请求
+     * @param post
+     */
+    public static void startServer(int post) throws Exception {
+        //定义服务端套接字
+        ServerSocket serverSocket = new ServerSocket(post);
+        // 定义客户端套接字 每个请求是不同套接字
+        Socket socket = null;
+        // 不停接收请求
+        while (true) {
+            socket = serverSocket.accept();
+            // 获取输入和输出流
+            InputStream inputStream = socket.getInputStream();
+            OutputStream outputStream = socket.getOutputStream();
+            // 定义请求对象
+            MyRequest myRequest = new MyRequest(inputStream);
+            // 定义响应对象
+            MyResponse myResponse = new MyResponse(outputStream);
+
+<pre><code>        String clazz = new MyMapping().getMapping().get(myRequest.getRequestUrl());
+        if (clazz != null) {
+            Class&lt;MyServlet&gt; myServletClass = (Class&lt;MyServlet&gt;) Class.forName(clazz);
+            //根据myServletClass创建对象
+            MyServlet myServlet = myServletClass.newInstance();
+            myServlet.service(myRequest, myResponse);
+        }
+    }
+}
+
+public static void main(String[] args) throws Exception {
+    startServer(10086);
+}</code></pre><p>}</p>
+<p></code></pre></details></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>web后端</category>
+      </categories>
+      <tags>
+        <tag>web服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>http协议</title>
+    <url>/2021/04/19/http%E5%8D%8F%E8%AE%AE/</url>
+    <content><![CDATA[<pre><code>客户端的浏览器版本很多，如何实现不同版本和服务器的通信？</code></pre><p><strong>HTTP超文本传输协议</strong><br>客户端和服务端定义好的规范。 所有人在进行请求和响应过程中，都需要遵循这些规范。</p>
+<p>当webserver拥有了动态生成页面的applet程序的能力的时候，此时可以将webserver称为容器，可以按照需求返回动态的页面</p>
+<p>servlet：server applet 基于http协议在服务端生成的小程序。<br>JSP：java server page<br>高级框架：如ssm</p>
+<p><strong>客户端和服务器端交互过程</strong>：<br><img src="https://img-blog.csdnimg.cn/20210419222117787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="http协议的特点"><a href="#http协议的特点" class="headerlink" title="http协议的特点"></a>http协议的特点</h2><ol>
+<li>简单快速：用键值对的格式，来声明格式规范。</li>
+<li>灵活：数据格式类型有json、text等</li>
+<li>无连接：早期版本是短连接。<font color='red'><strong>http1.1后支持长连接</strong></font></li>
+<li>无状态：上次的状态不会保存</li>
+<li>支持B/S和C/S架构</li>
+</ol>
+<p>B/S：Browser/Server 现在更多 比如网页版京东<br>C/S：Client/Server 比如电脑上登录qq，要先下载安装包</p>
+<h2 id="http交互流程"><a href="#http交互流程" class="headerlink" title="http交互流程"></a>http交互流程</h2><p><img src="https://img-blog.csdnimg.cn/20210419212318310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzQ4MjI3OQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"> </p>
+<h3 id="http协议请求格式"><a href="#http协议请求格式" class="headerlink" title="http协议请求格式"></a>http协议请求格式</h3><p><strong>请求行</strong>： 请求方法 URL 协议版本<br><strong>请求头</strong>： 头部键 值  【头信息中的附加信息 比如客户端允许接收的格式，语言，浏览器对应版本等】<br><strong>空行</strong><br><strong>请求体</strong>： 请求数据 </p>
+<h3 id="http请求方法"><a href="#http请求方法" class="headerlink" title="http请求方法"></a>http请求方法</h3><p><strong>GET</strong> : 请求获取由request-url 所标识的资源<br><strong>PUT</strong> ：请求服务器存储一个资源，并用request-url作为其标识<br>POST：在request-url所标识的资源后附件新的数据<br>HEAD：请求获取由request-url 所标识的资源的响应消息报头<br>DELETE：请求服务器删除由request-url 所标识的资源</p>
+<blockquote>
+<p>get和post请求方式的区别<br>get请求参数是直接显示在地址栏的，而post在地址栏不显示<br>get不安全，post安全<br>get请求参数是有参数限制的，但post没有</p>
+</blockquote>
+<h3 id="http响应格式"><a href="#http响应格式" class="headerlink" title="http响应格式"></a>http响应格式</h3><p><strong>状态行</strong>： 协议版本 状态码 状态码描述<br><strong>响应头</strong>： 头部键 值  【头信息中的附加信息，是给浏览器看的 比如日期，文本长度，文本格式等】<br><strong>空行</strong><br><strong>响应体</strong>： 请求数据 【渲染后给用户看的】 </p>
+<h4 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h4><p><font color='red'><strong>状态码</strong></font><br>1xx 服务器收到请求，需要请求者继续操作<br>2xx 成功，操作被成功接收并处理<br>3xx 重定向，需要进一步操作<br>4xx 客户端错误<br>5xx 服务端错误 </p>
+<p><strong>常见响应状态码</strong><br>200 客户端请求成功<br>400 客户端语法错误<br>403 服务器收到请求，但拒绝提供服务<br>404 请求资源不存在<br>500 服务器内部错误<br>503 服务器当前不能处理客户端请求</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>web后端</category>
       </categories>
       <tags>
         <tag>http</tag>
